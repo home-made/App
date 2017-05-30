@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, AsyncStorage } from "react-native";
+import { View, AsyncStorage, Alert } from "react-native";
 import axios from "axios";
 import { Container, Content, List, Header, Text, Button } from "native-base";
 import CheckOutItem from "./CheckOutItem.js";
@@ -35,7 +35,9 @@ export default class Checkout extends Component {
     this.decrementDishCount = this.decrementDishCount.bind(this);
     this.deleteDish = this.deleteDish.bind(this);
     this.calculateTotal = this.calculateTotal.bind(this);
+    this.sendNotification = this.sendNotification.bind(this);
     this.submitOrder = this.submitOrder.bind(this);
+    
   }
 
   componentWillMount() {
@@ -106,6 +108,18 @@ export default class Checkout extends Component {
     });
   }
 
+  sendNotification(){
+    return(
+      Alert.alert(
+        'Order Submitted to Chef!',
+        'Wait for a confirmation your order was accepted.',
+        [
+          {text: 'OK', onPress: () => console.log('OK Pressed')}
+        ]
+      )
+    )
+  }
+
   submitOrder() {
     //will need the customerId && chefId to submit order to DB
     //hardcoded info for demo purposes
@@ -129,6 +143,7 @@ export default class Checkout extends Component {
       status: 0,
       cashTotal: this.state.cashTotal
     };
+    this.sendNotification();
 
     axios
       .post("http://localhost:3000/orders", newOrder)
