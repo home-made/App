@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, AsyncStorage } from "react-native";
+import { StyleSheet, Text, View, AsyncStorage, ScrollView} from "react-native";
 import {
   Container,
   Header,
@@ -22,50 +22,49 @@ export default class OrderPanel extends Component {
     this.returnRow = this.returnRow.bind(this);
   }
 
-  returnRow(data){
-    return(
+  returnRow(data) {
+    return (
       <ListItem onPress={() => Actions.orderView(data)}>
         <Text style={{ marginLeft: 10 }}>
           Placed at: {data.date.slice(11, 16)}{"\n"}
           Cash total: ${data.cashTotal}
         </Text>
       </ListItem>
-    )
-
+    );
   }
 
-
   componentWillMount() {
-    console.log("IN CHEF ORDER PANEL WILL MOUNT");
-
     let authID;
+    console.log("CHEF ORDER PANEL WILL MOUNT");
 
     async function getAuthID() {
       try {
         const data = await AsyncStorage.getItem("profile");
         if (data !== null && data !== undefined) {
-          console.log("async data: ", data);
-          authID = data[0][1].userId;
+          authID = JSON.parse(data).userId;
+          console.log(authID);
         }
       } catch (err) {
         console.log("Error getting data: ", err);
       }
     }
-    getAuthID();
 
-    
-    axios.get("http://localhost:3000/orders/0/" + authID).then(pending => {
-      this.setState({ pending: pending.data[0] }, () =>
-        console.log("PENDING ORDERS ARE ", this.state.pending)
-      );
-      axios.get("http://localhost:3000/orders/1/" + authID).then(accepted => {
-        this.setState({ accepted: accepted.data[0] }, () =>
-          console.log("ACCEPTED ORDERS ARE ", this.state.accepted)
+    getAuthID().then(() => {
+      axios.get("http://localhost:3000/orders/0/" + authID).then(pending => {
+        this.setState({ pending: pending.data[0] }, () =>
+          console.log("PENDING ORDERS ARE ", this.state.pending)
         );
-        axios.get("http://localhost:3000/orders/2/" + authID).then(complete => {
-          this.setState({ complete: complete.data[0] }, () =>
-            console.log("COMPLETE ORDERS ARE ", this.state.complete)
+        axios.get("http://localhost:3000/orders/1/" + authID).then(accepted => {
+          this.setState({ accepted: accepted.data[0] }, () =>
+            console.log("ACCEPTED ORDERS ARE ", this.state.accepted)
           );
+          axios
+            .get("http://localhost:3000/orders/2/" + authID)
+            .then(complete => {
+              this.setState({ complete: complete.data[0] }, () =>
+                console.log("COMPLETE ORDERS ARE ", this.state.complete)
+              );
+            });
         });
       });
     });
@@ -77,37 +76,44 @@ export default class OrderPanel extends Component {
     var completeOrders = [];
     console.log(this.state.pending, this.state.accepted, this.state.complete);
     return (
-      <Container>
+
+      <ScrollView>
         <Header hasTabs />
         <Tabs>
           <Tab heading={<TabHeading><Text>Pending</Text></TabHeading>}>
-            {
-              !this.state.pending ? <Text></Text> : this.state.pending.forEach(item => pendingOrders.push(this.returnRow(item)))
-            }
+            {!this.state.pending
+              ? <Text />
+              : this.state.pending.forEach(item =>
+                  pendingOrders.push(this.returnRow(item))
+                )}
             <List style={{ marginTop: 10 }} dataArray={this.state.pending}>
               {pendingOrders}
             </List>
           </Tab>
 
           <Tab heading={<TabHeading><Text>Confirmed</Text></TabHeading>}>
-            {
-              !this.state.accepted ? <Text></Text> : this.state.accepted.forEach(item => acceptedOrders.push(this.returnRow(item)))
-            }
+            {!this.state.accepted
+              ? <Text />
+              : this.state.accepted.forEach(item =>
+                  acceptedOrders.push(this.returnRow(item))
+                )}
             <List style={{ marginTop: 10 }} dataArray={this.state.accepted}>
-              {acceptedOrders}  
+              {acceptedOrders}
             </List>
           </Tab>
 
           <Tab heading={<TabHeading><Text>Complete</Text></TabHeading>}>
-            {
-              !this.state.complete ? <Text></Text> : this.state.complete.forEach(item => completeOrders.push(this.returnRow(item)))
-            }
+            {!this.state.complete
+              ? <Text />
+              : this.state.complete.forEach(item =>
+                  completeOrders.push(this.returnRow(item))
+                )}
             <List style={{ marginTop: 10 }} dataArray={this.state.complete}>
               {completeOrders}
             </List>
           </Tab>
         </Tabs>
-      </Container>
+      </ScrollView>
     );
   }
 }
