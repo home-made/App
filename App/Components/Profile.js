@@ -134,7 +134,7 @@ export default class Profile extends Component {
                   return (
                     <View>
                       <DishView dish={dish} addToCart={this.handleAddToCart} />
-                      {this.state.cart.length > 0 ? (<Container style={{alignItems:"center"}}><Content><Button success onPress={() => this.handleCheckout()}>
+                      {this.state.cart.length > 0 ? (<Container style={{alignItems:"center", marginBottom: -600}}><Content><Button success onPress={() => this.handleCheckout()}>
                         <Text> Checkout </Text>
                       </Button></Content></Container>) : (<Text></Text>)}
                     </View>

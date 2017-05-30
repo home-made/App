@@ -15,32 +15,43 @@ export default class ChefList extends Component {
 
   render() {
     let chefs = this.state.chefs;
-    return (
-      <Container>
-        <Content>
-          <List
-            style={{ marginTop: 60 }}
-            dataArray={chefs}
-            renderRow={chef => (
-              <ListItem
-                onPress={() => {
-                  this.props.setChef(chef);
-                }}
-              >
-                <Image
-                  style={{ width: 70, height: 70 }}
-                  source={{
-                    uri: chef.profileUrl
+
+    if (chefs.length === 0) {
+      console.log("inside the if block for ChefList and chefs is ", chefs)
+      return (
+        <Container style={{ marginTop: 60 }}>
+          <Content>
+            <Text>Whoops! There are currently no chefs available for this cuisine!</Text>
+          </Content>
+        </Container>
+      )
+    } else {
+      return (
+        <Container>
+          <Content>
+            <List
+              style={{ marginTop: 60 }}
+              dataArray={chefs}
+              renderRow={chef => (
+                <ListItem
+                  onPress={() => {
+                    this.props.setChef(chef);
                   }}
-                />
-                <Text style={{ marginLeft: 10 }}>{`${chef.firstName}
-${chef.status}`}</Text>
-              </ListItem>
-            )}
-          />
-        </Content>
-      </Container>
-    );
+                >
+                  <Image
+                    style={{ width: 70, height: 70 }}
+                    source={{
+                      uri: chef.profileUrl
+                    }}
+                  />
+                  <Text style={{ marginLeft: 10 }}>{`${chef.firstName} ${chef.status}`}</Text>
+                </ListItem>
+              )}
+            />
+          </Content>
+        </Container>
+      );
+    }
   }
 }
 
