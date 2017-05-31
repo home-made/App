@@ -1,8 +1,6 @@
 import React, { Component } from "react";
-import SocketIO from "socket.io-client";
 import { StyleSheet, TextInput, View, Alert } from "react-native";
 import { Actions } from "react-native-router-flux";
-// import SocketIO from "socket.io-client";÷
 import {
   Container,
   Text,
@@ -16,9 +14,6 @@ import {
   CheckBox,
   ListItem
 } from "native-base";
-const axios = require("react-native-axios");
-var socket = new SocketIO("localhost:3000");
-
 export default class DishView extends Component {
   constructor(props) {
     super(props);
@@ -33,28 +28,12 @@ export default class DishView extends Component {
       }
     };
     this.handleSubmit = this.handleSubmit.bind(this);
-  }å
+  }
   componentWillMount(){
-//    var socket = new SocketIO                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       ("localhost:3000");
-
-    socket.connect();
-    console.log('b4id is',socket.id)
-
-    socket.on("connect", () => {
-      console.log('id is',socket.id)
-      socket.on("fresh", message => {
-        console.log(message);
-      });
-
-    });
-    
     this.setState({genres:['Select a Cuisine Style'].concat(this.props.getStyles())})
   }
   handleSubmit() {
-    console.log('b4')
-    socket.emit("fresh", "right back you bitch");
-    console.log('a4ter')
-    // console.log(this.state.dish)
+    console.log(this.state.dish)
     // axios.post("http://localhost:3000/dish/add", {
     //   cuisineType: "Chinese",
     //   name: this.state.name,
@@ -68,8 +47,8 @@ export default class DishView extends Component {
     //   isActive: true,
     //   quantity: 1
     // });
-    // this.props.setDish(this.state.dish)
-    // Actions.uploaddishimage()
+    this.props.setDish(this.state.dish)
+    Actions.uploaddishimage()
   }
   onValueChange (value) {
     console.log(this.state.genres[value])
@@ -123,8 +102,6 @@ export default class DishView extends Component {
                 placeholder="Donation Amount"
                 keyboardType={"number-pad"}
                 onChangeText={donation => {
-                    socket.on('fresh', 'imherebitch')
-                    console.log('bitch')
                     let result = donation.split('')
                     result.shift()
                     result.shift()
@@ -163,14 +140,6 @@ export default class DishView extends Component {
 
                 }): {}}
             </Picker>
-            <ListItem>
-              <CheckBox checked={true} />
-              <Text>Daily Stand Up</Text>
-            </ListItem>
-            <ListItem>
-                <CheckBox checked={false} />
-                <Text>Discussion with Client</Text>
-            </ListItem>
             <Button style={{ marginTop: 70}} onPress={() => this.handleSubmit()}>
               <Text>Next </Text>
             </Button>

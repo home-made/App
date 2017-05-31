@@ -16,39 +16,39 @@ export default class ChefPanel extends Component {
     super(props);
   }
   componentWillMount(){
-    // async function getAuthID() {
-    //   try {
-    //     const data = await AsyncStorage.getItem("profile");
-    //     if (data !== null && data !== undefined) {
-    //       authID = JSON.parse(data).userId;
-    //       console.log(authID);
-    //     }
-    //   } catch (err) {
-    //     console.log("Error getting data: ", err);
-    //   }
-    // }
+    async function getAuthID() {
+      try {
+        const data = await AsyncStorage.getItem("profile");
+        if (data !== null && data !== undefined) {
+          authID = JSON.parse(data).userId;
+          console.log(authID);
+        }
+      } catch (err) {
+        console.log("Error getting data: ", err);
+      }
+    }
 
-    // getAuthID().then(() => {
-    //   axios.get("http://localhost:3000/dish/0/" + authID).then(inactive => {
-    //     this.setState({ inactive: inactive.data[0] }, () =>
-    //       console.log("INACTIVE DISHES ARE ", this.state.inactive)
-    //     );
-    //     axios.get("http://localhost:3000/dish/1/" + authID).then(active => {
-    //       this.setState({ active: active.data[0] }, () =>
-    //         console.log("ACTIVE DISHES ARE ", this.state.active)
-    //       );
-    //     });
-    //   });
-    // });
+    getAuthID().then(() => {
+      axios.get("http://localhost:3000/dish/0/" + authID).then(inactive => {
+        this.setState({ inactive: inactive.data[0] }, () =>
+          console.log("INACTIVE DISHES ARE ", this.state.inactive)
+        );
+        axios.get("http://localhost:3000/dish/1/" + authID).then(active => {
+          this.setState({ active: active.data[0] }, () =>
+            console.log("ACTIVE DISHES ARE ", this.state.active)
+          );
+        });
+      });
+    });
   }
   render() {
     var inactiveOrders = [];
     var activeOrders = [];
     return (
       <ScrollView>
-        {/*<Header hasTabs />*/}
-        {/*<Tabs >*/}
-          {/*<Tab heading={<TabHeading><Text>Inactive</Text></TabHeading>}>
+        <Header hasTabs />
+        <Tabs >
+          <Tab heading={<TabHeading><Text>Inactive</Text></TabHeading>}>
             {!this.state.inactive
               ? <Text />
               : this.state.inactive.forEach(item =>
@@ -68,9 +68,8 @@ export default class ChefPanel extends Component {
             <List style={{ marginTop: 10 }} dataArray={this.state.active}>
               {acceptedOrders}
             </List>
-          </Tab>*/}
-        {/*</Tabs>*/}
-        <Text> CHef Panel</Text>
+          </Tab>
+        </Tabs>
       </ScrollView>
     );
   }

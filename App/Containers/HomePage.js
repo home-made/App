@@ -75,19 +75,21 @@ export default class HomePage extends Component {
           console.log(err);
         } else {
           token = JSON.stringify(token);
-          axios
-            .get(`http://localhost:3000/chef/${profile.userId}`)
-            .then(res => {
-              console.log("INSIDE AXIOS REQUEST, res", res);
-              profile.isChef = res.data[0].isChef;
-              profile.isChef ? profile.chefView = true : profile.chefView = false;
+          
+          axios.post(`http://localhost:3000/user/${profile.userId}`, profile).then((user) => {
+            if (user.data.isChef) {
+                profile.chefView = true;
+                profile = JSON.stringify(profile);
+                setStorage();
+            } else {
+              profile.chefView = false;
               profile = JSON.stringify(profile);
               setStorage();
-            })
-            .catch(err => console.log(err));
-
+            }
+          });
+            
+        
           async function setStorage() {
-          console.log('whoa')
             try {
               await AsyncStorage.multiSet(
                 [
@@ -112,7 +114,6 @@ export default class HomePage extends Component {
         }
       }
     );
-     console.log('whoa2')
   }
 
   showDrawer() {

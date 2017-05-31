@@ -117,9 +117,6 @@ export default class Checkout extends Component {
       not sure what the ID for a dish is in the DB.
       */
 
-    var chefId = "7564fjasdif"; //Luke Skywalker
-    var customerId = "axncmufid745"; //Darth Vader
-    var cashTotal = this.state.cashTotal;
 
     //where status: 0 means the order is pending approval
     var newOrder = {

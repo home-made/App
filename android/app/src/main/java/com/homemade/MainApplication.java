@@ -3,7 +3,10 @@ package com.homemade;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+<<<<<<< HEAD
 import com.mybigday.rns3.RNS3Package;
+=======
+>>>>>>> master
 import com.airbnb.android.react.maps.MapsPackage;
 import com.auth0.lock.react.LockReactPackage;
 import com.imagepicker.ImagePickerPackage;
@@ -30,7 +33,10 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+<<<<<<< HEAD
             new RNS3Package(),
+=======
+>>>>>>> master
             new MapsPackage(),
             new LockReactPackage(),
             new ImagePickerPackage(),

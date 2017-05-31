@@ -22,8 +22,8 @@ export default class EditProfile extends Component {
       try {
         const data = await AsyncStorage.getItem('profile');
         if (data !== null && data !== undefined) {
+          // console.log('async data: ', data);
           data = JSON.parse(data);
-          console.log('async data: ', data);
           userId = data.identityId, userName = data.name, userPic = data.extraInfo.picture_large;
         }
       } catch (err) {
@@ -79,7 +79,17 @@ export default class EditProfile extends Component {
             uri: this.state.userPic
           }}
         />
-
+        <Button
+            style={{ marginTop: 10 }}
+            onPress={() => {Actions.uploaddishimage(); Toast.show({
+              supportedOrientations: ['portrait','landscape'],
+              text: 'Profile Updated',
+              position: 'bottom',
+              buttonText: 'Okay'
+            });}}
+          >
+          <Text>Upload Profile Pic</Text>
+        </Button>  
         <Item>
           <Text>Update Address:</Text>
         </Item>

@@ -10,34 +10,18 @@ import ChefList from "../Components/ChefList";
 import Profile from "../Components/Profile";
 import Checkout from "../Components/Checkout";
 import EditProfile from "../Components/EditProfile";
-import UploadImageDish from "../Components/UploadImageDish";
-import DishCreate from "../Components/DishCreate";
-import DishConfirm from "../Components/DishConfirm";
-import SocketIO from "socket.io-client";
 import OrderPanel from "../Components/OrderPanel";
 import OrderView from "../Components/OrderView";
 import ChefPanel from "../Components/ChefPanel";
+import UploadImageDish from "../Components/UploadImageDish";
+import DishCreate from "../Components/DishCreate";
+import DishConfirm from "../Components/DishConfirm";
 import UserOrderPanel from "../Components/UserOrderPanel";
 import axios from "axios";
 
 // const cstore = store();
 
 // var socketConfig = { path: '/socket'};
-var socket = new SocketIO                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       ("localhost:3000");
-
-socket.connect();
-  console.log('b4id is',socket.id)
-
-socket.on("connect", () => {
-  console.log('id is',socket.id)
-  socket.emit("join", {email:'user1'});
-  socket.on("fresh", message => {
-    console.log(message);
-    console.log('send heem')
-  });
-
-});
- 
 class App extends Component {
   constructor() {
     super();
@@ -48,25 +32,23 @@ class App extends Component {
     this.getChef = this.getChef.bind(this);
     this.fetchCart = this.fetchCart.bind(this);
     this.setCart = this.setCart.bind(this);
-    this.setDishDetails =this.setDishDetails.bind(this);
-    this.fetchDishDetails = this.fetchDishDetails.bind(this);
+    this.fetchDishDetails = this.fetchDishDetails.bind(this)
+    this.setDishDetails = this.setDishDetails.bind(this)
     this.getCuisineStyles = this.getCuisineStyles.bind(this)
-  }
-  //return array of styles
-  getCuisineStyles(){
-    return "All Cuisines,American,Barbecue,Burgers,Chinese,Indian,Italian,Japanese,Korean,Mediterranean,Mexican,Pizza,Sandwiches,Sushi,Thai,Vegetarian,Vietnamese,American,Ethiopian,Other".split(",");
+
   }
 
   componentDidMount() {
     console.log("APP MOUNTED");
   }
-
+  getCuisineStyles(){
+    return "All Cuisines,American,Barbecue,Burgers,Chinese,Indian,Italian,Japanese,Korean,Mediterranean,Mexican,Pizza,Sandwiches,Sushi,Thai,Vegetarian,Vietnamese,American,Ethiopian,Other".split(",");
+  }
   setChef(chef) {
-    axios.get(`http://localhost:3000/chef/${chef.authId}`).then(res => {
-      this.setState({ user: res.data }, () => {
-        Actions.profile();
-      });
-    });
+    axios.get(`http://localhost:3000/chef/${chef.authId}`).then( res => {
+      this.setState({user: res.data}, () => {
+        Actions.profile();});
+    })
   }
 
   getChef() {
@@ -75,7 +57,7 @@ class App extends Component {
 
   setCuisineType(genre) {
     console.log(genre);
-    this.setState({ cuisineType: genre }, () => {
+    this.setState({cuisineType: genre}, () => {
       let url = `http://localhost:3000/chef/style/${this.state.cuisineType}`;
       axios
         .get(url)
@@ -90,17 +72,16 @@ class App extends Component {
         });
     });
   }
-
-  fetchChefs() {
-    console.log("the chefs inside fetchchefs are ", this.state.chefs)
-    return this.state.chefs;
-  }
   fetchDishDetails() {
     console.log('dish set',this.state.dish)
     return this.state.dish;
   }
   setDishDetails(dish) {
     this.setState({dish},()=> console.log('dish set',this.state.dish));
+  }
+  fetchChefs() {
+    console.log("the chefs inside fetchchefs are ", this.state.chefs)
+    return this.state.chefs;
   }
   setCart(cart) {
     this.setState({ checkout: cart });
@@ -132,7 +113,6 @@ class App extends Component {
               key="cuisines"
               component={Cuisines}
               title="Cuisines"
-              getStyles={this.getCuisineStyles}
               setCuisineType={this.setCuisineType}
             />
             <Scene key="chefPanel" component={ChefPanel} title="Chef Panel" />
@@ -150,23 +130,21 @@ class App extends Component {
               component={Profile}
               getChef={this.getChef}
             />
-            <Scene key="dishcreate" component={DishCreate} setDish={this.setDishDetails} getStyles={this.getCuisineStyles}
 
-title="Create Dish"/>
-            <Scene key="dishconfirm" component={DishConfirm} setDish={this.setDishDetails}  fetchDish={this.fetchDishDetails}/>
-            <Scene
-              key="uploaddishimage"
-              component={UploadImageDish}
-              title="Upload Dish"
-              setDish={this.setDishDetails}
-              fetchDish={this.fetchDishDetails}
-            />
             <Scene key="chefMap" component={ChefMap} setChef={this.setChef} />
 
             <Scene
               key="checkout"
               component={Checkout}
               fetchCart={this.fetchCart}
+            />
+            <Scene key="dishcreate" component={DishCreate} setDish={this.setDishDetails} getStyles={this.getCuisineStyles}
+              title="Create Dish"/>
+            <Scene key="dishconfirm" component={DishConfirm} setDish={this.setDishDetails}  fetchDish={this.fetchDishDetails}/>
+            <Scene
+              key="uploaddishimage"
+              component={UploadImageDish}
+              title="Upload Dish"
             />
             <Scene key="edit" component={EditProfile} />
             <Scene key="orders" component={OrderPanel} />

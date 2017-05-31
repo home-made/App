@@ -1,6 +1,9 @@
 rootProject.name = 'homemade'
+<<<<<<< HEAD
 include ':react-native-s3'
 project(':react-native-s3').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-s3/android')
+=======
+>>>>>>> master
 include ':react-native-maps'
 project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-maps/lib/android')
 include ':react-native-lock'

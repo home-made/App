@@ -14,7 +14,7 @@ import {
   Icon,
   Body,
   Title,
-  Right      
+  Right
 } from "native-base";
 const axios = require("react-native-axios");
 
@@ -46,7 +46,7 @@ export default class DishConfirm extends Component {
       getProfile()
         .then((res) => {
           dish.chefId = res
-          dish.isActive = false
+          dish.isActive = true
           dish.allergies = []
           this.setState({dish},()=> {
             console.log(this.state.dish)

@@ -44,11 +44,9 @@ export default class NavBar extends Component {
     Actions.edit({ type: ActionConst.RESET });
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
-
   dishcreate() {
     Actions.dishcreate({type:ActionConst.RESET});
   }
-
   orders() {
     let chefView;
     async function getChefViewBool() {
@@ -108,6 +106,21 @@ export default class NavBar extends Component {
   }
 
   render() {
+    const styles = {
+      content: {
+        marginTop: 20,
+        justifyContent: 'center',
+        alignItems: 'center'
+      },
+      backgroundImage: {
+        position: 'absolute',
+        resizeMode: 'cover'
+      },
+      entries: {
+        fontSize: 22
+      }
+    }
+    
     return (
       <Container style={styles.actionButtonIcon}>
         <Content style={{ marginTop: 20 }}>
@@ -135,9 +148,9 @@ export default class NavBar extends Component {
               <Text note />
             </Right>
           </ListItem>
-          <ListItem avatar onPress={this.dishcreate}>
+          <ListItem avatar onPress={this.checkout}>
             <Body>
-              <Text>Create Dish</Text>
+              <Text>Checkout</Text>
             </Body>
             <Right>
               <Text note />
@@ -153,13 +166,17 @@ export default class NavBar extends Component {
           </ListItem>
           <ListItem avatar onPress={this.orders}>
             <Body>
-              <Text>Orders</Text>
+              <Text style={styles.entries}>Orders</Text>
             </Body>
             <Right>
               <Text note />
             </Right>
           </ListItem>
-
+            <ListItem avatar onPress={this.dishcreate}>
+            <Body>
+              <Text>Create Dish</Text>
+            </Body>
+          </ListItem>
           <ListItem avatar onPress={this.logout}>
             <Body>
               <Text>Log Out</Text>
@@ -170,7 +187,7 @@ export default class NavBar extends Component {
           </ListItem>
           <ListItem avatar>
             <Body>
-              <Text>Chef Mode</Text>
+              <Text style={styles.entries}>Chef Mode</Text>
               <Text />
               <Switch
                 value={true}
