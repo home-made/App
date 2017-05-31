@@ -32,3 +32,5 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff"
   }
 });
+
+//Wow nice component Man...

@@ -19,6 +19,7 @@ export default class SignaturePage extends Component {
   }
   _onDragEvent() {
     // This callback will be called when the user enters signature
+    //Hey Joe.
     console.log("dragged");
   }
 
