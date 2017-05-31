@@ -22,6 +22,13 @@ export default class HomePage extends Component {
 
     this.state = {};
 
+    this.options = {
+      closeable: true,
+      languageDictionary: {
+        title: 'Homemade'
+      }
+    }
+
     this.lock = new Auth0Lock({
       clientId: "Rp7ThYPPRNHrSGUaLOv_Ub307zwDb_VR",
       domain: "stzy.auth0.com",
@@ -68,7 +75,7 @@ export default class HomePage extends Component {
     this.lock.show(
       {
         // connections: ["touchid"]
-        closeable: true
+        closable: true
       },
       (err, profile, token) => {
         if (err) {
