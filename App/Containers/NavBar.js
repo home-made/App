@@ -103,6 +103,8 @@ export default class NavBar extends Component {
     }
   }
 
+
+
   render() {
     return (
       <Container style={styles.actionButtonIcon}>
@@ -155,7 +157,6 @@ export default class NavBar extends Component {
               <Text note />
             </Right>
           </ListItem>
-
           <ListItem avatar onPress={this.logout}>
             <Body>
               <Text>Log Out</Text>

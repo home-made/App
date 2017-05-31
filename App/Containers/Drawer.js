@@ -4,10 +4,7 @@ import NavBar from "./NavBar";
 import { Actions, DefaultRenderer } from "react-native-router-flux";
 
 export default class NavigationDrawer extends Component {
-
-  componentDidMount() {
-    console.log("DRAWER MOUNTED");
-  }
+  
   render() {
     const state = this.props.navigationState;
     const children = state.children;
