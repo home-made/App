@@ -20,8 +20,8 @@ export default class NavigationDrawer extends Component {
         type="displace"
         content={<NavBar />}
         tapToClose={true}
-        openDrawerOffset={0.5}
-        panCloseMask={.4}
+        openDrawerOffset={0.25}
+        panCloseMask={.3}
         negotiatePan={true}
         styles={drawerStyles}
         tweenHandler={ratio => {
