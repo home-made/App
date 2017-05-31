@@ -114,6 +114,8 @@ export default class NavBar extends Component {
     }
   }
 
+
+
   render() {
     const styles = {
       content: {
