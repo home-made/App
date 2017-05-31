@@ -13,7 +13,7 @@ import EditProfile from "../Components/EditProfile";
 import OrderPanel from "../Components/OrderPanel";
 import OrderView from "../Components/OrderView";
 import ChefPanel from "../Components/ChefPanel";
-import UploadImageDish from "../Components/UploadImageDish";
+import UploadImage from "../Components/UploadImage";
 import DishCreate from "../Components/DishCreate";
 import DishConfirm from "../Components/DishConfirm";
 import UserOrderPanel from "../Components/UserOrderPanel";
@@ -35,6 +35,8 @@ class App extends Component {
     this.fetchDishDetails = this.fetchDishDetails.bind(this)
     this.setDishDetails = this.setDishDetails.bind(this)
     this.getCuisineStyles = this.getCuisineStyles.bind(this)
+    this.fetchUploadStatus = this.fetchUploadStatus.bind(this);
+    this.setUploadStatus = this.setUploadStatus.bind(this);
 
   }
 
@@ -71,6 +73,14 @@ class App extends Component {
           console.log("ERROR IS", err);
         });
     });
+  }
+  setUploadStatus(cameraMode){
+    console.log('camera mode is',cameraMode)
+    this.setState({cameraMode: cameraMode}, ()=>console.log('app camera mode is dish is',this.state.cameraMode))
+  }
+  fetchUploadStatus(){
+    console.log('status fetched', this.state.cameraMode)
+    return this.state.cameraMode
   }
   fetchDishDetails() {
     console.log('dish set',this.state.dish)
@@ -138,15 +148,16 @@ class App extends Component {
               component={Checkout}
               fetchCart={this.fetchCart}
             />
-            <Scene key="dishcreate" component={DishCreate} setDish={this.setDishDetails} getStyles={this.getCuisineStyles}
+            <Scene key="dishcreate" component={DishCreate} setCameraMode={this.setUploadStatus} setDish={this.setDishDetails} getStyles={this.getCuisineStyles}
               title="Create Dish"/>
             <Scene key="dishconfirm" component={DishConfirm} setDish={this.setDishDetails}  fetchDish={this.fetchDishDetails}/>
             <Scene
-              key="uploaddishimage"
-              component={UploadImageDish}
+              key="uploadimage"
+              component={UploadImage}
               title="Upload Dish"
+              fetchCameraMode={this.fetchUploadStatus}
             />
-            <Scene key="edit" component={EditProfile} />
+            <Scene key="edit" component={EditProfile}  setCameraMode={this.setUploadStatus}/>
             <Scene key="orders" component={OrderPanel} />
             <Scene key="orderView" component={OrderView} title="Order" />
             <Scene key="userOrders" component={UserOrderPanel} title="Orders" />

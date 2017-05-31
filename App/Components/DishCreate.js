@@ -31,6 +31,7 @@ export default class DishView extends Component {
   }
   componentWillMount(){
     this.setState({genres:['Select a Cuisine Style'].concat(this.props.getStyles())})
+    this.props.setCameraMode('dish')
   }
   handleSubmit() {
     console.log(this.state.dish)
@@ -48,7 +49,8 @@ export default class DishView extends Component {
     //   quantity: 1
     // });
     this.props.setDish(this.state.dish)
-    Actions.uploaddishimage()
+    // this.props.setCameraMode()
+    Actions.uploadimage()
   }
   onValueChange (value) {
     console.log(this.state.genres[value])
