@@ -79,7 +79,7 @@ export default class OrderPanel extends Component {
 
       <ScrollView>
         <Header hasTabs />
-        <Tabs>
+        <Tabs >
           <Tab heading={<TabHeading><Text>Pending</Text></TabHeading>}>
             {!this.state.pending
               ? <Text />

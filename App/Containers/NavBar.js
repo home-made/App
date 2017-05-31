@@ -104,6 +104,21 @@ export default class NavBar extends Component {
   }
 
   render() {
+    const styles = {
+      content: {
+        marginTop: 20,
+        justifyContent: 'center',
+        alignItems: 'center'
+      },
+      backgroundImage: {
+        position: 'absolute',
+        resizeMode: 'cover'
+      },
+      entries: {
+        fontSize: 22
+      }
+    }
+    
     return (
       <Container style={styles.actionButtonIcon}>
         <Content style={{ marginTop: 20 }}>
@@ -149,7 +164,7 @@ export default class NavBar extends Component {
           </ListItem>
           <ListItem avatar onPress={this.orders}>
             <Body>
-              <Text>Orders</Text>
+              <Text style={styles.entries}>Orders</Text>
             </Body>
             <Right>
               <Text note />
@@ -166,7 +181,7 @@ export default class NavBar extends Component {
           </ListItem>
           <ListItem avatar>
             <Body>
-              <Text>Chef Mode</Text>
+              <Text style={styles.entries}>Chef Mode</Text>
               <Text />
               <Switch
                 value={true}
