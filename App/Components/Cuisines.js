@@ -17,7 +17,7 @@ export default class Cuisines extends Component {
         <List style={{ marginTop: 60 }}>
           {genres.map(genre => {
             return (
-              <ListItem onPress={() => this.props.setCuisineType(genre)}>
+              <ListItem key={genre} onPress={() => this.props.setCuisineType(genre)}>
                 <Text>
                   {genre}
                 </Text>
