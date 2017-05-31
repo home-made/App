@@ -14,7 +14,7 @@ import {
   Icon,
   Body,
   Title,
-  Right
+  Right      
 } from "native-base";
 const axios = require("react-native-axios");
 

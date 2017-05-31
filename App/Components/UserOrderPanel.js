@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { StyleSheet, ScrollView, AsyncStorage } from "react-native";
 import { Button, Text, Container } from "native-base";
+import SocketIO from "socket.io-client";
 import axios from "axios";
-
+var socket;
 export default class UserOrderPanel extends Component {
   constructor() {
     super();
@@ -12,6 +13,17 @@ export default class UserOrderPanel extends Component {
   componentWillMount() {
     console.log("IN USER ORDER PANEL WILL MOUNT");
     let authID;
+    socket = new SocketIO("localhost:3000");
+    socket.connect();
+      console.log('b4id is',socket.id)
+
+    socket.on("connect", () => {
+      console.log('id is',socket.id)
+      socket.on("fresh", message => {
+        console.log(message);
+        console.log('send heem')
+      });
+    });
 
     async function getAuthID() {
       try {
@@ -30,7 +42,10 @@ export default class UserOrderPanel extends Component {
       console.log("AUTHID IS", authID)
       axios.get("http://localhost:3000/orders/" + authID).then(orders => {
         let order = orders.data[orders.data.length - 1];
-        this.setState({ order: order }, () => console.log(this.state.order));
+        this.setState({ order: order }, () => {
+          console.log(this.state.order)
+          socket.emit("join", this.state.order);
+        });
       }).catch(err => console.log(err));
     }).catch(err => console.log(err));
   }

@@ -23,15 +23,21 @@ import axios from "axios";
 // const cstore = store();
 
 // var socketConfig = { path: '/socket'};
-var socket = new SocketIO("localhost:3000");
+var socket = new SocketIO                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       ("localhost:3000");
 
 socket.connect();
+  console.log('b4id is',socket.id)
+
 socket.on("connect", () => {
+  console.log('id is',socket.id)
+  socket.emit("join", {email:'user1'});
   socket.on("fresh", message => {
     console.log(message);
-    socket.emit("message", "right back you");
+    console.log('send heem')
   });
+
 });
+ 
 class App extends Component {
   constructor() {
     super();
