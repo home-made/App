@@ -15,6 +15,8 @@ import OrderView from "../Components/OrderView";
 import ChefPanel from "../Components/ChefPanel";
 import UserOrderPanel from "../Components/UserOrderPanel";
 import Feedback from "../Components/Feedback";
+import SignaturePage from "../Components/SignaturePage";
+import ChefForm from './ChefForm';
 import axios from "axios";
 
 // const cstore = store();
@@ -128,6 +130,8 @@ class App extends Component {
             <Scene key="orderView" component={OrderView} title="Order" />
             <Scene key="userOrders" component={UserOrderPanel} title="Orders" />
             <Scene key="feedback" component={Feedback} title="Feedback" />
+            <Scene key="chefform" component={ChefForm} title="Chef Form" />
+            <Scene key="signature" component={SignaturePage} title="Signature Page" />
           </Scene>
         </Scene>
       </Scene>

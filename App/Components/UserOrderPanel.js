@@ -77,7 +77,7 @@ export default class UserOrderPanel extends Component {
           />
         }
         >
-
+ 
           <Text>Order placed: {this.state.order.date}</Text>
           {this.state.order.status === 0
             ? <Text>Order Status: Pending</Text>
