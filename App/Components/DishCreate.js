@@ -1,7 +1,15 @@
 import React, { Component } from "react";
 import { StyleSheet, TextInput, View, Alert } from "react-native";
 import { Actions } from "react-native-router-flux";
-import { Container, Text, Content, Input, Item, Form, Button } from "native-base";
+import {
+  Container,
+  Text,
+  Content,
+  Input,
+  Item,
+  Form,
+  Button
+} from "native-base";
 const axios = require("react-native-axios");
 
 export default class DishView extends Component {
@@ -39,15 +47,13 @@ export default class DishView extends Component {
       <Container>
         <Content>
           <Form style={{ marginTop: 60 }}>
-            <Button onPress={() =>Actions.uploaddishimage()}>
-                <Text>Upload Image </Text>
-              </Button>
+            <Button onPress={() => Actions.uploaddishimage()}>
+              <Text>Upload Image </Text>
+            </Button>
             <Item>
               <Input
                 placeholder="Dish Name"
-                onChangeText={dishText => 
-                  this.setState({dishText: dishText})
-                }
+                onChangeText={dishText => this.setState({ dishText: dishText })}
                 value={this.state.dishText}
               />
             </Item>
@@ -77,7 +83,7 @@ export default class DishView extends Component {
                 value={this.state.quantityNumber}
               />
             </Item>
-            <Button onPress={() =>console.log(this.state)}>
+            <Button onPress={() => console.log(this.state)}>
               <Text>Next </Text>
             </Button>
           </Form>

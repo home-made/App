@@ -4,6 +4,10 @@ import NavBar from "./NavBar";
 import { Actions, DefaultRenderer } from "react-native-router-flux";
 
 export default class NavigationDrawer extends Component {
+
+  componentDidMount() {
+    console.log("DRAWER MOUNTED");
+  }
   render() {
     const state = this.props.navigationState;
     const children = state.children;
@@ -16,7 +20,7 @@ export default class NavigationDrawer extends Component {
         type="displace"
         content={<NavBar />}
         tapToClose={true}
-        openDrawerOffset={0.25}
+        openDrawerOffset={0.5}
         panCloseMask={.4}
         negotiatePan={true}
         styles={drawerStyles}

@@ -10,7 +10,7 @@ import {
   Body,
   Button
 } from "native-base";
-import {Actions,ActionConst} from 'react-native-router-flux'
+import { Actions, ActionConst } from "react-native-router-flux";
 import { Grid, Row, Col } from "react-native-easy-grid";
 import DishView from "./DishView";
 import Review from "./Review";
@@ -27,7 +27,6 @@ export default class Profile extends Component {
 
   componentWillMount() {
     let chef = this.props.getChef();
-    console.log("IN PROFILE CHEF IS", chef);
     this.setState({ chef: this.props.getChef(), cart: [] }, () => {
       let reviews = this.state.chef[0].chefReviews.map(curr => {
         return {
@@ -54,12 +53,14 @@ export default class Profile extends Component {
   handleMenuPress() {
     this.setState({ reviews: false, menu: true }, console.log(this.state));
   }
+
   handleAddToCart(e) {
     var cart = [];
     cart = this.state.cart;
     cart.push(e);
-    this.setState({ cart: cart }, console.log(this.state.cart));
+    this.setState({ cart: cart }, console.log("CART IS", this.state.cart));
   }
+
   handleCheckout(){
     let customerId;
     async function checkStorage() {
@@ -108,7 +109,8 @@ export default class Profile extends Component {
                       width: 120,
                       height: 120,
                       justifyContent: "center",
-                      alignItems: "center"
+                      alignItems: "center",
+                      borderRadius: 60
                     }}
                     source={{
                       uri: this.state.chef[0].profileUrl
@@ -128,20 +130,21 @@ export default class Profile extends Component {
 
           {this.state.menu
             ? this.state.chef[1].map((dish, idx) => {
-                if(idx === this.state.chef[1].length -1){
+                if (idx === this.state.chef[1].length - 1) {
                   return (
                     <View>
                       <DishView dish={dish} addToCart={this.handleAddToCart} />
-                      <Button onPress={() => this.handleCheckout()}><Text> Checkout </Text></Button>
+                      {this.state.cart.length > 0 ? (<Container style={{alignItems:"center", marginBottom: -600}}><Content><Button success onPress={() => this.handleCheckout()}>
+                        <Text> Checkout </Text>
+                      </Button></Content></Container>) : (<Text></Text>)}
                     </View>
                   );
-                }
-                else{
-                return (
+                } else {
+                  return (
                     <DishView dish={dish} addToCart={this.handleAddToCart} />
                   );
                 }
-              }) 
+              })
             : <Text />}
 
           {this.state.reviews

@@ -1,58 +1,118 @@
 import React, { Component } from "react";
 import { Image, View, StyleSheet, AsyncStorage } from "react-native";
-import { Container, Content, List, ListItem, Thumbnail, Text, Body, Left, Right, Icon } from 'native-base';
-import { Actions, ActionConst } from 'react-native-router-flux';
+import {
+  Container,
+  Content,
+  List,
+  ListItem,
+  Thumbnail,
+  Text,
+  Body,
+  Left,
+  Right,
+  Icon
+} from "native-base";
+import { Actions, ActionConst } from "react-native-router-flux";
+import { Switch } from "react-native-switch";
 import axios from 'axios';
 
 export default class NavBar extends Component {
-
   cuisines() {
-    Actions.cuisines({type:ActionConst.RESET});
-    setTimeout(() => Actions.refresh({ key: 'drawer', open: false }), 0)
+    Actions.cuisines({ type: ActionConst.RESET });
+    setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
+  }
+
+  chefList() {
+    Actions.chefList({ type: ActionConst.RESET });
+    setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
 
   profile() {
-    Actions.profile({type:ActionConst.RESET});
-    setTimeout(() => Actions.refresh({ key: 'drawer', open: false }), 0)
-  }
-  chefMap() {
-    Actions.chefMap({type:ActionConst.RESET});
-    setTimeout(() => Actions.refresh({ key: 'drawer', open: false }), 0)
-  }
-  
-  edit() {
-    Actions.edit({type:ActionConst.RESET});
-    setTimeout(() => Actions.refresh({ key: 'drawer', open: false }), 0)
+    Actions.profile({ type: ActionConst.RESET });
+    setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
 
-  chefform() {
-    Actions.chefform({type:ActionConst.RESET});
-    setTimeout(() => Actions.refresh({ key: 'drawer', open: false }), 0)
+  chefMap() {
+    Actions.chefMap({ type: ActionConst.RESET });
+    setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
+  }
+
+  checkout() {
+    Actions.checkout({ type: ActionConst.RESET });
+    setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
+  }
+
+  edit() {
+    Actions.edit({ type: ActionConst.RESET });
+    setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
+  }
+
+  orders() {
+    let chefView;
+    async function getChefViewBool() {
+      try {
+        const data = await AsyncStorage.getItem("profile");
+        if (data !== null && data !== undefined) {
+          data = JSON.parse(data);
+          chefView = data.chefView;
+        }
+      } catch (err) {
+        console.log("Error getting data: ", err);
+      }
+    }
+    getChefViewBool().then(() => {
+      console.log("chefView is", chefView);
+      if (chefView) {
+        Actions.orders({ type: ActionConst.RESET });
+      } else {
+        Actions.userOrders({ type: ActionConst.RESET });
+      }
+    });
+
+    setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
 
   logout() {
-    Actions.homepage({type:ActionConst.RESET});
+    Actions.homepage({ type: ActionConst.RESET });
     async function clearStorage() {
       try {
-        await AsyncStorage.multiRemove(['profile', 'token', 'isAuthenticated'], () => {
-          console.log('Storage cleared!');
-        })
+        await AsyncStorage.multiRemove(
+          ["profile", "token", "isAuthenticated"],
+          () => {
+            console.log("Storage cleared!");
+          }
+        );
       } catch (err) {
-        console.log('Error clearing storage: ', err);
+        console.log("Error clearing storage: ", err);
       }
     }
     clearStorage();
-
     axios.get('https://stzy.auth0.com/v2/logout?federated')
-      .then((res) => console.log(res))
+      .then((res) => console.log(res));
 
-    setTimeout(() => Actions.refresh({ key: 'drawer', open: false }), 0)
+
+    setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
+  }
+
+  async toggleChefMode() {
+    try {
+      const profile = await AsyncStorage.getItem("profile");
+
+      profile = JSON.parse(profile);
+      profile.chefView = !profile.chefView;
+      profile = JSON.stringify(profile);
+      if (profile !== null && profile !== undefined) {
+        await AsyncStorage.setItem("profile", profile);
+      }
+    } catch (err) {
+      console.log("Error getting data: ", err);
+    }
   }
 
   render() {
     const styles = {
       content: {
-        marginTop: 22,
+        marginTop: 20,
         justifyContent: 'center',
         alignItems: 'center'
       },
@@ -64,62 +124,80 @@ export default class NavBar extends Component {
         fontSize: 22
       }
     }
+    
     return (
-      <Container style={{}}>
+      <Container style={styles.actionButtonIcon}>
+        <Content style={{ marginTop: 20 }}>
+          <ListItem avatar onPress={this.cuisines}>
+            <Body>
+              <Text>Cuisines</Text>
+            </Body>
+            <Right>
+              <Text note>🍕</Text>
+            </Right>
+          </ListItem>
+          <ListItem avatar onPress={this.profile}>
+            <Body>
+              <Text>Profile</Text>
+            </Body>
+            <Right>
+              <Text note />
+            </Right>
+          </ListItem>
+          <ListItem avatar onPress={this.chefMap}>
+            <Body>
+              <Text>Map</Text>
+            </Body>
+            <Right>
+              <Text note />
+            </Right>
+          </ListItem>
+          <ListItem avatar onPress={this.checkout}>
+            <Body>
+              <Text>Checkout</Text>
+            </Body>
+            <Right>
+              <Text note />
+            </Right>
+          </ListItem>
+          <ListItem avatar onPress={this.edit}>
+            <Body>
+              <Text>Edit Profile</Text>
+            </Body>
+            <Right>
+              <Text note />
+            </Right>
+          </ListItem>
+          <ListItem avatar onPress={this.orders}>
+            <Body>
+              <Text style={styles.entries}>Orders</Text>
+            </Body>
+            <Right>
+              <Text note />
+            </Right>
+          </ListItem>
 
-        <Image source={require('./img/turquoise-top-gradient-background.jpg')} style={styles.backgroundImage} />
-
-        <View style={{ flex: .2, justifyContent: 'center', flexDirection: 'column' }}>
-          <Text style={{ textAlign: 'center', fontSize: 25 }}>HOMEMADE BITCHES</Text>
-        </View>
-
-        <Content>
-          <ListItem icon onPress={this.cuisines} style={styles.content}>
-            <Left>
-              <Icon name='ios-pizza' />
-            </Left>
+          <ListItem avatar onPress={this.logout}>
             <Body>
-                <Text style={styles.entries}>Cuisines</Text>
+              <Text>Log Out</Text>
             </Body>
+            <Right>
+              <Text note>LO</Text>
+            </Right>
           </ListItem>
-          <ListItem icon onPress={this.profile} style={styles.content}>
-            <Left>
-              <Icon name='ios-contact' />
-            </Left>
+          <ListItem avatar>
             <Body>
-              <Text style={styles.entries}>Profile</Text>
-            </Body>
-          </ListItem>
-          <ListItem icon onPress={this.chefMap} style={styles.content}>
-            <Left>
-              <Icon name='ios-map' />
-            </Left>
-            <Body>
-              <Text style={styles.entries}>Map</Text>
-            </Body>
-          </ListItem>
-          <ListItem icon onPress={this.edit} style={styles.content}>
-            <Left>
-              <Icon name='ios-create' />
-            </Left>
-            <Body>
-              <Text style={styles.entries}>Edit Profile</Text>
-            </Body>
-          </ListItem>
-          <ListItem icon onPress={this.chefform} style={styles.content}>
-            <Left>
-              <Icon name='ios-star' />
-            </Left>
-            <Body>
-              <Text style={styles.entries}>Be A Chef!</Text>
-            </Body>
-          </ListItem>
-          <ListItem icon onPress={this.logout} style={styles.content}>
-            <Left>
-              <Icon name='ios-exit' />
-            </Left>
-            <Body>
-              <Text style={styles.entries}>Log Out</Text>
+              <Text style={styles.entries}>Chef Mode</Text>
+              <Text />
+              <Switch
+                value={true}
+                onValueChange={this.toggleChefMode}
+                disabled={false}
+                backgroundActive={"green"}
+                backgroundInactive={"gray"}
+                circleActiveColor={"white"}
+                circleInActiveColor={"white"}
+              />
             </Body>
           </ListItem>
         </Content>
@@ -130,11 +208,8 @@ export default class NavBar extends Component {
 
 const styles = StyleSheet.create({
   actionButtonIcon: {
-    fontSize: 30,
-    height: 1000,
+    fontSize: 20,
+    height: 22,
     color: "white"
-  },
-  content: {
-    marginTop: 30
   }
 });

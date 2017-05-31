@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, AsyncStorage, Image, Container } from "react-native";
-import { View, Input, Item, Button, Text } from "native-base";
-import { Grid, Col, Row } from "react-native-easy-grid";
+import { View, Input, Item, Button, Text, Toast } from "native-base";
 import { Actions } from "react-native-router-flux";
 import axios from "axios";
 
@@ -9,6 +8,7 @@ export default class EditProfile extends Component {
   constructor() {
     super();
     this.state = {
+      showToast: false,
       userId: '',
       userName: '',
       userPic: ''
@@ -112,9 +112,12 @@ export default class EditProfile extends Component {
         <Item>
           <Button
             style={{ marginTop: 10 }}
-            onPress={() => {
-              this.handleSubmit();
-            }}
+            onPress={() => {Actions.cuisines(); Toast.show({
+              supportedOrientations: ['portrait','landscape'],
+              text: 'Profile Updated',
+              position: 'bottom',
+              buttonText: 'Okay'
+            });}}
           >
             <Text>Submit</Text>
           </Button>
