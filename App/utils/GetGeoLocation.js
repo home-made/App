@@ -14,9 +14,11 @@ module.exports = (mapContext) => {
         longitude: position.coords.longitude,
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA,
-      };      
+      };
+
+      var mapLoaded = true;      
       
-      mapContext.setState({region});
+      mapContext.setState({mapLoaded, region});
       
       FilterByLocation(mapContext, region);
 
@@ -32,8 +34,8 @@ module.exports = (mapContext) => {
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA,
       }; 
-      
-      mapContext.setState({region: regionChange});
+      var mapLoaded = true;
+      mapContext.setState({mapLoaded, region: regionChange});
 
     });
 }
