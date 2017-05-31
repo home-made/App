@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Image, View, StyleSheet, AsyncStorage } from "react-native";
 import { Container, Content, List, ListItem, Thumbnail, Text, Body, Left, Right, Icon } from 'native-base';
 import { Actions, ActionConst } from 'react-native-router-flux';
+import axios from 'axios';
 
 export default class NavBar extends Component {
 
@@ -41,6 +42,10 @@ export default class NavBar extends Component {
       }
     }
     clearStorage();
+
+    axios.get('https://stzy.auth0.com/v2/logout?federated')
+      .then((res) => console.log(res))
+
     setTimeout(() => Actions.refresh({ key: 'drawer', open: false }), 0)
   }
 

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { View, StyleSheet, Text, TouchableHighlight } from "react-native";
 import SignatureCapture from "react-native-signature-capture";
-import { Icons } from 'react-native-vector-icons/Ionicons'
+import { Icons } from "react-native-vector-icons/Ionicons";
 
 export default class SignaturePage extends Component {
   saveSign() {
@@ -66,14 +66,17 @@ export default class SignaturePage extends Component {
 }
 
 const styles = StyleSheet.create({
-    signature: {
-        flex: 1,
-        borderColor: '#000033',
-        borderWidth: 1,
-    },
-    buttonStyle: {
-        flex: 1, justifyContent: "center", alignItems: "center", height: 50,
-        backgroundColor: "#eeeeee",
-        margin: 10
-    }
+  signature: {
+    flex: 1,
+    borderColor: "#000033",
+    borderWidth: 1
+  },
+  buttonStyle: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    height: 50,
+    backgroundColor: "#eeeeee",
+    margin: 10
+  }
 });
