@@ -66,27 +66,7 @@ export default class Profile extends Component {
   }
   
   displayDishView(){
-    if (this.state.isChef) {
-      if (this.state.menu.length > 0){
-        
-        {this.state.menu.map(dish => {
-          return (
-            <Text>Got a Dish</Text>
-  
-          )
-        })}
-          
-      } else {
-        return (
-          <Text>Whoops! The current chef doesn't have any active dishes</Text>
-        )
-      }
-      
-    } else {
-      return (
-        <Text></Text>
-      )
-    }
+
   }
 
 
@@ -106,20 +86,31 @@ export default class Profile extends Component {
             */
 
   componentWillMount() {
-    AsyncStorage.getItem('profile').then(profile => {
+    
+    let context = this;
+    let userId;
 
-      var userId = JSON.parse(profile).userId;
-      var context = this;
-      
-      SetProfile(context, userId);
+    async function grabAuthId() {
+      try {
+        const profile = await AsyncStorage.getItem('profile');
+        if (profile !== null && profile !== undefined) {
+          userId = JSON.parse(profile).userId;
+          console.log(JSON.parse(profile).userId);
+          console.log(userId);
 
-    }).catch(error => {
-      console.log("Error inside AsyncStorage for Profile.js is ", error);
-    });
+          SetProfile(context, userId);
+
+        }
+      } catch (err) {
+        console.log("Error getting profile: ", err);
+      }
+    }
+    grabAuthId();
 
   }
 
   render() {
+    {console.log("the state is ", this.state)}
     return (
       <Container style={{ marginTop: 60 }}>
         <Content>
@@ -134,44 +125,42 @@ export default class Profile extends Component {
             <CardItem>
               <Body>
                 <Row style={{ justifyContent: "center", alignItems: "center" }}>
-                  <Image style={{ width: 120, height: 120, justifyContent: "center", alignItems:  "center", borderRadius: 60 }} source={{ uri: !this.state.profileUrl ? "" : this.state.user.profileUrl }} />
+
+                  <Image style={{ 
+                         width: 120, 
+                         height: 120, 
+                         justifyContent: "center", 
+                         alignItems:  "center", 
+                         borderRadius: 60 }} 
+                         source={{ uri: !this.state.profileUrl ? "" : this.state.user.profileUrl }} />
                 </Row>
               </Body>
             </CardItem>
-
-            {/* What should I do here? */}
+          </Card>
 
             <Row style={{ justifyContent: "center", alignItems: "center" }}>
               <Button onPress={this.handleReviewsPress}>
                 <Text>Reviews</Text>
               </Button>
-              <Text></Text>
-              <Button onPress={this.handleMenuPress}><Text>Menu</Text></Button>
+              
+              {/*<Button onPress={this.handleMenuPress}>
+                <Text>Menu</Text>
+              </Button> */}
             </Row>
 
-            {/*****************************/}
+            {this.state.chefReviews
+            ? this.state.chefReviews.map(review => {
+                console.log("the review is ", review)
+                {/*return <Review review={review} />;*/}
+              })
+            : <Text />}
 
-            {/*
-              user: user.data[0],
-              authId: user.data[0].authId,
-              chefReviews: user.data[0].chefReviews,
-              firstName: user.data[0].firstName,
-              lastName: user.data[0].lastName,
-              fullName: fullName,
-              status: user.data[0].status,
-              isChef: user.data[0].isChef,
-              likes: user.data[0].likes,
-              _id: user.data[0]._id
-              menu: activeDishes
-              
-            */}
-          </Card>
 
-          {this.displayDishView()}
+
+
+          
         </Content>
       </Container>
-
-
     );
 
   }

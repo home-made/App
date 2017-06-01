@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, AsyncStorage } from "react-native";
+import { View, Text, StyleSheet, Icon } from "react-native";
 import { Router, Scene, Actions, ActionConst } from "react-native-router-flux";
 
 import NavigationDrawer from "./Drawer";
@@ -27,7 +27,7 @@ import axios from "axios";
 
 // const cstore = store();
 
-class App extends Component {
+export default class App extends Component {
   constructor() {
     super();
     this.state = {};
@@ -63,6 +63,7 @@ class App extends Component {
   setCuisineType(genre) {
     console.log(genre);
     this.setState({cuisineType: genre}, () => {
+    console.log('CUISINETYPE: ', this.state.cuisineType);
       let url = `http://localhost:3000/chef/style/${this.state.cuisineType}`;
       axios
         .get(url)
@@ -105,6 +106,8 @@ class App extends Component {
 
   componentDidMount() {
     console.log("APP MOUNTED");
+
+/*
     AsyncStorage.getItem('profile').then(profile => {
 
       var userId = JSON.parse(profile).userId;
@@ -115,6 +118,8 @@ class App extends Component {
     }).catch(error => {
       console.log("Error inside AsyncStorage for Profile.js is ", error);
     });
+
+*/
   }
 
   render() {
@@ -206,4 +211,3 @@ const styles = StyleSheet.create({
   }
 });
 
-export default App;
