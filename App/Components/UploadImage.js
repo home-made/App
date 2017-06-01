@@ -44,7 +44,7 @@ class Upload extends Component {
           name: "image.jpg",
           type: "image/jpeg"
         }
-        // if(this.state.cameraMode === 'dish'){
+        if(this.state.cameraMode === 'dish'){
           let options = {
             keyPrefix: `dish${this.state.dish.name}`,
             bucket: "homemadedishes",
@@ -62,18 +62,27 @@ class Upload extends Component {
           this.props.setDish(dish)
           console.log('baby dish',dish)
           Actions.dishconfirm()
-          /**
-           * {
-           *   postResponse: {
-           *     bucket: "your-bucket",
-           *     etag : "9f620878e06d28774406017480a59fd4",
-           *     key: "uploads/image.png",
-           *     location: "https://your-bucket.s3.amazonaws.com/uploads%2Fimage.png"
-           *   }
-           * }
-           */
           });
-        // }
+        } else{
+          let options = {
+            keyPrefix: `profile${this.state.user.name}`,
+            bucket: "homemadeprofile",
+            region: "us-east-1",
+            accessKey: res.data.key,
+            secretKey: res.data.secret,
+            successActionStatus: 201
+          }
+          RNS3.put(file, options).then(response => {
+          if (response.status !== 201)
+            throw new Error("Failed to upload image to S3");
+          console.log(response.body.postResponse.location);
+          let user = this.state.user
+          user['profileUrl']=response.body.postResponse.location;
+          this.setUser(user)
+          console.log('baby user',user)
+          // Actions.dishconfirm()
+          });
+        }
       })
     }).catch(err =>{
     console.log(err)

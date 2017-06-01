@@ -22,7 +22,7 @@ export default class DishView extends Component {
         selected1: 0,
       dish:{
         name: "",
-        donation: 0,
+        cashDonation: 0,
         quantity: 0,
         description: ""
       }
@@ -103,15 +103,12 @@ export default class DishView extends Component {
               <Input 
                 placeholder="Donation Amount"
                 keyboardType={"number-pad"}
-                onChangeText={donation => {
-                    let result = donation.split('')
-                    result.shift()
-                    result.shift()
+                onChangeText={cashDonation => {
                     let dish = this.state.dish;
-                    dish.donation = donation
+                    dish.cashDonation = cashDonation
                     this.setState({ dish},()=> console.log(this.state.dish))
                   }
-                  }
+                }
               
                 value={this.state.dish.donation}
               />

@@ -21,23 +21,25 @@ export default class OrderView extends Component {
   }
 
   handleAccept() {
-    console.log("IN HANDLE ACCEPT, props are ", this.props);
     let request = {
       chefId: this.props.chefId,
       date: this.props.date,
       status: 1
-    }
-    axios.put("http://localhost:3000/orders", request).then((res) => console.log(res));
+    };
+    axios
+      .put('http://localhost:3000/orders', request)
+      .then(() => Actions.orders());
   }
 
-  handleDecline() {
-    console.log("IN HANDLE DECLINE, props are ", this.props);
+ handleDecline() {
     let request = {
       chefId: this.props.chefId,
       date: this.props.date,
       status: 3
-    }
-    axios.put("http://localhost:3000/orders", request).then((res) => console.log(res));
+    };
+    axios
+      .put('http://localhost:3000/orders', request)
+      .then(() => Actions.orders());
   }
 
   render() {
