@@ -8,82 +8,141 @@ import {
   Input,
   Item,
   Form,
-  Button
+  Button,
+  Label,
+  Picker,
+  CheckBox,
+  ListItem
 } from "native-base";
-const axios = require("react-native-axios");
-
 export default class DishView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dishText: "",
-      donationNumber: "",
-      quantityNumber: "",
-      dishDescriptionText: ""
+        selectedItem: 'undefined',
+        selected1: 0,
+      dish:{
+        name: "",
+        donation: 0,
+        quantity: 0,
+        description: ""
+      }
     };
-    this.onSubmit = this.onSubmit.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
-  onSubmit() {
-    axios.post("http://localhost:3000/dish/add", {
-      cuisineType: "Chinese",
-      name: this.state.name,
-      description: this.state.dishDescriptionText,
-      dishImages: [
-        "https://media-cdn.tripadvisor.com/media/photo-s/02/39/2d/21/chinese-dumplings-with.jpg"
-      ],
-      chefId: "7564fjasdif",
-      allergies: ["none"],
-      cashDonation: 8,
-      isActive: true,
-      quantity: 1
-    });
+  componentWillMount(){
+    this.setState({genres:['Select a Cuisine Style'].concat(this.props.getStyles())})
+    this.props.setCameraMode('dish')
+  }
+  handleSubmit() {
+    console.log(this.state.dish)
+    // axios.post("http://localhost:3000/dish/add", {
+    //   cuisineType: "Chinese",
+    //   name: this.state.name,
+    //   description: this.state.dishDescriptionText,
+    //   dishImages: [
+    //     "https://media-cdn.tripadvisor.com/media/photo-s/02/39/2d/21/chinese-dumplings-with.jpg"
+    //   ],
+    //   chefId: "7564fjasdif",
+    //   allergies: ["none"],
+    //   cashDonation: 8,
+    //   isActive: true,
+    //   quantity: 1
+    // });
+    this.props.setDish(this.state.dish)
+    // this.props.setCameraMode()
+    Actions.uploadimage()
+  }
+  onValueChange (value) {
+    console.log(this.state.genres[value])
+    let dish = this.state.dish
+    dish['cuisineType'] = this.state.genres[value]
+    this.setState({
+        selected1 : value, dish
+    },() =>console.log(this.state.dish));
   }
   render() {
+    const price = '$'+this.state.donation;
     const { container } = styles;
     const onButtonPress = () => {
       this.setState({ dishText: "freshly" });
     };
     return (
-      <Container>
-        <Content>
-          <Form style={{ marginTop: 60 }}>
-            <Button onPress={() => Actions.uploaddishimage()}>
-              <Text>Upload Image </Text>
-            </Button>
+      <Container   style={{
+          flex: 1,
+          flexDirection: "column",
+
+
+        }}>
+        <Content >
+          <Form style={{ marginTop: 100 }}>
             <Item>
               <Input
-                placeholder="Dish Name"
-                onChangeText={dishText => this.setState({ dishText: dishText })}
-                value={this.state.dishText}
+                placeholder="Name"
+                onChangeText={name => {
+                   let dish = this.state.dish;
+                  dish.name = name;
+                  this.setState({dish},()=>console.log(this.state.dish));
+
+                }}
+                value={this.state.dish.name}
               />
             </Item>
             <Item>
               <Input
                 placeholder="Description"
-                onChangeText={dishDescriptionText =>
-                  this.setState({ dishDescriptionText })}
-                value={this.state.dishDescriptionText}
+                onChangeText={description =>{
+                  let dish = this.state.dish;
+                  dish.description = description
+                  this.setState({dish},()=>console.log(this.state.dish));
+                }}
+                value={this.state.dish.description}
+              />
+            </Item>
+            <Item stackedLabel>
+              <Label>$</Label>
+              <Input 
+                placeholder="Donation Amount"
+                keyboardType={"number-pad"}
+                onChangeText={donation => {
+                    let result = donation.split('')
+                    result.shift()
+                    result.shift()
+                    let dish = this.state.dish;
+                    dish.donation = donation
+                    this.setState({ dish},()=> console.log(this.state.dish))
+                  }
+                  }
+              
+                value={this.state.dish.donation}
               />
             </Item>
             <Item>
               <Input
-                placeholder="Cash Donation $"
+                placeholder="Quantity"
                 keyboardType={"number-pad"}
-                onChangeText={donationNumber =>
-                  this.setState({ donationNumber })}
-                value={this.state.donationNumber}
+                onChangeText={quantity =>{
+                    let dish = this.state.dish;
+                    dish.quantity = quantity;
+                    this.setState({ dish},()=> console.log(this.state.dish))
+                  }}
+                value={this.state.dish.quantity}
               />
             </Item>
-            <Item>
-              <Input
-                placeholder="Cash Donation $"
-                keyboardType={"number-pad"}
-                onChangeText={quantityNumber =>
-                  this.setState({ quantityNumber })}
-                value={this.state.quantityNumber}
-              />
-            </Item>
-            <Button onPress={() => console.log(this.state)}>
+             <Picker
+                supportedOrientations={['portrait','landscape']}
+                iosHeader="Select one"
+                mode="dropdown"
+                selectedValue={this.state.selected1}
+                onValueChange={this.onValueChange.bind(this)}>
+                {/*<Item label="Select a Cuisine Style" value={0} />*/}
+                { this.state.genres ? this.state.genres.map((curr,ind) => {
+                  return (
+                    <Item label={curr} value={ind} />
+                  );
+
+                }): {}}
+            </Picker>
+            <Button style={{ marginTop: 70}} onPress={() => this.handleSubmit()}>
               <Text>Next </Text>
             </Button>
           </Form>

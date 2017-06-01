@@ -26,7 +26,10 @@ export default class NavBar extends Component {
     Actions.chefList({ type: ActionConst.RESET });
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
-
+  dishcreate() {
+    Actions.dishcreate({type:ActionConst.RESET});
+    setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
+  }
   profile() {
     Actions.profile({ type: ActionConst.RESET });
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
@@ -41,7 +44,10 @@ export default class NavBar extends Component {
     Actions.checkout({ type: ActionConst.RESET });
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
-
+  chefPanel(){
+     Actions.chefPanel({ type: ActionConst.RESET });
+    setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
+  }
   edit() {
     Actions.edit({ type: ActionConst.RESET });
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
@@ -114,6 +120,8 @@ export default class NavBar extends Component {
     }
   }
 
+
+
   render() {
     const styles = {
       content: {
@@ -174,10 +182,23 @@ export default class NavBar extends Component {
               <Text style={styles.entries}>Map</Text>
             </Body>
           </ListItem>
+
+          <ListItem avatar onPress={this.dishcreate}>
+            <Body>
+              <Text>Create Dish</Text>
+            </Body>
+          </ListItem>
+          <ListItem avatar onPress={this.chefPanel}>
+            <Body>
+              <Text>Manage Dishes</Text>
+            </Body>
+          </ListItem>
+
           <ListItem icon onPress={this.checkout} style={styles.content}>
             <Left>
               <Icon name='ios-basket'/>
             </Left>
+
             <Body>
               <Text style={styles.entries}>Checkout</Text>
             </Body>
