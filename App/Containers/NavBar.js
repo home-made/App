@@ -26,7 +26,10 @@ export default class NavBar extends Component {
     Actions.chefList({ type: ActionConst.RESET });
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
-
+  dishcreate() {
+    Actions.dishcreate({ type: ActionConst.RESET });
+    setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
+  }
   profile() {
     Actions.profile({ type: ActionConst.RESET });
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
@@ -41,7 +44,10 @@ export default class NavBar extends Component {
     Actions.checkout({ type: ActionConst.RESET });
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
-
+  chefPanel() {
+    Actions.chefPanel({ type: ActionConst.RESET });
+    setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
+  }
   edit() {
     Actions.edit({ type: ActionConst.RESET });
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
@@ -117,7 +123,7 @@ export default class NavBar extends Component {
   render() {
     const styles = {
       content: {
-        marginTop: 14,
+        marginTop: 6,
         justifyContent: "center",
         alignItems: "center"
       },
@@ -126,7 +132,7 @@ export default class NavBar extends Component {
         resizeMode: "cover"
       },
       entries: {
-        fontSize: 22
+        fontSize: 18
       }
     };
 
@@ -140,8 +146,8 @@ export default class NavBar extends Component {
 
         <View
           style={{
-            marginTop: 40,
-            flex: 0.1,
+            marginTop: 25,
+            flex: 0.08,
             justifyContent: "center",
             flexDirection: "column"
           }}
@@ -158,6 +164,7 @@ export default class NavBar extends Component {
               <Text style={styles.entries}>Cuisines</Text>
             </Body>
           </ListItem>
+
           <ListItem icon onPress={this.profile} style={styles.content}>
             <Left>
               <Icon name="ios-contact" />
@@ -166,6 +173,7 @@ export default class NavBar extends Component {
               <Text style={styles.entries}>Profile</Text>
             </Body>
           </ListItem>
+
           <ListItem icon onPress={this.chefMap} style={styles.content}>
             <Left>
               <Icon name="ios-map" />
@@ -174,6 +182,25 @@ export default class NavBar extends Component {
               <Text style={styles.entries}>Map</Text>
             </Body>
           </ListItem>
+
+          <ListItem icon onPress={this.dishcreate} style={styles.content}>
+            <Left>
+              <Icon name='ios-camera' />
+            </Left>
+            <Body>
+              <Text style={styles.entries}>Create Dish</Text>
+            </Body>
+          </ListItem>
+
+          <ListItem icon onPress={this.chefPanel} style={styles.content}>
+            <Left>
+              <Icon name='ios-clipboard' />
+            </Left>
+            <Body>
+              <Text style={styles.entries}>Manage Dishes</Text>
+            </Body>
+          </ListItem>
+
           <ListItem icon onPress={this.checkout} style={styles.content}>
             <Left>
               <Icon name="ios-basket" />
@@ -182,6 +209,7 @@ export default class NavBar extends Component {
               <Text style={styles.entries}>Checkout</Text>
             </Body>
           </ListItem>
+
           <ListItem icon onPress={this.edit} style={styles.content}>
             <Left>
               <Icon name="ios-create" />
@@ -190,6 +218,7 @@ export default class NavBar extends Component {
               <Text style={styles.entries}>Edit Profile</Text>
             </Body>
           </ListItem>
+
           <ListItem icon onPress={this.orders} style={styles.content}>
             <Left>
               <Icon name="ios-filing" />
@@ -198,6 +227,7 @@ export default class NavBar extends Component {
               <Text style={styles.entries}>Orders</Text>
             </Body>
           </ListItem>
+
           <ListItem icon onPress={this.chefform} style={styles.content}>
             <Left>
               <Icon name="ios-star" />
@@ -206,6 +236,7 @@ export default class NavBar extends Component {
               <Text style={styles.entries}>Be A Chef!</Text>
             </Body>
           </ListItem>
+
           <ListItem icon onPress={this.logout} style={styles.content}>
             <Left>
               <Icon name="ios-exit" />
@@ -214,6 +245,7 @@ export default class NavBar extends Component {
               <Text style={styles.entries}>Log Out</Text>
             </Body>
           </ListItem>
+
           <ListItem avatar>
             <Body>
               <Text>Chef Mode</Text>

@@ -60,8 +60,11 @@ export default class HomePage extends Component {
           data
         );
         if (data[2][1] === "true") {
+          console.log('last stepppppppp')
           Actions.drawer();
         }
+      } else {
+        console.log('WHAT IS ', data);
       }
     } catch (err) {
       console.log(
