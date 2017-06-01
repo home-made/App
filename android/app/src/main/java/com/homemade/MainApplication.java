@@ -3,6 +3,8 @@ package com.homemade;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.rssignaturecapture.RSSignatureCapturePackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.auth0.lock.react.LockReactPackage;
 import com.imagepicker.ImagePickerPackage;
@@ -29,6 +31,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new VectorIconsPackage(),
+            new RSSignatureCapturePackage(),
             new MapsPackage(),
             new LockReactPackage(),
             new ImagePickerPackage(),
