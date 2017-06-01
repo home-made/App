@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, StyleSheet, AsyncStorage } from "react-native";
+import { Image, View, StyleSheet, AsyncStorage } from "react-native";
 import {
   Container,
   Content,
@@ -9,10 +9,12 @@ import {
   Text,
   Body,
   Left,
-  Right
+  Right,
+  Icon
 } from "native-base";
 import { Actions, ActionConst } from "react-native-router-flux";
 import { Switch } from "react-native-switch";
+import axios from "axios";
 
 export default class NavBar extends Component {
   cuisines() {
@@ -45,7 +47,10 @@ export default class NavBar extends Component {
     Actions.checkout({ type: ActionConst.RESET });
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
-
+  chefPanel(){
+     Actions.chefPanel({ type: ActionConst.RESET });
+    setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
+  }
   edit() {
     Actions.edit({ type: ActionConst.RESET });
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
@@ -78,6 +83,11 @@ export default class NavBar extends Component {
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
 
+  chefform() {
+    Actions.chefform({ type: ActionConst.RESET });
+    setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
+  }
+
   logout() {
     Actions.homepage({ type: ActionConst.RESET });
     async function clearStorage() {
@@ -93,6 +103,10 @@ export default class NavBar extends Component {
       }
     }
     clearStorage();
+    axios
+      .get("https://stzy.auth0.com/v2/logout?federated")
+      .then(res => console.log(res));
+
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
 
@@ -111,89 +125,137 @@ export default class NavBar extends Component {
     }
   }
 
+
+
   render() {
     const styles = {
       content: {
-        marginTop: 20,
-        justifyContent: 'center',
-        alignItems: 'center'
+        marginTop: 14,
+        justifyContent: "center",
+        alignItems: "center"
       },
       backgroundImage: {
-        position: 'absolute',
-        resizeMode: 'cover'
+        position: "absolute",
+        resizeMode: "cover"
       },
       entries: {
         fontSize: 22
       }
-    }
-    
+    };
+
     return (
-      <Container style={styles.actionButtonIcon}>
-        <Content style={{ marginTop: 20 }}>
-          <ListItem avatar onPress={this.cuisines}>
+      <Container>
+
+        <Image
+          source={require("./img/turquoise-top-gradient-background.jpg")}
+          style={styles.backgroundImage}
+        />
+
+        <View
+          style={{
+            marginTop: 40,
+            flex: 0.1,
+            justifyContent: "center",
+            flexDirection: "column"
+          }}
+        >
+          <Text style={{ textAlign: "center", fontSize: 25 }}>HOMEMADE</Text>
+        </View>
+
+        <Content>
+          <ListItem icon onPress={this.cuisines} style={styles.content}>
+            <Left>
+              <Icon name="ios-pizza" />
+            </Left>
             <Body>
-              <Text>Cuisines</Text>
+              <Text style={styles.entries}>Cuisines</Text>
             </Body>
-            <Right>
-              <Text note>🍕</Text>
-            </Right>
           </ListItem>
-          <ListItem avatar onPress={this.profile}>
+          <ListItem icon onPress={this.profile} style={styles.content}>
+            <Left>
+              <Icon name="ios-contact" />
+            </Left>
             <Body>
-              <Text>Profile</Text>
+              <Text style={styles.entries}>Profile</Text>
             </Body>
-            <Right>
-              <Text note />
-            </Right>
           </ListItem>
-          <ListItem avatar onPress={this.chefMap}>
+          <ListItem icon onPress={this.chefMap} style={styles.content}>
+            <Left>
+              <Icon name="ios-map" />
+            </Left>
             <Body>
-              <Text>Map</Text>
+              <Text style={styles.entries}>Map</Text>
             </Body>
-            <Right>
-              <Text note />
-            </Right>
           </ListItem>
-          <ListItem avatar onPress={this.checkout}>
+
+          <ListItem avatar onPress={this.dishcreate}>
             <Body>
-              <Text>Checkout</Text>
+              <Text>Create Dish</Text>
             </Body>
-            <Right>
-              <Text note />
-            </Right>
           </ListItem>
-          <ListItem avatar onPress={this.edit}>
+          <ListItem avatar onPress={this.chefPanel}>
             <Body>
-              <Text>Edit Profile</Text>
+              <Text>Manage Dishes</Text>
             </Body>
-            <Right>
-              <Text note />
-            </Right>
           </ListItem>
-          <ListItem avatar onPress={this.orders}>
+
+          <ListItem icon onPress={this.checkout} style={styles.content}>
+            <Left>
+              <Icon name='ios-basket'/>
+            </Left>
+
+            <Body>
+              <Text style={styles.entries}>Checkout</Text>
+            </Body>
+          </ListItem>
+          <ListItem icon onPress={this.edit} style={styles.content}>
+            <Left>
+              <Icon name="ios-create" />
+            </Left>
+            <Body>
+              <Text style={styles.entries}>Edit Profile</Text>
+            </Body>
+          </ListItem>
+          <ListItem icon onPress={this.orders} style={styles.content}>
+            <Left>
+              <Icon name="ios-filing" />
+            </Left>
             <Body>
               <Text style={styles.entries}>Orders</Text>
             </Body>
-            <Right>
-              <Text note />
-            </Right>
           </ListItem>
             <ListItem avatar onPress={this.dishcreate}>
             <Body>
               <Text>Create Dish</Text>
             </Body>
           </ListItem>
-          <ListItem avatar onPress={this.logout}>
+         <ListItem icon onPress={this.logout} style={styles.content}>
+            <Left>
+              <Icon name="ios-exit" />
+            </Left>
             <Body>
-              <Text>Log Out</Text>
+              <Text style={styles.entries}>Log Out</Text>
             </Body>
-            <Right>
-              <Text note>LO</Text>
-            </Right>
+          </ListItem>
+          <ListItem icon onPress={this.chefform} style={styles.content}>
+            <Left>
+              <Icon name="ios-star" />
+            </Left>
+            <Body>
+              <Text style={styles.entries}>Be A Chef!</Text>
+            </Body>
+          </ListItem>
+          <ListItem icon onPress={this.logout} style={styles.content}>
+            <Left>
+              <Icon name="ios-exit" />
+            </Left>
+            <Body>
+              <Text style={styles.entries}>Log Out</Text>
+            </Body>
           </ListItem>
           <ListItem avatar>
             <Body>
-              <Text style={styles.entries}>Chef Mode</Text>
+              <Text>Chef Mode</Text>
               <Text />
               <Switch
                 value={true}
@@ -211,11 +273,3 @@ export default class NavBar extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  actionButtonIcon: {
-    fontSize: 20,
-    height: 22,
-    color: "white"
-  }
-});

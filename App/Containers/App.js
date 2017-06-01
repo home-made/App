@@ -13,15 +13,20 @@ import EditProfile from "../Components/EditProfile";
 import OrderPanel from "../Components/OrderPanel";
 import OrderView from "../Components/OrderView";
 import ChefPanel from "../Components/ChefPanel";
+import UserOrderPanel from "../Components/UserOrderPanel";
+import ManageDish from '../Components/EditDish'
 import UploadImage from "../Components/UploadImage";
 import DishCreate from "../Components/DishCreate";
 import DishConfirm from "../Components/DishConfirm";
-import UserOrderPanel from "../Components/UserOrderPanel";
+
+import Feedback from "../Components/Feedback";
+import SignaturePage from "../Components/SignaturePage";
+import ChefForm from './ChefForm';
+
 import axios from "axios";
 
 // const cstore = store();
 
-// var socketConfig = { path: '/socket'};
 class App extends Component {
   constructor() {
     super();
@@ -37,7 +42,6 @@ class App extends Component {
     this.getCuisineStyles = this.getCuisineStyles.bind(this)
     this.fetchUploadStatus = this.fetchUploadStatus.bind(this);
     this.setUploadStatus = this.setUploadStatus.bind(this);
-
   }
 
   componentDidMount() {
@@ -52,7 +56,7 @@ class App extends Component {
         Actions.profile();});
     })
   }
-
+  
   getChef() {
     return this.state.user;
   }
@@ -76,7 +80,7 @@ class App extends Component {
   }
   setUploadStatus(cameraMode){
     console.log('camera mode is',cameraMode)
-    this.setState({cameraMode: cameraMode}, ()=>console.log('app camera mode is dish is',this.state.cameraMode))
+    this.setState({cameraMode: cameraMode}, ()=>console.log('app camera mode is',this.state.cameraMode))
   }
   fetchUploadStatus(){
     console.log('status fetched', this.state.cameraMode)
@@ -125,7 +129,19 @@ class App extends Component {
               title="Cuisines"
               setCuisineType={this.setCuisineType}
             />
-            <Scene key="chefPanel" component={ChefPanel} title="Chef Panel" />
+            <Scene 
+              key="dishedit"
+              title="Manage Dish"
+              component={ManageDish}
+              fetchDish={this.fetchDishDetails} 
+
+            />
+            <Scene 
+              key="chefPanel" 
+              component={ChefPanel} 
+              title="Chef Panel" 
+              setDish={this.setDishDetails}  
+            />
             <Scene
               key="chefList"
               component={ChefList}
@@ -155,13 +171,18 @@ class App extends Component {
               key="uploadimage"
               component={UploadImage}
               title="Upload Dish"
+              setDish={this.setDishDetails}
+              fetchDish={this.fetchDishDetails}
               fetchCameraMode={this.fetchUploadStatus}
             />
             <Scene key="edit" component={EditProfile}  setCameraMode={this.setUploadStatus}/>
+
             <Scene key="orders" component={OrderPanel} />
             <Scene key="orderView" component={OrderView} title="Order" />
             <Scene key="userOrders" component={UserOrderPanel} title="Orders" />
-
+            <Scene key="feedback" component={Feedback} title="Feedback" />
+            <Scene key="chefform" component={ChefForm} title="Chef Form" />
+            <Scene key="signature" component={SignaturePage} title="Signature Page" />
           </Scene>
         </Scene>
       </Scene>

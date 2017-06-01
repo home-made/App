@@ -1,13 +1,19 @@
 import React, { Component } from "react";
-import { StyleSheet, ScrollView, AsyncStorage } from "react-native";
-import { Button, Text, Container } from "native-base";
 import SocketIO from "socket.io-client";
+import { StyleSheet, ScrollView, AsyncStorage, RefreshControl} from "react-native";
+import { Button, Text, Container, Content, Header, Left, Icon, Right } from "native-base";
+import { Actions } from "react-native-router-flux";
+import FontAwesome, { Icons } from "react-native-fontawesome";
 import axios from "axios";
 var socket;
 export default class UserOrderPanel extends Component {
   constructor() {
     super();
-    this.state = {order: null};
+    this.state = {
+      refreshing: false, 
+      order: null 
+    };
+    this._onRefresh = this._onRefresh.bind(this);
   }
 
   componentWillMount() {
@@ -48,20 +54,59 @@ export default class UserOrderPanel extends Component {
         });
       }).catch(err => console.log(err));
     }).catch(err => console.log(err));
+    _onRefresh = () => {
+      this.componentWillMount();
+    }
   }
 
   render() {
+        console.log("IN RENDER");
+    if (!this.state.order) return <ScrollView />;
+    else {
+      return (
+        <ScrollView
+          contentContainerStyle={{
+            alignItems: "center",
+            alignContent: "center",
+            justifyContent: "center",
+            marginTop: 150
+          }}
+          refreshControl={
+          <RefreshControl
 
-    if (!this.state.order) return (<ScrollView ></ScrollView >)
-    else{
-    return (
-      <Container style={{alignItems: "center", alignContent: "center", justifyContent: "center", marginTop: 100}}>
-      <ScrollView >
-        <Text>Order placed: {this.state.order.date}</Text>
-        {this.state.order.status === 0 ? (<Text>Order Status: Pending</Text>) : <Text>Order Status: Accepted</Text>}
-      </ScrollView>
-      </Container>
-    ) }}
+            refreshing={this.state.refreshing}
+            onRefresh={this._onRefresh}
+            tintColor="#ff0000"
+            title="Loading..."
+            titleColor="black"
+            colors={['#ff0000', '#00ff00', '#0000ff']}
+            progressBackgroundColor="#ffff00"
+          />
+        }
+        >
+ 
+          <Text>Order placed: {this.state.order.date}</Text>
+          {this.state.order.status === 0
+            ? <Text>Order Status: Pending</Text>
+            : <Text>Order Status: Accepted</Text>}
+          <Content>
+            {this.state.order.status !== 0
+              ? <View>
+                  <Button
+                    style={{ marginTop: 10 }}
+                    onPress={() => Actions.feedback(this.state.order)}
+                  >
+                    <Text>Leave Feedback</Text>
+                  </Button>
+                </View>
+              : <Text />}
+          </Content>
+
+
+        </ScrollView>
+      );
+    }
+  }
 }
 
 const styles = StyleSheet.create({

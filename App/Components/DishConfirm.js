@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, AsyncStorage,Image,TextInput, View, Alert } from "react-native";
-import { Actions } from "react-native-router-flux";
+import { Actions, ActionConst} from "react-native-router-flux";
 import {
   Container,
   Text,
@@ -60,7 +60,7 @@ export default class DishConfirm extends Component {
     axios.post("http://localhost:3000/dish/add", this.state.dish)
     .then(res => {
       console.log(res)
-      Actions.chefPanel()
+      Actions.chefPanel({type: ActionConst.RESET})
     })
   }
   render() {
@@ -77,7 +77,7 @@ export default class DishConfirm extends Component {
           <Body>
             <Title>Name: {this.state.dish.name}</Title>
             <Text>Description: {this.state.dish.description}</Text>
-            <Text>Donation: {this.state.dish.cashDonation}</Text>
+            <Text>Donation: ${this.state.dish.cashDonation}</Text>
             <Text>Quantity: {this.state.dish.quantity}</Text>
             
 
