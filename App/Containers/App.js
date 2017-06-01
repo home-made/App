@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, AsyncStorage } from "react-native";
 import { Router, Scene, Actions, ActionConst } from "react-native-router-flux";
 
 import NavigationDrawer from "./Drawer";

@@ -14,6 +14,7 @@ import { Actions, ActionConst } from "react-native-router-flux";
 import { Grid, Row, Col } from "react-native-easy-grid";
 import DishView from "./DishView";
 import Review from "./Review";
+import axios from "axios";
 
 export default class Profile extends Component {
   constructor(props) {
@@ -26,6 +27,42 @@ export default class Profile extends Component {
   }
 
   componentWillMount() {
+    AsyncStorage.getItem('profile').then(profile => {
+
+      let userId = JSON.parse(profile).userId;
+      console.log("userId is ", userId)
+
+      axios.get(`http://localhost:3000/user/${userId}`).then(user => {
+        console.log("the user inside axiospost for profile.js is ", user);
+        this.setState({
+          user: user.data[0],
+          isChef: user.data[0].isChef
+        });
+
+      }).catch(error => {
+        console.log("Error inside axios post for Profile.js is ", error);
+      })
+    }).catch(error => {
+      console.log("Error inside AsyncStorage for Profile.js is ", error);
+    })
+
+/*
+  authId: String,
+  firstName: String,
+  lastName: String,
+  bio: String,
+  status: String,
+  phoneNumber: String,
+  likes: [Number],
+  profileUrl: String,
+  customerReviews: [],
+  chefReviews: [],
+  isChef: Boolean,
+  location: { geo_lat: Number, geo_lng: Number, address: String },
+  rating: Number
+*/
+
+/*
     let chef = this.props.getChef();
     this.setState({ chef: this.props.getChef(), cart: [] }, () => {
       let reviews = this.state.chef[0].chefReviews.map(curr => {
@@ -42,6 +79,9 @@ export default class Profile extends Component {
       });
       this.setState({ reviewers: reviews });
     });
+
+*/
+
   }
 
   handleReviewsPress() {
@@ -88,6 +128,28 @@ export default class Profile extends Component {
       });
   }
 
+
+  /*
+
+     var UserSchema = new Schema({
+     authId: String,
+     firstName: String,
+     lastName: String,
+     bio: String,
+     status: String,
+     phoneNumber: String,
+     likes: [Number],
+     profileUrl: String,
+     customerReviews: [],
+     chefReviews: [],
+     isChef: Boolean,
+     location: { geo_lat: Number, geo_lng: Number, address: String },
+     rating: Number
+   });
+
+
+  */
+
   render() {
     return (
       <Container style={{ marginTop: 60 }}>
@@ -96,8 +158,8 @@ export default class Profile extends Component {
             <CardItem>
 
               <Body>
-                <Text>{this.state.chef[0].firstName}</Text>
-                <Text note>{this.state.chef[0].status}</Text>
+                <Text>{this.state.user.firstName ? this.state.user.firstName : ""}</Text>
+                <Text note>{this.state.user.status ? this.state.user.status : ""}</Text>
               </Body>
 
             </CardItem>
@@ -113,7 +175,7 @@ export default class Profile extends Component {
                       borderRadius: 60
                     }}
                     source={{
-                      uri: this.state.chef[0].profileUrl
+                      uri: this.state.user.profileUrl ? 
                     }}
                   />
                 </Row>
@@ -154,8 +216,12 @@ export default class Profile extends Component {
             : <Text />}
         </Content>
       </Container>
+
+
     );
+
   }
+
 }
 
 const styles = StyleSheet.create({
