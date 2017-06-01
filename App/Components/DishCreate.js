@@ -22,7 +22,7 @@ export default class DishView extends Component {
         selected1: 0,
       dish:{
         name: "",
-        donation: 0,
+        cashDonation: 0,
         quantity: 0,
         description: ""
       }
@@ -61,7 +61,7 @@ export default class DishView extends Component {
     },() =>console.log(this.state.dish));
   }
   render() {
-    const price = '$'+this.state.donation;
+    const price = '$' + this.state.cashDonation;
     const { container } = styles;
     const onButtonPress = () => {
       this.setState({ dishText: "freshly" });
@@ -108,12 +108,12 @@ export default class DishView extends Component {
                     result.shift()
                     result.shift()
                     let dish = this.state.dish;
-                    dish.donation = donation
-                    this.setState({ dish},()=> console.log(this.state.dish))
+                    dish.cashDonation = donation
+                    this.setState({ dish },()=> console.log(this.state.dish))
                   }
                   }
               
-                value={this.state.dish.donation}
+                value={this.state.dish.cashDonation}
               />
             </Item>
             <Item>

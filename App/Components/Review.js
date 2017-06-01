@@ -7,26 +7,14 @@ export default class Review extends Component {
   constructor(props) {
     super();
   }
-
-  orderId
-:
-15
-reviewText
-:
-"chef had that bomb lit"
-reviewerId
-:
-"axncmufid745"
-score
-:
-4.25
+  
   render() {
     return (
       <ListItem avatar>
         {/*<Left>
           <Thumbnail source={{ uri: this.props.review.user.profileUrl }} />
         </Left>*/}
-        
+
         <Body>
           <Text>{this.props.review.user.firstName}</Text>
           <Text note> {this.props.review.userText}</Text>
