@@ -35,6 +35,7 @@ export default class ChefList extends Component {
               renderRow={chef => (
                 <ListItem
                   onPress={() => {
+                    console.log("CHEF IS", chef)
                     this.props.setChef(chef);
                   }}
                 >
