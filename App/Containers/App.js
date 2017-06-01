@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Icon } from "react-native";
 import { Router, Scene, Actions, ActionConst } from "react-native-router-flux";
 
 import NavigationDrawer from "./Drawer";
@@ -20,7 +20,7 @@ import axios from "axios";
 
 // const cstore = store();
 
-class App extends Component {
+export default class App extends Component {
   constructor() {
     super();
     this.state = {};
@@ -153,4 +153,3 @@ const styles = StyleSheet.create({
   }
 });
 
-export default App;
