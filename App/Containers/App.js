@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Icon } from "react-native";
 import { Router, Scene, Actions, ActionConst } from "react-native-router-flux";
 
 import NavigationDrawer from "./Drawer";
@@ -27,7 +27,7 @@ import axios from "axios";
 
 // const cstore = store();
 
-class App extends Component {
+export default class App extends Component {
   constructor() {
     super();
     this.state = {};
@@ -64,6 +64,7 @@ class App extends Component {
   setCuisineType(genre) {
     console.log(genre);
     this.setState({cuisineType: genre}, () => {
+    console.log('CUISINETYPE: ', this.state.cuisineType);
       let url = `http://localhost:3000/chef/style/${this.state.cuisineType}`;
       axios
         .get(url)
@@ -205,4 +206,3 @@ const styles = StyleSheet.create({
   }
 });
 
-export default App;
