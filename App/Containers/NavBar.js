@@ -114,8 +114,6 @@ export default class NavBar extends Component {
     }
   }
 
-
-
   render() {
     const styles = {
       content: {
@@ -178,7 +176,7 @@ export default class NavBar extends Component {
           </ListItem>
           <ListItem icon onPress={this.checkout} style={styles.content}>
             <Left>
-              <Icon name='ios-basket'/>
+              <Icon name="ios-basket" />
             </Left>
             <Body>
               <Text style={styles.entries}>Checkout</Text>

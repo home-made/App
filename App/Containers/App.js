@@ -38,10 +38,13 @@ class App extends Component {
   }
 
   setChef(chef) {
+    console.log("INSIDE SET CHEF", chef)
     axios.get(`http://localhost:3000/chef/${chef.authId}`).then( res => {
+      console.log(res)
       this.setState({user: res.data}, () => {
+        console.log("IN SET CHEF STATE", this.state)
         Actions.profile();});
-    })
+    }).catch(err => console.log(err))
   }
 
   getChef() {
@@ -57,7 +60,7 @@ class App extends Component {
         .then(res => {
           console.log("res.data inside App.js for setCuisine is ", res.data)
           this.setState({ chefs: res.data }, () => {
-            Actions.chefList({ type: ActionConst.RESET });
+            Actions.chefList();
           })
         })
         .catch(err => {
@@ -97,6 +100,8 @@ class App extends Component {
 
 
             <Scene
+              navigationBarStyle={{backgroundColor: 'black'}}
+              titleStyle={{fontFamily: "helvetica", fontWeight:"bold", color : "white"}}
               key="cuisines"
               component={Cuisines}
               title="Cuisines"
