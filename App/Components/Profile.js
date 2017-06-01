@@ -1,15 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Image, AsyncStorage } from "react-native";
-import {
-  Container,
-  Text,
-  Content,
-  Card,
-  CardItem,
-  Left,
-  Body,
-  Button
-} from "native-base";
+import { Container, Text, Content, Card, CardItem, Left, Body, Button } from "native-base";
 import { Actions, ActionConst } from "react-native-router-flux";
 import { Grid, Row, Col } from "react-native-easy-grid";
 import DishView from "./DishView";
@@ -30,13 +21,30 @@ export default class Profile extends Component {
     AsyncStorage.getItem('profile').then(profile => {
 
       let userId = JSON.parse(profile).userId;
-      console.log("userId is ", userId)
 
       axios.get(`http://localhost:3000/user/${userId}`).then(user => {
         console.log("the user inside axiospost for profile.js is ", user);
+
+        var firstName = user.data[0].firstName.length > 0 ? user.data[0].firstName : "unknown";
+        var lastName = user.data[0].lastName.length > 0 ? user.data[0].lastName : "unknown";
+
+        if (firstName != "unknown" && lastName != "unknown") {
+          var fullName = `${firstName + " " + lastName}`;
+        } else {
+          fullName = "n/a";
+        }
+    
         this.setState({
           user: user.data[0],
-          isChef: user.data[0].isChef
+          authId: user.data[0].authId,
+          chefReviews: user.data[0].chefReviews,
+          firstName: user.data[0].firstName,
+          lastName: user.data[0].lastName,
+          fullName: fullName,
+          status: user.data[0].status,
+          isChef: user.data[0].isChef,
+          likes: user.data[0].likes,
+          _id: user.data[0]._id
         });
 
       }).catch(error => {
@@ -45,42 +53,6 @@ export default class Profile extends Component {
     }).catch(error => {
       console.log("Error inside AsyncStorage for Profile.js is ", error);
     })
-
-/*
-  authId: String,
-  firstName: String,
-  lastName: String,
-  bio: String,
-  status: String,
-  phoneNumber: String,
-  likes: [Number],
-  profileUrl: String,
-  customerReviews: [],
-  chefReviews: [],
-  isChef: Boolean,
-  location: { geo_lat: Number, geo_lng: Number, address: String },
-  rating: Number
-*/
-
-/*
-    let chef = this.props.getChef();
-    this.setState({ chef: this.props.getChef(), cart: [] }, () => {
-      let reviews = this.state.chef[0].chefReviews.map(curr => {
-        return {
-          userText: curr.reviewText,
-          user: this.state.chef[2][
-            this.state.chef[2]
-              .map(o => {
-                return o.authId;
-              })
-              .indexOf(curr.reviewerId)
-          ]
-        };
-      });
-      this.setState({ reviewers: reviews });
-    });
-
-*/
 
   }
 
@@ -128,69 +100,39 @@ export default class Profile extends Component {
       });
   }
 
-
-  /*
-
-     var UserSchema = new Schema({
-     authId: String,
-     firstName: String,
-     lastName: String,
-     bio: String,
-     status: String,
-     phoneNumber: String,
-     likes: [Number],
-     profileUrl: String,
-     customerReviews: [],
-     chefReviews: [],
-     isChef: Boolean,
-     location: { geo_lat: Number, geo_lng: Number, address: String },
-     rating: Number
-   });
-
-
-  */
-
   render() {
     return (
       <Container style={{ marginTop: 60 }}>
         <Content>
           <Card>
             <CardItem>
-
               <Body>
-                <Text>{this.state.user.firstName ? this.state.user.firstName : ""}</Text>
-                <Text note>{this.state.user.status ? this.state.user.status : ""}</Text>
+                <Text>Name: {!this.state.fullName != "n/a" ?  this.state.fullName :  this.state.firstName}</Text>
+                <Text note>Status: {!this.state.status ? "No status at this time." :  this.state.status}</Text>
               </Body>
-
             </CardItem>
+
             <CardItem>
               <Body>
                 <Row style={{ justifyContent: "center", alignItems: "center" }}>
-                  <Image
-                    style={{
-                      width: 120,
-                      height: 120,
-                      justifyContent: "center",
-                      alignItems: "center",
-                      borderRadius: 60
-                    }}
-                    source={{
-                      uri: this.state.user.profileUrl ? 
-                    }}
-                  />
+                  <Image style={{ width: 120, height: 120, justifyContent: "center", alignItems:  "center", borderRadius: 60 }} source={{ uri: !this.state.profileUrl ? "" : this.state.user.profileUrl }} />
                 </Row>
               </Body>
             </CardItem>
-          </Card>
-          <Row style={{ justifyContent: "center", alignItems: "center" }}>
-            <Button onPress={this.handleReviewsPress}>
-              <Text>Reviews</Text>
-            </Button>
-            <Text> </Text>
-            <Button onPress={this.handleMenuPress}><Text>Menu</Text></Button>
-          </Row>
 
-          {this.state.menu
+            {/* What should I do here? */}
+
+            <Row style={{ justifyContent: "center", alignItems: "center" }}>
+              <Button onPress={this.handleReviewsPress}>
+                <Text>Reviews</Text>
+              </Button>
+              <Text></Text>
+              <Button onPress={this.handleMenuPress}><Text>Menu</Text></Button>
+            </Row>
+
+            {/*****************************/}
+
+            {this.state.menu
             ? this.state.chef[1].map((dish, idx) => {
                 if (idx === this.state.chef[1].length - 1) {
                   return (
@@ -214,6 +156,10 @@ export default class Profile extends Component {
                 return <Review review={review} />;
               })
             : <Text />}
+
+
+
+          </Card>
         </Content>
       </Container>
 
