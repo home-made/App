@@ -14,9 +14,15 @@ import OrderPanel from "../Components/OrderPanel";
 import OrderView from "../Components/OrderView";
 import ChefPanel from "../Components/ChefPanel";
 import UserOrderPanel from "../Components/UserOrderPanel";
+
+import UploadImage from "../Components/UploadImage";
+import DishCreate from "../Components/DishCreate";
+import DishConfirm from "../Components/DishConfirm";
+
 import Feedback from "../Components/Feedback";
 import SignaturePage from "../Components/SignaturePage";
 import ChefForm from './ChefForm';
+
 import axios from "axios";
 
 // const cstore = store();
@@ -31,12 +37,19 @@ class App extends Component {
     this.getChef = this.getChef.bind(this);
     this.fetchCart = this.fetchCart.bind(this);
     this.setCart = this.setCart.bind(this);
+    this.getCuisineStyles = this.getCuisineStyles.bind(this)
+    this.fetchUploadStatus = this.fetchUploadStatus.bind(this);
+    this.setUploadStatus = this.setUploadStatus.bind(this);
+    this.fetchDishDetails = this.fetchDishDetails.bind(this)
+    this.setDishDetails = this.setDishDetails.bind(this)
   }
 
   componentDidMount() {
     console.log("APP MOUNTED");
   }
-
+  getCuisineStyles(){
+    return "All Cuisines,American,Barbecue,Burgers,Chinese,Indian,Italian,Japanese,Korean,Mediterranean,Mexican,Pizza,Sandwiches,Sushi,Thai,Vegetarian,Vietnamese,American,Ethiopian,Other".split(",");
+  }
   setChef(chef) {
     axios.get(`http://localhost:3000/chef/${chef.authId}`).then( res => {
       this.setState({user: res.data}, () => {
@@ -65,7 +78,21 @@ class App extends Component {
         });
     });
   }
-
+  setUploadStatus(cameraMode){
+    console.log('camera mode is',cameraMode)
+    this.setState({cameraMode: cameraMode}, ()=>console.log('app camera mode is dish is',this.state.cameraMode))
+  }
+  fetchUploadStatus(){
+    console.log('status fetched', this.state.cameraMode)
+    return this.state.cameraMode
+  }
+  fetchDishDetails() {
+    console.log('dish set',this.state.dish)
+    return this.state.dish;
+  }
+  setDishDetails(dish) {
+    this.setState({dish},()=> console.log('dish set',this.state.dish));
+  }
   fetchChefs() {
     console.log("the chefs inside fetchchefs are ", this.state.chefs)
     return this.state.chefs;
@@ -124,6 +151,17 @@ class App extends Component {
               key="checkout"
               component={Checkout}
               fetchCart={this.fetchCart}
+            />
+            <Scene key="dishcreate" component={DishCreate} setCameraMode={this.setUploadStatus} setDish={this.setDishDetails} getStyles={this.getCuisineStyles}
+              title="Create Dish"/>
+            <Scene key="dishconfirm" component={DishConfirm} setDish={this.setDishDetails}  fetchDish={this.fetchDishDetails}/>
+            <Scene
+              key="uploadimage"
+              component={UploadImage}
+              title="Upload Dish"
+              setDish={this.setDishDetails}
+              fetchCameraMode={this.fetchUploadStatus}
+              fetchDish={this.fetchDishDetails}
             />
             <Scene key="edit" component={EditProfile} />
             <Scene key="orders" component={OrderPanel} />
