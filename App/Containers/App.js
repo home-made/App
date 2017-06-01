@@ -44,9 +44,8 @@ class App extends Component {
     this.setDishDetails = this.setDishDetails.bind(this)
   }
 
-  componentDidMount() {
-    console.log("APP MOUNTED");
-  }
+  
+
   getCuisineStyles(){
     return "All Cuisines,American,Barbecue,Burgers,Chinese,Indian,Italian,Japanese,Korean,Mediterranean,Mexican,Pizza,Sandwiches,Sushi,Thai,Vegetarian,Vietnamese,American,Ethiopian,Other".split(",");
   }
@@ -104,7 +103,22 @@ class App extends Component {
     return this.state.checkout;
   }
 
+  componentDidMount() {
+    console.log("APP MOUNTED");
+    AsyncStorage.getItem('profile').then(profile => {
+
+      var userId = JSON.parse(profile).userId;
+      var context = this;
+      
+      SetProfile(context, userId);
+
+    }).catch(error => {
+      console.log("Error inside AsyncStorage for Profile.js is ", error);
+    });
+  }
+
   render() {
+    {console.log("the state inside App.js is ", this.state)}
     const scenes = Actions.create(
       <Scene key="root">
         <Scene

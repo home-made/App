@@ -6,6 +6,7 @@ import { Grid, Row, Col } from "react-native-easy-grid";
 import DishView from "./DishView";
 import Review from "./Review";
 import axios from "axios";
+import SetProfile from '../utils/SetProfile';
 
 export default class Profile extends Component {
   constructor(props) {
@@ -15,46 +16,10 @@ export default class Profile extends Component {
     this.handleMenuPress = this.handleMenuPress.bind(this);
     this.handleAddToCart = this.handleAddToCart.bind(this);
     this.handleCheckout = this.handleCheckout.bind(this);
+    this.displayDishView = this.displayDishView.bind(this);
   }
 
-  componentWillMount() {
-    AsyncStorage.getItem('profile').then(profile => {
-
-      let userId = JSON.parse(profile).userId;
-
-      axios.get(`http://localhost:3000/user/${userId}`).then(user => {
-        console.log("the user inside axiospost for profile.js is ", user);
-
-        var firstName = user.data[0].firstName.length > 0 ? user.data[0].firstName : "unknown";
-        var lastName = user.data[0].lastName.length > 0 ? user.data[0].lastName : "unknown";
-
-        if (firstName != "unknown" && lastName != "unknown") {
-          var fullName = `${firstName + " " + lastName}`;
-        } else {
-          fullName = "n/a";
-        }
-    
-        this.setState({
-          user: user.data[0],
-          authId: user.data[0].authId,
-          chefReviews: user.data[0].chefReviews,
-          firstName: user.data[0].firstName,
-          lastName: user.data[0].lastName,
-          fullName: fullName,
-          status: user.data[0].status,
-          isChef: user.data[0].isChef,
-          likes: user.data[0].likes,
-          _id: user.data[0]._id
-        });
-
-      }).catch(error => {
-        console.log("Error inside axios post for Profile.js is ", error);
-      })
-    }).catch(error => {
-      console.log("Error inside AsyncStorage for Profile.js is ", error);
-    })
-
-  }
+  
 
   handleReviewsPress() {
     console.log(this.state.reviewers);
@@ -99,6 +64,60 @@ export default class Profile extends Component {
         })
       });
   }
+  
+  displayDishView(){
+    if (this.state.isChef) {
+      if (this.state.menu.length > 0){
+        
+        {this.state.menu.map(dish => {
+          return (
+            <Text>Got a Dish</Text>
+  
+          )
+        })}
+          
+      } else {
+        return (
+          <Text>Whoops! The current chef doesn't have any active dishes</Text>
+        )
+      }
+      
+    } else {
+      return (
+        <Text></Text>
+      )
+    }
+  }
+
+
+             /*
+              user: user.data[0],
+              authId: user.data[0].authId,
+              chefReviews: user.data[0].chefReviews,
+              firstName: user.data[0].firstName,
+              lastName: user.data[0].lastName,
+              fullName: fullName,
+              status: user.data[0].status,
+              isChef: user.data[0].isChef,
+              likes: user.data[0].likes,
+              _id: user.data[0]._id
+              menu: activeDishes
+              
+            */
+
+  componentWillMount() {
+    AsyncStorage.getItem('profile').then(profile => {
+
+      var userId = JSON.parse(profile).userId;
+      var context = this;
+      
+      SetProfile(context, userId);
+
+    }).catch(error => {
+      console.log("Error inside AsyncStorage for Profile.js is ", error);
+    });
+
+  }
 
   render() {
     return (
@@ -132,34 +151,23 @@ export default class Profile extends Component {
 
             {/*****************************/}
 
-            {this.state.menu
-            ? this.state.chef[1].map((dish, idx) => {
-                if (idx === this.state.chef[1].length - 1) {
-                  return (
-                    <View>
-                      <DishView dish={dish} addToCart={this.handleAddToCart} />
-                      {this.state.cart.length > 0 ? (<Container style={{alignItems:"center", marginBottom: -600}}><Content><Button success onPress={() => this.handleCheckout()}>
-                        <Text> Checkout </Text>
-                      </Button></Content></Container>) : (<Text></Text>)}
-                    </View>
-                  );
-                } else {
-                  return (
-                    <DishView dish={dish} addToCart={this.handleAddToCart} />
-                  );
-                }
-              })
-            : <Text />}
-
-          {this.state.reviews
-            ? this.state.reviewers.map(review => {
-                return <Review review={review} />;
-              })
-            : <Text />}
-
-
-
+            {/*
+              user: user.data[0],
+              authId: user.data[0].authId,
+              chefReviews: user.data[0].chefReviews,
+              firstName: user.data[0].firstName,
+              lastName: user.data[0].lastName,
+              fullName: fullName,
+              status: user.data[0].status,
+              isChef: user.data[0].isChef,
+              likes: user.data[0].likes,
+              _id: user.data[0]._id
+              menu: activeDishes
+              
+            */}
           </Card>
+
+          {this.displayDishView()}
         </Content>
       </Container>
 
