@@ -15,9 +15,9 @@ export default class Cuisines extends Component {
     return (
       <ScrollView style={{ alignSelf: "stretch" }}>
         <List style={{ marginTop: 60 }}>
-          {genres.map(genre => {
+          {genres.map((genre, index) => {
             return (
-              <ListItem onPress={() => this.props.setCuisineType(genre)}>
+              <ListItem onPress={() => this.props.setCuisineType(genre)} key={index}>
                 <Text>
                   {genre}
                 </Text>

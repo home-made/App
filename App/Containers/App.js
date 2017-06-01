@@ -64,6 +64,7 @@ export default class App extends Component {
   setCuisineType(genre) {
     console.log(genre);
     this.setState({cuisineType: genre}, () => {
+    console.log('CUISINETYPE: ', this.state.cuisineType);
       let url = `http://localhost:3000/chef/style/${this.state.cuisineType}`;
       axios
         .get(url)
