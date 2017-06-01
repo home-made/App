@@ -77,7 +77,7 @@ export default class DishConfirm extends Component {
           <Body>
             <Title>Name: {this.state.dish.name}</Title>
             <Text>Description: {this.state.dish.description}</Text>
-            <Text>Donation: {this.state.dish.donation}</Text>
+            <Text>Donation: {this.state.dish.cashDonation}</Text>
             <Text>Quantity: {this.state.dish.quantity}</Text>
             
 
