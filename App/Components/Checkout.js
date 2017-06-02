@@ -1,9 +1,11 @@
 import React, { Component } from "react";
-import { View, AsyncStorage, Alert } from "react-native";
+import { View, AsyncStorage } from "react-native";
 import axios from "axios";
 import { Container, Content, List, Header, Text, Button } from "native-base";
 import CheckOutItem from "./CheckOutItem.js";
-import { Actions, ActionConst } from "react-native-router-flux";
+import SocketIO from "socket.io-client";
+import { Actions } from "react-native-router-flux";
+var socket;
 export default class Checkout extends Component {
   /*
       State inside Checkout.js is 
@@ -12,14 +14,20 @@ export default class Checkout extends Component {
       customerId: "google-oauth2|"
       data: [array of dish documents]
       dishCounter: {obj}
+
       where cashTotal is the total dollar amt calculated in the checkout
+
+
+
       dishCounter obj has:
       {dishKey: {
         amount: 1
         cashDonation:7}
       }
+
       where amount is the number of times 
       the dish has been incremented
+
     */
   constructor(props) {
     super(props);
@@ -28,26 +36,31 @@ export default class Checkout extends Component {
     this.decrementDishCount = this.decrementDishCount.bind(this);
     this.deleteDish = this.deleteDish.bind(this);
     this.calculateTotal = this.calculateTotal.bind(this);
-    this.sendNotification = this.sendNotification.bind(this);
     this.submitOrder = this.submitOrder.bind(this);
-    
   }
+
   componentWillMount() {
     this.calculateTotal();
+
   }
+
   incrementDishCount(key) {
     var newDishCounter = this.state.dishCounter;
     var newCount = newDishCounter[key].amount;
     newDishCounter[key].amount = newCount + 1;
+
     this.setState({
       dishCounter: newDishCounter
     });
+
     this.calculateTotal();
   }
+
   decrementDishCount(key) {
     var newDishCounter = this.state.dishCounter;
     var newCount = newDishCounter[key].amount;
     newCount = newCount - 1;
+
     if (newCount <= 0) {
       newDishCounter[key].amount = 0;
       this.setState({ dishCounter: newDishCounter });
@@ -58,55 +71,58 @@ export default class Checkout extends Component {
       this.calculateTotal();
     }
   }
+
   deleteDish(key) {
     var total = this.state.cashTotal;
     var subtract;
     var newData = this.state.data.filter(dish => {
       return dish._id !== key;
     });
+
       var newDishCounter = this.state.dishCounter;
       subtract = newDishCounter[key].amount * newDishCounter[key].cashDonation;
       delete newDishCounter[key];
       this.setState({dishCounter: newDishCounter});
       total -= subtract;
+
     this.setState({
       data: newData,
       cashTotal: total
     });
   }
+
   calculateTotal() {
     var dishCounter = this.state.dishCounter;
     var total = 0;
+
     for (var dishID in dishCounter) {
       var amount = dishCounter[dishID].amount;
       amount *= dishCounter[dishID].cashDonation;
+
       total += amount;
       amount = 0;
     }
+
     this.setState({
       cashTotal: total
     });
   }
-  sendNotification(){
-    return(
-      Alert.alert(
-        'Order Submitted to Chef!',
-        'Wait for a confirmation your order was accepted.',
-        [
-          {text: 'OK', onPress: () => console.log('OK Pressed')}
-        ]
-      )
-    )
-  }
+
   submitOrder() {
     //will need the customerId && chefId to submit order to DB
     //hardcoded info for demo purposes
+
     /*
       Note: I think we should set the state.dishCounter obj as
       the cart property on an Order because that dishCounter obj
       has the quantity per dish that was placed in an order. just 
       not sure what the ID for a dish is in the DB.
       */
+
+    var chefId = "7564fjasdif"; //Luke Skywalker
+    var customerId = "axncmufid745"; //Darth Vader
+    var cashTotal = this.state.cashTotal;
+
     //where status: 0 means the order is pending approval
     var newOrder = {
       chefId: this.state.chefId,
@@ -115,17 +131,29 @@ export default class Checkout extends Component {
       status: 0,
       cashTotal: this.state.cashTotal
     };
-    this.sendNotification();
+    socket = new SocketIO('http://localhost:3000');
+    socket.connect();
+    socket.on("connect", () => {
+      socket.emit('user',newOrder);
+      socket.on("fresh", message => {
+        console.log(message);
+        console.log('send heem')
+      });
+      socket.on('disconnect', ()=>{
+        console.log('user disconnected')
+      })
+    });
     axios
       .post("http://localhost:3000/orders", newOrder)
       .then(function(response) {
         console.log("New order was submitted to the database, response is: ", response);
-        Actions.userOrders({ type: ActionConst.RESET });
+        Actions.userOrders();
       })
       .catch(function(error) {
         console.log("The error message inside checkout post is ", error);
       });
   }
+
   componentDidMount() {
     console.log("compont did mont start");
     let cart = this.props.fetchCart();
@@ -147,6 +175,7 @@ export default class Checkout extends Component {
     });
     
   }
+
   render() {
     console.log("render start");
     console.log("the state inside the checkout is ", this.state);

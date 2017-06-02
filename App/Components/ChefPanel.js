@@ -68,35 +68,34 @@ export default class ChefPanel extends Component {
   }
 
   render() {
-    var inactiveOrders = [];
-    var activeOrders = [];
+    var inactiveDishes = [];
+    var activeDishes = [];
     return (
       <ScrollView>
         <Header hasTabs />
         <Tabs >
           <Tab heading={<TabHeading><Text>Inactive</Text></TabHeading>}>
             {!this.state.inactive
-              ? <Text />
+              ? <Text note> {"\n"}  No Dishes Available</Text>
               : this.state.inactive.forEach(item =>
-                  inactiveOrders.push(this.returnRow(item))
+                  inactiveDishes.push(this.returnRow(item))
                 )}
             <List style={{ marginTop: 10 }} dataArray={this.state.inactive}>
-              {inactiveOrders}
+              {inactiveDishes}
             </List>
           </Tab>
 
           <Tab heading={<TabHeading><Text>Active</Text></TabHeading>}>
             {!this.state.active
-              ? <Text />
+              ? <Text note> {"\n"}  No Dishes Available</Text>
               : this.state.active.forEach(item =>
-                  activeOrders.push(this.returnRow(item))
+                  activeDishes.push(this.returnRow(item))
                 )}
             <List style={{ marginTop: 10 }} dataArray={this.state.active}>
-              {activeOrders}
+              {activeDishes}
             </List>
           </Tab>
         </Tabs>
-        <Text> CHef Panel</Text>
       </ScrollView>
     );
   }

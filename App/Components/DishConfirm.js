@@ -46,7 +46,7 @@ export default class DishConfirm extends Component {
       getProfile()
         .then((res) => {
           dish.chefId = res
-          dish.isActive = true
+          dish.isActive = false
           dish.allergies = []
           this.setState({dish},()=> {
             console.log(this.state.dish)

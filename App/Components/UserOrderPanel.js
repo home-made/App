@@ -35,16 +35,20 @@ export default class UserOrderPanel extends Component {
   componentWillMount() {
     console.log("IN USER ORDER PANEL WILL MOUNT");
     let authID;
-    socket = new SocketIO("localhost:3000");
+    socket = new SocketIO('http://localhost:3000');
     socket.connect();
-      console.log('b4id is',socket.id)
+      // console.log('b4id is',socket.id)
 
     socket.on("connect", () => {
       console.log('id is',socket.id)
+      socket.emit('user','fuck')
       socket.on("fresh", message => {
         console.log(message);
         console.log('send heem')
       });
+      socket.on('disconnect', ()=>{
+        console.log('user disconnected')
+      })
     });
 
     async function getAuthID() {
