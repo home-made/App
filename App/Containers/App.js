@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Icon } from "react-native";
+import { View, Text, StyleSheet, Icon, Linking} from "react-native";
 import { Router, Scene, Actions, ActionConst } from "react-native-router-flux";
 
 import NavigationDrawer from "./Drawer";
@@ -14,18 +14,18 @@ import OrderPanel from "../Components/OrderPanel";
 import OrderView from "../Components/OrderView";
 import ChefPanel from "../Components/ChefPanel";
 import UserOrderPanel from "../Components/UserOrderPanel";
-
 import UploadImage from "../Components/UploadImage";
 import DishCreate from "../Components/DishCreate";
 import DishConfirm from "../Components/DishConfirm";
-
 import Feedback from "../Components/Feedback";
 import SignaturePage from "../Components/SignaturePage";
 import ChefForm from './ChefForm';
 
+import GeoPoint from 'geopoint';
 import axios from "axios";
 
 // const cstore = store();
+let distanceInterval; 
 
 export default class App extends Component {
   constructor() {
@@ -42,14 +42,51 @@ export default class App extends Component {
     this.setUploadStatus = this.setUploadStatus.bind(this);
     this.fetchDishDetails = this.fetchDishDetails.bind(this)
     this.setDishDetails = this.setDishDetails.bind(this)
+    this.setChefLocationAndPhoneNumber= this.setChefLocationAndPhoneNumber.bind(this);
+    this.updateLocation = this.updateLocation.bind(this);
   }
 
   componentDidMount() {
     console.log("APP MOUNTED");
+    this.setLocation();
   }
+
+  setLocation() {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        console.log(position);
+        geo = new GeoPoint(position.coords.latitude, position.coords.longitude);
+        this.setState({latitude: position.coords.latitude, longitude: position.coords.longitude, geo}, () => console.log(this.state.position));
+      },
+      (error) => alert(JSON.stringify(error)),
+      {enableHighAccuracy: true}
+    );
+  }
+
+  setChefLocationAndPhoneNumber(chef, phone) {
+    console.log("CHEF IS", chef)
+    const url = `http://maps.apple.com/?saddr=${this.state.latitude},${this.state.longitude}&daddr=${chef.geo_lat},${chef.geo_lng}&dirflg=d`;    
+    chefLocation = new GeoPoint(chef.geo_lat, chef.geo_lng)
+    this.setState({ chefLocation, phone: phone });
+    distanceInterval = setInterval(this.updateLocation, 60000);
+    Linking.openURL(url);
+  }
+
+  updateLocation() {
+    if (this.state.chefLocation.distanceTo(this.state.geo) > 2.5) {
+      console.log("ABOUT TO RESET LOCATION");
+      this.setLocation();
+    } else {
+      console.log("ABOUT TO CLEAR INTERVAL", this.state.phone);
+      axios.post("http://localhost:3000/text/", {phone: this.state.phone});
+      clearInterval(distanceInterval);
+    }
+  }
+
   getCuisineStyles(){
     return "All Cuisines,American,Barbecue,Burgers,Chinese,Indian,Italian,Japanese,Korean,Mediterranean,Mexican,Pizza,Sandwiches,Sushi,Thai,Vegetarian,Vietnamese,American,Ethiopian,Other".split(",");
   }
+
   setChef(chef) {
     console.log("INSIDE SET CHEF", chef)
     axios.get(`http://localhost:3000/chef/${chef.authId}`).then( res => {
@@ -172,7 +209,7 @@ export default class App extends Component {
             <Scene key="edit" component={EditProfile} />
             <Scene key="orders" component={OrderPanel} />
             <Scene key="orderView" component={OrderView} title="Order" />
-            <Scene key="userOrders" component={UserOrderPanel} title="Orders" />
+            <Scene key="userOrders" component={UserOrderPanel} title="Orders" setChefLocationAndPhoneNumber={this.setChefLocationAndPhoneNumber} />
             <Scene key="feedback" component={Feedback} title="Feedback" />
             <Scene key="chefform" component={ChefForm} title="Chef Form" />
             <Scene key="signature" component={SignaturePage} title="Signature Page" />
