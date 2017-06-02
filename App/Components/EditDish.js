@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, AsyncStorage, Image } from "react-native";
+import { StyleSheet, AsyncStorage, Switch, Image } from "react-native";
 import { View, Input, Item, Button, Text, Toast, Picker,Label,Content,Container,Form} from "native-base";
 import { Actions } from "react-native-router-flux";
 import axios from "axios";
@@ -8,6 +8,8 @@ export default class ManageDish extends Component {
   constructor() {
     super();
     this.state = {
+      //  selectedItem: 'undefined',
+        selected1: 0,
       showToast: false,
       userId: '',
       userName: '',
@@ -35,25 +37,23 @@ export default class ManageDish extends Component {
     //   .then(() => {
     //     this.setState({ userId: userId, userName: userName, userPic: userPic })
     //   })
-    this.setState({dish:this.props.fetchDish()},() =>console.log(this.state.dish));
+    let dish = this.props.fetchDish()
+    dish.cashDonation += ''
+    dish.quantity += ''
+    this.setState({dish},() => console.log(this.state.dish));
+    this.setState({genres:['Select a Cuisine Style'].concat(this.props.getStyles())},() => {
+      this.setState({selected1: this.state.genres.indexOf(dish.cuisineType)});
+      
+    })
   }
 
   handleSubmit() {
-    let send = { authId: this.state.userId };
-    console.log('SEND: ', send);
-    if (this.state.address) {
-      send.address = this.state.address;
-    }
-    if (this.state.phone) {
-      send.phone = this.state.phone;
-    }
-    if (this.state.status) {
-      send.state = this.state.status;
-    }
+    let dish = this.state.dish;
+    console.log('SEND: ', dish);
 
-    axios.put("http://localhost:3000/user", send).then(Actions.cuisines());
+    axios.put("http://localhost:3000/dish", dish).then(Actions.chefPanel());
   }
-    onValueChange (value) {
+  onValueChange (value) {
     console.log(this.state.genres[value])
     let dish = this.state.dish
     dish['cuisineType'] = this.state.genres[value]
@@ -70,7 +70,19 @@ export default class ManageDish extends Component {
 
         }}>
         <Content >
+          <Image source={{ uri:this.state.dish.dishImages[0]}}  
+        style={{width: 200, height: 200}}
+          resizeMode={Image.resizeMode.center} />
           <Form style={{ marginTop: 100 }}>
+            <Text> {this.state.dish.isActive? 'Active' : "Inactive"}</Text>
+            <Switch
+              onValueChange={(value) => {
+                let dish = this.state.dish;
+                dish.isActive = value
+                this.setState({dish}, () => console.log(this.state.dish.isActive))
+                }}
+              style={{marginBottom: 10}}
+              value={this.state.dish.isActive} />
             <Item>
               <Input
                 placeholder="Name"
@@ -98,7 +110,6 @@ export default class ManageDish extends Component {
               <Label>$</Label>
               <Input 
                 placeholder="Donation Amount"
-                keyboardType={"number-pad"}
                 onChangeText={cashDonation => {
                     let dish = this.state.dish;
                     dish.cashDonation = cashDonation
@@ -106,7 +117,7 @@ export default class ManageDish extends Component {
                   }
                 }
               
-                value={this.state.dish.donation}
+                value={this.state.dish.cashDonation}
               />
             </Item>
             <Item>
@@ -136,7 +147,7 @@ export default class ManageDish extends Component {
                 }): {}}
             </Picker>
             <Button style={{ marginTop: 70}} onPress={() => this.handleSubmit()}>
-              <Text>Next </Text>
+              <Text>Submit </Text>
             </Button>
           </Form>
         </Content>

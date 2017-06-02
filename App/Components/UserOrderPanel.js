@@ -1,7 +1,23 @@
 import React, { Component } from "react";
 import SocketIO from "socket.io-client";
-import { StyleSheet, ScrollView, AsyncStorage, RefreshControl} from "react-native";
-import { Button, Text, Container, Content, Header, Left, Icon, Right } from "native-base";
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  AsyncStorage,
+  RefreshControl
+} from "react-native";
+import {
+  Button,
+  Text,
+  Container,
+  Content,
+  Header,
+  Left,
+  Icon,
+  Right
+} from "native-base";
+
 import { Actions } from "react-native-router-flux";
 import FontAwesome, { Icons } from "react-native-fontawesome";
 import axios from "axios";
@@ -10,8 +26,8 @@ export default class UserOrderPanel extends Component {
   constructor() {
     super();
     this.state = {
-      refreshing: false, 
-      order: null 
+      refreshing: false,
+      order: null
     };
     this._onRefresh = this._onRefresh.bind(this);
   }
@@ -44,64 +60,71 @@ export default class UserOrderPanel extends Component {
       }
     }
 
-    getAuthID().then( () => {
-      console.log("AUTHID IS", authID)
-      axios.get("http://localhost:3000/orders/" + authID).then(orders => {
-        let order = orders.data[orders.data.length - 1];
-        this.setState({ order: order }, () => {
-          console.log(this.state.order)
-          socket.emit("join", this.state.order);
-        });
-      }).catch(err => console.log(err));
-    }).catch(err => console.log(err));
-    _onRefresh = () => {
-      this.componentWillMount();
-    }
+    getAuthID()
+      .then(() => {
+        console.log("AUTHID IS", authID);
+        axios
+          .get("http://localhost:3000/orders/" + authID)
+          .then(orders => {
+            let order = orders.data[orders.data.length - 1];
+            this.setState({ order: order }, () =>
+              console.log(this.state.order)
+            );
+          })
+          .catch(err => console.log(err));
+      })
+      .catch(err => console.log(err));
   }
 
+  _onRefresh = () => {
+    this.componentWillMount();
+  };
+
   render() {
-        console.log("IN RENDER");
     if (!this.state.order) return <ScrollView />;
     else {
       return (
         <ScrollView
           contentContainerStyle={{
+            flex: 1,
+            flexDirection: "column",
             alignItems: "center",
-            alignContent: "center",
-            justifyContent: "center",
-            marginTop: 150
+            marginTop: 70
           }}
           refreshControl={
-          <RefreshControl
-
-            refreshing={this.state.refreshing}
-            onRefresh={this._onRefresh}
-            tintColor="#ff0000"
-            title="Loading..."
-            titleColor="black"
-            colors={['#ff0000', '#00ff00', '#0000ff']}
-            progressBackgroundColor="#ffff00"
-          />
-        }
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this._onRefresh}
+              tintColor="#ff0000"
+              title="Loading..."
+              titleColor="black"
+              colors={["#ff0000", "#00ff00", "#0000ff"]}
+              progressBackgroundColor="#ffff00"
+            />
+          }
         >
- 
-          <Text>Order placed: {this.state.order.date}</Text>
-          {this.state.order.status === 0
-            ? <Text>Order Status: Pending</Text>
-            : <Text>Order Status: Accepted</Text>}
-          <Content>
-            {this.state.order.status !== 0
-              ? <View>
-                  <Button
-                    style={{ marginTop: 10 }}
-                    onPress={() => Actions.feedback(this.state.order)}
-                  >
-                    <Text>Leave Feedback</Text>
-                  </Button>
-                </View>
-              : <Text />}
-          </Content>
-
+          <Text>Pull Down to Refresh</Text>
+          <View style={{ alignItems: "center", marginTop: 150 }}>
+            <Text>Order placed: {this.state.order.date}</Text>
+            {this.state.order.status === 0
+              ? <Text>Order Status: Pending</Text>
+              : <Text>Order Status: Accepted</Text>}
+            <Content>
+              {this.state.order.status === 2
+                ? <View>
+                    <Button
+                      style={{ marginTop: 10 }}
+                      onPress={() =>
+                        Actions.feedback(this.state.order, {
+                          leavingChefReview: true
+                        })}
+                    >
+                      <Text>Leave Feedback</Text>
+                    </Button>
+                  </View>
+                : <Text />}
+            </Content>
+          </View>
 
         </ScrollView>
       );

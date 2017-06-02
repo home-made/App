@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, AsyncStorage, ScrollView} from "react-native";
+import { StyleSheet, Text, View, AsyncStorage, ScrollView } from "react-native";
 import {
   Container,
   Header,
@@ -61,23 +61,34 @@ export default class OrderPanel extends Component {
 
     getAuthID().then(() => {
       axios.get("http://localhost:3000/orders/0/" + authID).then(pending => {
-        this.setState({ pending: pending.data[0] }, () =>
-          console.log("PENDING ORDERS ARE ", this.state.pending)
-        );
         axios.get("http://localhost:3000/orders/1/" + authID).then(accepted => {
-          this.setState({ accepted: accepted.data[0] }, () =>
-            console.log("ACCEPTED ORDERS ARE ", this.state.accepted)
-          );
           axios
             .get("http://localhost:3000/orders/2/" + authID)
             .then(complete => {
-              this.setState({ complete: complete.data[0] }, () =>
-                console.log("COMPLETE ORDERS ARE ", this.state.complete)
+              this.setState(
+                {
+                  pending: pending.data[0],
+                  accepted: accepted.data[0],
+                  complete: complete.data[0]
+                },
+                () =>
+                  console.log(
+                    "Pending:",
+                    this.state.pending,
+                    "Accepted: ",
+                    this.state.accepted,
+                    " Complete: ",
+                    this.state.complete
+                  )
               );
             });
         });
       });
     });
+  }
+
+  componentWillReceiveProps() {
+    this.componentWillMount();
   }
 
   render() {
@@ -86,10 +97,9 @@ export default class OrderPanel extends Component {
     var completeOrders = [];
     console.log(this.state.pending, this.state.accepted, this.state.complete);
     return (
-
       <ScrollView>
         <Header hasTabs />
-        <Tabs >
+        <Tabs>
           <Tab heading={<TabHeading><Text>Pending</Text></TabHeading>}>
             {!this.state.pending
               ? <Text />

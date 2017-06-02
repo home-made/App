@@ -61,7 +61,7 @@ export default class DishView extends Component {
     },() =>console.log(this.state.dish));
   }
   render() {
-    const price = '$'+this.state.donation;
+    const price = '$' + this.state.cashDonation;
     const { container } = styles;
     const onButtonPress = () => {
       this.setState({ dishText: "freshly" });
@@ -107,10 +107,11 @@ export default class DishView extends Component {
                     let dish = this.state.dish;
                     dish.cashDonation = cashDonation
                     this.setState({ dish},()=> console.log(this.state.dish))
+
                   }
                 }
               
-                value={this.state.dish.donation}
+                value={this.state.dish.cashDonation}
               />
             </Item>
             <Item>

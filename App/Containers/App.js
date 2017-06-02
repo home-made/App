@@ -51,10 +51,13 @@ export default class App extends Component {
     return "All Cuisines,American,Barbecue,Burgers,Chinese,Indian,Italian,Japanese,Korean,Mediterranean,Mexican,Pizza,Sandwiches,Sushi,Thai,Vegetarian,Vietnamese,American,Ethiopian,Other".split(",");
   }
   setChef(chef) {
+    console.log("INSIDE SET CHEF", chef)
     axios.get(`http://localhost:3000/chef/${chef.authId}`).then( res => {
+      console.log(res)
       this.setState({user: res.data}, () => {
+        console.log("IN SET CHEF STATE", this.state)
         Actions.profile();});
-    })
+    }).catch(err => console.log(err))
   }
   
   getChef() {
@@ -71,7 +74,7 @@ export default class App extends Component {
         .then(res => {
           console.log("res.data inside App.js for setCuisine is ", res.data)
           this.setState({ chefs: res.data }, () => {
-            Actions.chefList({ type: ActionConst.RESET });
+            Actions.chefList();
           })
         })
         .catch(err => {
@@ -125,6 +128,8 @@ export default class App extends Component {
 
 
             <Scene
+              navigationBarStyle={{backgroundColor: 'black'}}
+              titleStyle={{fontFamily: "helvetica", fontWeight:"bold", color : "white"}}
               key="cuisines"
               component={Cuisines}
               title="Cuisines"
@@ -135,7 +140,7 @@ export default class App extends Component {
               title="Manage Dish"
               component={ManageDish}
               fetchDish={this.fetchDishDetails} 
-
+              getStyles={this.getCuisineStyles}
             />
             <Scene 
               key="chefPanel" 
