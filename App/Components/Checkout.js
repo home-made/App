@@ -30,7 +30,6 @@ export default class Checkout extends Component {
     this.calculateTotal = this.calculateTotal.bind(this);
     this.sendNotification = this.sendNotification.bind(this);
     this.submitOrder = this.submitOrder.bind(this);
-    
   }
   componentWillMount() {
     this.calculateTotal();
@@ -64,11 +63,11 @@ export default class Checkout extends Component {
     var newData = this.state.data.filter(dish => {
       return dish._id !== key;
     });
-      var newDishCounter = this.state.dishCounter;
-      subtract = newDishCounter[key].amount * newDishCounter[key].cashDonation;
-      delete newDishCounter[key];
-      this.setState({dishCounter: newDishCounter});
-      total -= subtract;
+    var newDishCounter = this.state.dishCounter;
+    subtract = newDishCounter[key].amount * newDishCounter[key].cashDonation;
+    delete newDishCounter[key];
+    this.setState({ dishCounter: newDishCounter });
+    total -= subtract;
     this.setState({
       data: newData,
       cashTotal: total
@@ -88,16 +87,12 @@ export default class Checkout extends Component {
     });
   }
 
-  sendNotification(){
-    return(
-      Alert.alert(
-        'Order Submitted to Chef!',
-        'Wait for a confirmation your order was accepted.',
-        [
-          {text: 'OK', onPress: () => console.log('OK Pressed')}
-        ]
-      )
-    )
+  sendNotification() {
+    return Alert.alert(
+      "Order Submitted to Chef!",
+      "Wait for a confirmation your order was accepted.",
+      [{ text: "OK", onPress: () => console.log("OK Pressed") }]
+    );
   }
 
   submitOrder() {
@@ -123,7 +118,10 @@ export default class Checkout extends Component {
     axios
       .post("http://localhost:3000/orders", newOrder)
       .then(function(response) {
-        console.log("New order was submitted to the database, response is: ", response);
+        console.log(
+          "New order was submitted to the database, response is: ",
+          response
+        );
         Actions.userOrders({ type: ActionConst.RESET });
       })
       .catch(function(error) {
@@ -150,7 +148,6 @@ export default class Checkout extends Component {
     this.setState({
       dishCounter: dishItems
     });
-    
   }
   render() {
     console.log("render start");
@@ -166,7 +163,7 @@ export default class Checkout extends Component {
       );
     } else {
       return (
-        <Container >
+        <Container>
           <Header><Text>Checkout</Text></Header>
           <Content>
             <List>
@@ -185,12 +182,16 @@ export default class Checkout extends Component {
               })}
             </List>
             <Header><Text>Total: ${this.state.cashTotal}</Text></Header>
-            <Container style={{ alignItems:"center"}}>
+            <Container style={{ alignItems: "center" }}>
               <Content>
-            <Button style={{marginTop: 10}} onPress={this.submitOrder} success>
-              <Text>Submit Order</Text>
-            </Button>
-            </Content>
+                <Button
+                  style={{ marginTop: 10 }}
+                  onPress={this.submitOrder}
+                  success
+                >
+                  <Text>Submit Order</Text>
+                </Button>
+              </Content>
             </Container>
           </Content>
         </Container>
