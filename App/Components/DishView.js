@@ -10,7 +10,7 @@ export default class DishView extends Component {
     console.log(this.props);
     return (
       <View style={styles.container}>
-    
+
         <Text />
         <Image
           style={{
@@ -24,12 +24,17 @@ export default class DishView extends Component {
         <Text> ${this.props.dish.cashDonation}</Text>
         <Container style={{ alignContent: "center", marginBottom: -600 }}>
           <Content>
-            <Button onPress={() => {this.props.addToCart(this.props.dish); Toast.show({
-              supportedOrientations: ['portrait','landscape'],
-              text: 'Added to Cart!',
-              position: 'bottom',
-              duration: 1000
-            });}}>
+            <Button
+              onPress={() => {
+                this.props.addToCart(this.props.dish);
+                Toast.show({
+                  supportedOrientations: ["portrait", "landscape"],
+                  text: "Added to Cart!",
+                  position: "bottom",
+                  duration: 1000
+                });
+              }}
+            >
               <Text>Add to cart</Text>
             </Button>
           </Content>
