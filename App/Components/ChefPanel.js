@@ -49,6 +49,7 @@ export default class ChefPanel extends Component {
     });
   }
   returnRow(data) {
+    console.log(!!this.state.active)
     return (
       <ListItem onPress={() => {
           this.props.setDish(data)
@@ -60,7 +61,7 @@ export default class ChefPanel extends Component {
             {data.name}
           </Text>
           <Text note>
-            Status: {data.isActive ? 'ACTIVE' : 'INACTIVE'}
+            Donation: ${data.cashDonation} {'\n'}Quantity: {data.quantity}
           </Text>
         </Body>
       </ListItem>
@@ -71,32 +72,36 @@ export default class ChefPanel extends Component {
     var inactiveDishes = [];
     var activeDishes = [];
     return (
-      <ScrollView>
-        <Header hasTabs />
-        <Tabs >
-          <Tab heading={<TabHeading><Text>Inactive</Text></TabHeading>}>
-            {!this.state.inactive
-              ? <Text note> {"\n"}  No Dishes Available</Text>
-              : this.state.inactive.forEach(item =>
-                  inactiveDishes.push(this.returnRow(item))
-                )}
-            <List style={{ marginTop: 10 }} dataArray={this.state.inactive}>
-              {inactiveDishes}
-            </List>
-          </Tab>
+      <Container>
+          <Header hasTabs />
+          <Tabs >
+            <Tab heading={<TabHeading><Text>Inactive</Text></TabHeading>}>
+              {!this.state.inactive
+                ? <Text note> {"\n"}  No Dishes Available</Text>
+                : this.state.inactive.forEach(item =>
+                    inactiveDishes.push(this.returnRow(item))
+                  )}
+              <ScrollView>
+                <List style={{ marginTop: 10 }} dataArray={this.state.inactive}>
+                  {inactiveDishes}
+                </List>
+              </ScrollView>
+            </Tab>
 
-          <Tab heading={<TabHeading><Text>Active</Text></TabHeading>}>
-            {!this.state.active
-              ? <Text note> {"\n"}  No Dishes Available</Text>
-              : this.state.active.forEach(item =>
-                  activeDishes.push(this.returnRow(item))
-                )}
-            <List style={{ marginTop: 10 }} dataArray={this.state.active}>
-              {activeDishes}
-            </List>
-          </Tab>
-        </Tabs>
-      </ScrollView>
+            <Tab heading={<TabHeading><Text>Active</Text></TabHeading>}>
+              {!this.state.active
+                ? <Text note> {"\n"}  No Dishes Available</Text>
+                : this.state.active.forEach(item =>
+                    activeDishes.push(this.returnRow(item))
+                  )}
+              <ScrollView>
+                <List style={{ marginTop: 10 }} dataArray={this.state.active}>
+                  {activeDishes}
+                </List>
+              </ScrollView>
+            </Tab>
+          </Tabs>
+      </Container>
     );
   }
 }

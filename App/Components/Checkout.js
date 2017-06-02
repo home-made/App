@@ -108,6 +108,19 @@ export default class Checkout extends Component {
     });
   }
 
+
+  sendNotification(){
+    return(
+      Alert.alert(
+        'Order Submitted to Chef!',
+        'Wait for a confirmation your order was accepted.',
+        [
+          {text: 'OK', onPress: () => console.log('OK Pressed')}
+        ]
+      )
+    )
+  }
+
   submitOrder() {
     //will need the customerId && chefId to submit order to DB
     //hardcoded info for demo purposes
@@ -119,10 +132,6 @@ export default class Checkout extends Component {
       not sure what the ID for a dish is in the DB.
       */
 
-    var chefId = "7564fjasdif"; //Luke Skywalker
-    var customerId = "axncmufid745"; //Darth Vader
-    var cashTotal = this.state.cashTotal;
-
     //where status: 0 means the order is pending approval
     var newOrder = {
       chefId: this.state.chefId,
@@ -131,6 +140,7 @@ export default class Checkout extends Component {
       status: 0,
       cashTotal: this.state.cashTotal
     };
+
     socket = new SocketIO('http://localhost:3000');
     socket.connect();
     socket.on("connect", () => {
@@ -143,6 +153,8 @@ export default class Checkout extends Component {
         console.log('user disconnected')
       })
     });
+    this.sendNotification();
+
     axios
       .post("http://localhost:3000/orders", newOrder)
       .then(function(response) {

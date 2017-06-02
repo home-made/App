@@ -56,7 +56,7 @@ export default class UserOrderPanel extends Component {
         const data = await AsyncStorage.getItem("profile");
         if (data !== null && data !== undefined) {
           data = JSON.parse(data);
-          console.log("DATA IS ", data);
+          console.log("DATA INSIDE USER ORDER PANEL IS ", data);
           authID = data.userId;
         }
       } catch (err) {
@@ -66,18 +66,21 @@ export default class UserOrderPanel extends Component {
 
     getAuthID()
       .then(() => {
-        console.log("AUTHID IS", authID);
         axios
           .get("http://localhost:3000/orders/" + authID)
           .then(orders => {
             let order = orders.data[orders.data.length - 1];
-            this.setState({ order: order }, () =>
-              console.log(this.state.order)
-            );
+            axios.get("http://localhost:3000/user/" + order.chefId).then(chefDetails => {
+              console.log("CHEF DETAILS ARE", chefDetails)
+              this.setState({ order, chefLocation: chefDetails.data[0].location, phone: chefDetails.data[0].phoneNumber});
+            })
+            
           })
           .catch(err => console.log(err));
       })
       .catch(err => console.log(err));
+
+
   }
 
   _onRefresh = () => {
@@ -114,6 +117,19 @@ export default class UserOrderPanel extends Component {
               ? <Text>Order Status: Pending</Text>
               : <Text>Order Status: Accepted</Text>}
             <Content>
+              {this.state.order.status === 1
+                ? <View>
+                    <Button
+                      style={{ marginTop: 10 }}
+                      onPress={() => {
+                        this.props.setChefLocationAndPhoneNumber(this.state.chefLocation, this.state.phone);
+                      }}
+                    >
+                      <Text>Get Directions</Text>
+                    </Button>
+                  </View>
+                : null}
+
               {this.state.order.status === 2
                 ? <View>
                     <Button
@@ -126,7 +142,7 @@ export default class UserOrderPanel extends Component {
                       <Text>Leave Feedback</Text>
                     </Button>
                   </View>
-                : <Text />}
+                : null}
             </Content>
           </View>
 
