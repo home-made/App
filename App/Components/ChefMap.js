@@ -25,7 +25,7 @@ export default class ChefMap extends Component {
     const lo = chef.location.geo_lng;
 
     const url = `http://maps.apple.com/?saddr=${rla},${rlo}&daddr=${la},${lo}&dirflg=d`;
-
+    // const url = `http://maps.apple.com/?saddr=${rla},${rlo}&daddr=106+Austin+Dr+Folsom+CA&dirflg=d`;
     console.log(Linking.openURL(url));
     return Linking.openURL(url);
   }

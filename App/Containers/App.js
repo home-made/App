@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Icon, Linking} from "react-native";
 import { Router, Scene, Actions, ActionConst } from "react-native-router-flux";
 
 import NavigationDrawer from "./Drawer";
@@ -14,20 +14,21 @@ import OrderPanel from "../Components/OrderPanel";
 import OrderView from "../Components/OrderView";
 import ChefPanel from "../Components/ChefPanel";
 import UserOrderPanel from "../Components/UserOrderPanel";
-
+import ManageDish from '../Components/EditDish'
 import UploadImage from "../Components/UploadImage";
 import DishCreate from "../Components/DishCreate";
 import DishConfirm from "../Components/DishConfirm";
-
 import Feedback from "../Components/Feedback";
 import SignaturePage from "../Components/SignaturePage";
 import ChefForm from './ChefForm';
 
+import GeoPoint from 'geopoint';
 import axios from "axios";
 
 // const cstore = store();
+let distanceInterval; 
 
-class App extends Component {
+export default class App extends Component {
   constructor() {
     super();
     this.state = {};
@@ -37,26 +38,67 @@ class App extends Component {
     this.getChef = this.getChef.bind(this);
     this.fetchCart = this.fetchCart.bind(this);
     this.setCart = this.setCart.bind(this);
+    this.fetchDishDetails = this.fetchDishDetails.bind(this)
+    this.setDishDetails = this.setDishDetails.bind(this)
     this.getCuisineStyles = this.getCuisineStyles.bind(this)
     this.fetchUploadStatus = this.fetchUploadStatus.bind(this);
     this.setUploadStatus = this.setUploadStatus.bind(this);
-    this.fetchDishDetails = this.fetchDishDetails.bind(this)
-    this.setDishDetails = this.setDishDetails.bind(this)
+    this.setChefLocationAndPhoneNumber= this.setChefLocationAndPhoneNumber.bind(this);
+    this.updateLocation = this.updateLocation.bind(this);
+
   }
 
   componentDidMount() {
     console.log("APP MOUNTED");
+    this.setLocation();
   }
+
+  setLocation() {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        console.log(position);
+        geo = new GeoPoint(position.coords.latitude, position.coords.longitude);
+        this.setState({latitude: position.coords.latitude, longitude: position.coords.longitude, geo}, () => console.log(this.state.position));
+      },
+      (error) => alert(JSON.stringify(error)),
+      {enableHighAccuracy: true}
+    );
+  }
+
+  setChefLocationAndPhoneNumber(chef, phone) {
+    console.log("CHEF IS", chef)
+    const url = `http://maps.apple.com/?saddr=${this.state.latitude},${this.state.longitude}&daddr=${chef.geo_lat},${chef.geo_lng}&dirflg=d`;    
+    chefLocation = new GeoPoint(chef.geo_lat, chef.geo_lng)
+    this.setState({ chefLocation, phone: phone });
+    distanceInterval = setInterval(this.updateLocation, 60000);
+    Linking.openURL(url);
+  }
+
+  updateLocation() {
+    if (this.state.chefLocation.distanceTo(this.state.geo) > 2.5) {
+      console.log("ABOUT TO RESET LOCATION");
+      this.setLocation();
+    } else {
+      console.log("ABOUT TO CLEAR INTERVAL", this.state.phone);
+      axios.post("http://localhost:3000/text/", {phone: this.state.phone});
+      clearInterval(distanceInterval);
+    }
+  }
+
   getCuisineStyles(){
     return "All Cuisines,American,Barbecue,Burgers,Chinese,Indian,Italian,Japanese,Korean,Mediterranean,Mexican,Pizza,Sandwiches,Sushi,Thai,Vegetarian,Vietnamese,American,Ethiopian,Other".split(",");
   }
-  setChef(chef) {
-    axios.get(`http://localhost:3000/chef/${chef.authId}`).then( res => {
-      this.setState({user: res.data}, () => {
-        Actions.profile();});
-    })
-  }
 
+  setChef(chef) {
+    console.log("INSIDE SET CHEF", chef)
+    axios.get(`http://localhost:3000/chef/${chef.authId}`).then( res => {
+      console.log(res)
+      this.setState({user: res.data}, () => {
+        console.log("IN SET CHEF STATE", this.state)
+        Actions.profile();});
+    }).catch(err => console.log(err))
+  }
+  
   getChef() {
     return this.state.user;
   }
@@ -64,13 +106,14 @@ class App extends Component {
   setCuisineType(genre) {
     console.log(genre);
     this.setState({cuisineType: genre}, () => {
+    console.log('CUISINETYPE: ', this.state.cuisineType);
       let url = `http://localhost:3000/chef/style/${this.state.cuisineType}`;
       axios
         .get(url)
         .then(res => {
           console.log("res.data inside App.js for setCuisine is ", res.data)
           this.setState({ chefs: res.data }, () => {
-            Actions.chefList({ type: ActionConst.RESET });
+            Actions.chefList();
           })
         })
         .catch(err => {
@@ -80,7 +123,7 @@ class App extends Component {
   }
   setUploadStatus(cameraMode){
     console.log('camera mode is',cameraMode)
-    this.setState({cameraMode: cameraMode}, ()=>console.log('app camera mode is dish is',this.state.cameraMode))
+    this.setState({cameraMode: cameraMode}, ()=>console.log('app camera mode is',this.state.cameraMode))
   }
   fetchUploadStatus(){
     console.log('status fetched', this.state.cameraMode)
@@ -124,12 +167,26 @@ class App extends Component {
 
 
             <Scene
+              navigationBarStyle={{backgroundColor: 'black'}}
+              titleStyle={{fontFamily: "helvetica", fontWeight:"bold", color : "white"}}
               key="cuisines"
               component={Cuisines}
               title="Cuisines"
               setCuisineType={this.setCuisineType}
             />
-            <Scene key="chefPanel" component={ChefPanel} title="Chef Panel" />
+            <Scene 
+              key="dishedit"
+              title="Manage Dish"
+              component={ManageDish}
+              fetchDish={this.fetchDishDetails} 
+              getStyles={this.getCuisineStyles}
+            />
+            <Scene 
+              key="chefPanel" 
+              component={ChefPanel} 
+              title="Chef Panel" 
+              setDish={this.setDishDetails}  
+            />
             <Scene
               key="chefList"
               component={ChefList}
@@ -160,13 +217,14 @@ class App extends Component {
               component={UploadImage}
               title="Upload Dish"
               setDish={this.setDishDetails}
-              fetchCameraMode={this.fetchUploadStatus}
               fetchDish={this.fetchDishDetails}
+              fetchCameraMode={this.fetchUploadStatus}
             />
-            <Scene key="edit" component={EditProfile} />
+            <Scene key="edit" component={EditProfile}  setCameraMode={this.setUploadStatus}/>
+
             <Scene key="orders" component={OrderPanel} />
             <Scene key="orderView" component={OrderView} title="Order" />
-            <Scene key="userOrders" component={UserOrderPanel} title="Orders" />
+            <Scene key="userOrders" component={UserOrderPanel} title="Orders" setChefLocationAndPhoneNumber={this.setChefLocationAndPhoneNumber} />
             <Scene key="feedback" component={Feedback} title="Feedback" />
             <Scene key="chefform" component={ChefForm} title="Chef Form" />
             <Scene key="signature" component={SignaturePage} title="Signature Page" />
@@ -192,4 +250,3 @@ const styles = StyleSheet.create({
   }
 });
 
-export default App;
