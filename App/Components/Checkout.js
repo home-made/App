@@ -87,6 +87,7 @@ export default class Checkout extends Component {
       cashTotal: total
     });
   }
+
   sendNotification(){
     return(
       Alert.alert(
@@ -98,6 +99,7 @@ export default class Checkout extends Component {
       )
     )
   }
+
   submitOrder() {
     //will need the customerId && chefId to submit order to DB
     //hardcoded info for demo purposes
@@ -107,6 +109,7 @@ export default class Checkout extends Component {
       has the quantity per dish that was placed in an order. just 
       not sure what the ID for a dish is in the DB.
       */
+
     //where status: 0 means the order is pending approval
     var newOrder = {
       chefId: this.state.chefId,
@@ -116,6 +119,7 @@ export default class Checkout extends Component {
       cashTotal: this.state.cashTotal
     };
     this.sendNotification();
+
     axios
       .post("http://localhost:3000/orders", newOrder)
       .then(function(response) {
@@ -126,6 +130,7 @@ export default class Checkout extends Component {
         console.log("The error message inside checkout post is ", error);
       });
   }
+
   componentDidMount() {
     console.log("compont did mont start");
     let cart = this.props.fetchCart();

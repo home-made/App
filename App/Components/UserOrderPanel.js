@@ -52,7 +52,7 @@ export default class UserOrderPanel extends Component {
         const data = await AsyncStorage.getItem("profile");
         if (data !== null && data !== undefined) {
           data = JSON.parse(data);
-          console.log("DATA IS ", data);
+          console.log("DATA INSIDE USER ORDER PANEL IS ", data);
           authID = data.userId;
         }
       } catch (err) {

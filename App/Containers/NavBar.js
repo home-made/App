@@ -33,7 +33,7 @@ export default class NavBar extends Component {
   }
 
   profile() {
-    Actions.profile({ type: ActionConst.RESET });
+    Actions.userProfile({ type: ActionConst.RESET });
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
 

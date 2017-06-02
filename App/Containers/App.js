@@ -7,6 +7,7 @@ import HomePage from "./HomePage";
 import Cuisines from "../Components/Cuisines";
 import ChefMap from "../Components/ChefMap";
 import ChefList from "../Components/ChefList";
+import UserProfile from "../Components/UserProfile";
 import Profile from "../Components/Profile";
 import Checkout from "../Components/Checkout";
 import EditProfile from "../Components/EditProfile";
@@ -47,6 +48,7 @@ export default class App extends Component {
     this.updateLocation = this.updateLocation.bind(this);
 
   }
+
 
   componentDidMount() {
     console.log("APP MOUNTED");
@@ -147,7 +149,26 @@ export default class App extends Component {
     return this.state.checkout;
   }
 
+  componentDidMount() {
+    console.log("APP MOUNTED");
+
+/*
+    AsyncStorage.getItem('profile').then(profile => {
+
+      var userId = JSON.parse(profile).userId;
+      var context = this;
+      
+      SetProfile(context, userId);
+
+    }).catch(error => {
+      console.log("Error inside AsyncStorage for Profile.js is ", error);
+    });
+
+*/
+  }
+
   render() {
+    {console.log("the state inside App.js is ", this.state)}
     const scenes = Actions.create(
       <Scene key="root">
         <Scene
@@ -194,6 +215,14 @@ export default class App extends Component {
               fetchChefs={this.fetchChefs}
               setChef={this.setChef}
             />
+
+            <Scene
+              key="userProfile"
+              setCart={this.setCart}
+              component={UserProfile}
+            />
+
+
             <Scene
               key="profile"
               setCart={this.setCart}

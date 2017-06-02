@@ -85,14 +85,21 @@ export default class HomePage extends Component {
           console.log(err);
         } else {
           token = JSON.stringify(token);
-          
+          /* after we log into the app, we make a post request
+             that either finds or creates a user. we find out 
+             if user is a chef or not */
+
           axios.post(`http://localhost:3000/user/${profile.userId}`, profile).then((user) => {
+
+            console.log("The user data inside HomePage is ", user)
             if (user.data.isChef) {
+                profile.isChef = true;
                 profile.chefView = true;
                 profile = JSON.stringify(profile);
                 setStorage();
             } else {
               profile.chefView = false;
+              profile.isChef = false;
               profile = JSON.stringify(profile);
               setStorage();
             }
