@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import SocketIO from "socket.io-client";
 import {
   View,
   StyleSheet,
@@ -16,10 +17,11 @@ import {
   Icon,
   Right
 } from "native-base";
+
 import { Actions } from "react-native-router-flux";
 import FontAwesome, { Icons } from "react-native-fontawesome";
 import axios from "axios";
-
+var socket;
 export default class UserOrderPanel extends Component {
   constructor() {
     super();
@@ -33,6 +35,17 @@ export default class UserOrderPanel extends Component {
   componentWillMount() {
     console.log("IN USER ORDER PANEL WILL MOUNT");
     let authID;
+    socket = new SocketIO("localhost:3000");
+    socket.connect();
+      console.log('b4id is',socket.id)
+
+    socket.on("connect", () => {
+      console.log('id is',socket.id)
+      socket.on("fresh", message => {
+        console.log(message);
+        console.log('send heem')
+      });
+    });
 
     async function getAuthID() {
       try {
@@ -49,18 +62,21 @@ export default class UserOrderPanel extends Component {
 
     getAuthID()
       .then(() => {
-        console.log("AUTHID IS", authID);
         axios
           .get("http://localhost:3000/orders/" + authID)
           .then(orders => {
             let order = orders.data[orders.data.length - 1];
-            this.setState({ order: order }, () =>
-              console.log(this.state.order)
-            );
+            axios.get("http://localhost:3000/user/" + order.chefId).then(chefDetails => {
+              console.log("CHEF DETAILS ARE", chefDetails)
+              this.setState({ order, chefLocation: chefDetails.data[0].location, phone: chefDetails.data[0].phoneNumber});
+            })
+            
           })
           .catch(err => console.log(err));
       })
       .catch(err => console.log(err));
+
+
   }
 
   _onRefresh = () => {
@@ -97,6 +113,19 @@ export default class UserOrderPanel extends Component {
               ? <Text>Order Status: Pending</Text>
               : <Text>Order Status: Accepted</Text>}
             <Content>
+              {this.state.order.status === 1
+                ? <View>
+                    <Button
+                      style={{ marginTop: 10 }}
+                      onPress={() => {
+                        this.props.setChefLocationAndPhoneNumber(this.state.chefLocation, this.state.phone);
+                      }}
+                    >
+                      <Text>Get Directions</Text>
+                    </Button>
+                  </View>
+                : null}
+
               {this.state.order.status === 2
                 ? <View>
                     <Button
@@ -109,7 +138,7 @@ export default class UserOrderPanel extends Component {
                       <Text>Leave Feedback</Text>
                     </Button>
                   </View>
-                : <Text />}
+                : null}
             </Content>
           </View>
 
