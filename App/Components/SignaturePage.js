@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { View, StyleSheet, Text, TouchableHighlight, AsyncStorage } from "react-native";
 import SignatureCapture from "react-native-signature-capture";
 import { Icons } from "react-native-vector-icons/Ionicons";
+import { Actions, ActionConst } from 'react-native-router-flux';
 import axios from 'axios';
 
 export default class SignaturePage extends Component {
@@ -9,7 +10,8 @@ export default class SignaturePage extends Component {
     super(props);
     
     this.state = {
-      authId: ''
+      authId: '',
+      isChef: false
     }
   }
   
@@ -20,8 +22,6 @@ export default class SignaturePage extends Component {
         const profile = await AsyncStorage.getItem('profile');
         if (profile !== null && profile !== undefined) {
           userId = JSON.parse(profile).userId;
-          console.log(JSON.parse(profile).userId);
-          console.log(userId);
         }
       } catch (err) {
         console.log("Error getting profile: ", err);
@@ -40,34 +40,35 @@ export default class SignaturePage extends Component {
     axios.put(`http://localhost:3000/user/${this.state.authId}`, { isChef: true })
       .then((res) => console.log(res.data))
       .catch((err) => console.log('Error updating user to chef status: ', err));
+      this.setState({
+        isChef: true
+      })
+    Actions.homepage({ type: ActionConst.RESET });
+    setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
 
   resetSign() {
     this.refs["sign"].resetImage();
   }
 
-  _onSaveEvent(result) {
+  onSaveEvent(result) {
     //result.encoded - for the base64 encoded png
     //result.pathName - for the file path name
     console.log(result);
   }
-  _onDragEvent() {
-    // This callback will be called when the user enters signature
+  onDragEvent() {
     console.log("dragged");
   }
 
   render() {
-
+    console.log(this.props)
     return (
-      <View style={{ flex: 1, flexDirection: "column" }}>
-        <Text style={{ alignItems: "center", justifyContent: "center" }}>
-          Signature Capture Extended{" "}
-        </Text>
+      <View style={{ flex: 1, flexDirection: "column", marginTop: 63 }}>
         <SignatureCapture
           style={[{ flex: 1 }, styles.signature]}
           ref="sign"
-          onSaveEvent={this._onSaveEvent}
-          onDragEvent={this._onDragEvent}
+          onSaveEvent={this.onSaveEvent}
+          onDragEvent={this.onDragEvent}
           saveImageFileInExtStorage={false}
           showNativeButtons={false}
           showTitleLabel={false}
@@ -93,6 +94,14 @@ export default class SignaturePage extends Component {
             <Text>Reset</Text>
           </TouchableHighlight>
 
+        </View>
+        <View style={{ flex: 0.3, alignItems: 'center'}}>
+          <Text style={{ alignItems: "center", justifyContent: "center" }}>
+            By signing this form, I agree to these
+          </Text>
+          <Text style={{ alignItems: "center", justifyContent: "center", color: 'blue' }}>
+            terms and conditions
+          </Text>
         </View>
 
       </View>

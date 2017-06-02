@@ -96,7 +96,7 @@ export default class OrderView extends Component {
             : null}
 
           {this.props.status === 0
-            ? <Button onPress={this.handleAccept}><Text>Accept</Text></Button>
+            ? <Button style={{marginLeft: 10}} onPress={this.handleAccept}><Text>Accept</Text></Button>
             : null}
 
           {this.props.status === 1

@@ -49,6 +49,7 @@ export default class ChefPanel extends Component {
     });
   }
   returnRow(data) {
+    console.log("DATA IS", data)
     return (
       <ListItem
         onPress={() => {
@@ -62,7 +63,7 @@ export default class ChefPanel extends Component {
             {data.name}
           </Text>
           <Text note>
-            Status: {data.isActive ? "ACTIVE" : "INACTIVE"}
+            Quantity: {data.quantity}
           </Text>
         </Body>
       </ListItem>

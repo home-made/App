@@ -22,6 +22,8 @@ import DishConfirm from "../Components/DishConfirm";
 import Feedback from "../Components/Feedback";
 import SignaturePage from "../Components/SignaturePage";
 import ChefForm from "./ChefForm";
+import Statistics from '../Components/Statistics';
+
 
 import GeoPoint from "geopoint";
 import axios from "axios";
@@ -50,23 +52,24 @@ export default class App extends Component {
     this.updateLocation = this.updateLocation.bind(this);
   }
 
-  componentDidMount() {
+  componentWillMount() {
     console.log("APP MOUNTED");
     this.setLocation();
   }
-
+  
   setLocation() {
     navigator.geolocation.getCurrentPosition(
       position => {
         console.log(position);
         geo = new GeoPoint(position.coords.latitude, position.coords.longitude);
+        console.log(geo);
         this.setState(
           {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
             geo
           },
-          () => console.log(this.state.position)
+          () => console.log("IN SET LOCATION", this.state.geo)
         );
       },
       error => alert(JSON.stringify(error)),
@@ -78,8 +81,9 @@ export default class App extends Component {
     console.log("CHEF IS", chef);
     const url = `http://maps.apple.com/?saddr=${this.state.latitude},${this.state.longitude}&daddr=${chef.geo_lat},${chef.geo_lng}&dirflg=d`;
     chefLocation = new GeoPoint(chef.geo_lat, chef.geo_lng);
+    console.log("CHEF LOCATION IS", chefLocation)
     this.setState({ chefLocation, phone: phone });
-    distanceInterval = setInterval(this.updateLocation, 60000);
+    distanceInterval = setInterval(this.updateLocation, 5000);
     Linking.openURL(url);
   }
 
@@ -295,11 +299,8 @@ export default class App extends Component {
             />
             <Scene key="feedback" component={Feedback} title="Feedback" />
             <Scene key="chefform" component={ChefForm} title="Chef Form" />
-            <Scene
-              key="signature"
-              component={SignaturePage}
-              title="Signature Page"
-            />
+            <Scene key="signature" component={SignaturePage} title="Signature Page" />
+            <Scene key="statistics" component={Statistics} title="Statistics" />
           </Scene>
         </Scene>
       </Scene>
