@@ -31,7 +31,7 @@ export default class NavBar extends Component {
       try {
         const data = await AsyncStorage.getItem("profile");
         if (data !== null && data !== undefined) {
-          console.log(JSON.parse(data));
+          console.log('profile in componentwillmount: ', JSON.parse(data));
           authId = JSON.parse(data).userId;
         }
       } catch (err) {
@@ -51,11 +51,6 @@ export default class NavBar extends Component {
       });
   }
   
-  statistics() {
-    Actions.statistics({ type: ActionConst.RESET });
-    setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
-  }
-
   cuisines() {
     Actions.cuisines({ type: ActionConst.RESET });
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
@@ -73,6 +68,11 @@ export default class NavBar extends Component {
 
   profile() {
     Actions.userProfile({ type: ActionConst.RESET });
+    setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
+  }
+
+  statistics() {
+    Actions.statistics({ type: ActionConst.RESET });
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
 
@@ -199,14 +199,6 @@ export default class NavBar extends Component {
         </View>
 
         <Content>
-          <ListItem icon onPress={this.statistics} style={styles.content}>
-            <Left>
-              <Icon name="ios-stats" />
-            </Left>
-            <Body>
-              <Text style={styles.entries}>Statistics</Text>
-            </Body>
-          </ListItem>
 
           <ListItem icon onPress={this.cuisines} style={styles.content}>
             <Left>
@@ -223,6 +215,15 @@ export default class NavBar extends Component {
             </Left>
             <Body>
               <Text style={styles.entries}>Profile</Text>
+            </Body>
+          </ListItem>
+
+          <ListItem icon onPress={this.statistics} style={styles.content}>
+            <Left>
+              <Icon name="ios-stats" />
+            </Left>
+            <Body>
+              <Text style={styles.entries}>Statistics</Text>
             </Body>
           </ListItem>
 

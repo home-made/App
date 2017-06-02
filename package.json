@@ -27,8 +27,8 @@
     "react-native-fetch-blob": "^0.10.5",
     "react-native-fontawesome": "^5.7.0",
     "react-native-fs": "^2.3.2",
-    "react-native-google-places-autocomplete": "^1.2.12",
     "react-native-geocoder": "^0.4.8",
+    "react-native-google-places-autocomplete": "^1.2.12",
     "react-native-image-picker": "^0.26.3",
     "react-native-lock": "^0.6.0",
     "react-native-maps": "^0.15.2",
@@ -39,6 +39,7 @@
     "react-native-vector-icons": "^4.2.0",
     "react-redux": "^5.0.5",
     "redux": "^3.6.0",
+    "socket.io-client": "^2.0.2",
     "yarn": "^0.24.5"
   },
   "devDependencies": {
