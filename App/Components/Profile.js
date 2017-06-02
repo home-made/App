@@ -1,12 +1,19 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Image, AsyncStorage } from "react-native";
-import { Container, Text, Content, Card, CardItem, Left, Body, Button } from "native-base";
+import {
+  Container,
+  Text,
+  Content,
+  Card,
+  CardItem,
+  Left,
+  Body,
+  Button
+} from "native-base";
 import { Actions, ActionConst } from "react-native-router-flux";
 import { Grid, Row, Col } from "react-native-easy-grid";
 import DishView from "./DishView";
 import Review from "./Review";
-import axios from "axios";
-import SetProfile from '../utils/SetProfile';
 
 export default class Profile extends Component {
   constructor(props) {
@@ -16,10 +23,26 @@ export default class Profile extends Component {
     this.handleMenuPress = this.handleMenuPress.bind(this);
     this.handleAddToCart = this.handleAddToCart.bind(this);
     this.handleCheckout = this.handleCheckout.bind(this);
-    this.displayDishView = this.displayDishView.bind(this);
   }
 
-  
+  componentWillMount() {
+    let chef = this.props.getChef();
+    this.setState({ chef: this.props.getChef(), cart: [] }, () => {
+      let reviews = this.state.chef[0].chefReviews.map(curr => {
+        return {
+          userText: curr.reviewText,
+          user: this.state.chef[2][
+            this.state.chef[2]
+              .map(o => {
+                return o.authId;
+              })
+              .indexOf(curr.reviewerId)
+          ]
+        };
+      });
+      this.setState({ reviewers: reviews });
+    });
+  }
 
   handleReviewsPress() {
     console.log(this.state.reviewers);
@@ -68,104 +91,86 @@ export default class Profile extends Component {
       );
     });
   }
-  
-  displayDishView(){
-
-  }
-
-
-             /*
-              user: user.data[0],
-              authId: user.data[0].authId,
-              chefReviews: user.data[0].chefReviews,
-              firstName: user.data[0].firstName,
-              lastName: user.data[0].lastName,
-              fullName: fullName,
-              status: user.data[0].status,
-              isChef: user.data[0].isChef,
-              likes: user.data[0].likes,
-              _id: user.data[0]._id
-              menu: activeDishes
-              
-            */
-
-  componentWillMount() {
-    
-    let context = this;
-    let userId;
-
-    async function grabAuthId() {
-      try {
-        const profile = await AsyncStorage.getItem('profile');
-        if (profile !== null && profile !== undefined) {
-          userId = JSON.parse(profile).userId;
-          console.log(JSON.parse(profile).userId);
-          console.log(userId);
-
-          SetProfile(context, userId);
-
-        }
-      } catch (err) {
-        console.log("Error getting profile: ", err);
-      }
-    }
-    grabAuthId();
-
-  }
 
   render() {
-    {console.log("the state is ", this.state)}
     return (
       <Container style={{ marginTop: 60 }}>
         <Content>
           <Card>
             <CardItem>
-              <Body>
-                <Text>Name: {!this.state.fullName != "n/a" ?  this.state.fullName :  this.state.firstName}</Text>
-                <Text note>Status: {!this.state.status ? "No status at this time." :  this.state.status}</Text>
-              </Body>
-            </CardItem>
 
+              <Body>
+                <Text>{this.state.chef[0].firstName}</Text>
+                <Text note>{this.state.chef[0].status}</Text>
+              </Body>
+
+            </CardItem>
             <CardItem>
               <Body>
                 <Row style={{ justifyContent: "center", alignItems: "center" }}>
-
-                  <Image style={{ 
-                         width: 120, 
-                         height: 120, 
-                         justifyContent: "center", 
-                         alignItems:  "center", 
-                         borderRadius: 60 }} 
-                         source={{ uri: !this.state.profileUrl ? "" : this.state.user.profileUrl }} />
+                  <Image
+                    style={{
+                      width: 120,
+                      height: 120,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRadius: 60
+                    }}
+                    source={{
+                      uri: this.state.chef[0].profileUrl
+                    }}
+                  />
                 </Row>
               </Body>
             </CardItem>
           </Card>
-
           <Row style={{ justifyContent: "center", alignItems: "center" }}>
             <Button onPress={this.handleReviewsPress}>
               <Text>Reviews</Text>
             </Button>
-            
-            {/*<Button onPress={this.handleMenuPress}>
-              <Text>Menu</Text>
-            </Button> */}
+            <Text> </Text>
+            <Button onPress={this.handleMenuPress}><Text>Menu</Text></Button>
           </Row>
 
-          {this.state.chefReviews
-          ? this.state.chefReviews.map(review => {
-              console.log("the review is ", review)
-              {/*return <Review review={review} />;*/}
-            })
-          : <Text />}
+          {this.state.menu
+            ? this.state.chef[1].map((dish, idx) => {
+                if (idx === this.state.chef[1].length - 1) {
+                  return (
+                    <View>
+                      <DishView dish={dish} addToCart={this.handleAddToCart} />
+                      {this.state.cart.length > 0
+                        ? <Container
+                            style={{ alignItems: "center", marginBottom: -600 }}
+                          >
+                            <Content>
+                              <Button
+                                success
+                                onPress={() => this.handleCheckout()}
+                              >
+                                <Text> Checkout </Text>
+                              </Button>
+                            </Content>
+                          </Container>
+                        : <Text />}
+                    </View>
+                  );
+                } else {
+                  return (
+                    <DishView dish={dish} addToCart={this.handleAddToCart} />
+                  );
+                }
+              })
+            : <Text />}
 
-
+          {this.state.reviews
+            ? this.state.reviewers.map(review => {
+                return <Review review={review} />;
+              })
+            : <Text />}
         </Content>
       </Container>
     );
-
   }
-
 }
 
 const styles = StyleSheet.create({

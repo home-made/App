@@ -87,10 +87,7 @@ export default class Checkout extends Component {
       cashTotal: total
     });
   }
-<<<<<<< HEAD
 
-=======
->>>>>>> 19609ab7d05f54148a2fdb3f4a05d2821c9284ad
   sendNotification(){
     return(
       Alert.alert(
@@ -102,10 +99,7 @@ export default class Checkout extends Component {
       )
     )
   }
-<<<<<<< HEAD
 
-=======
->>>>>>> 19609ab7d05f54148a2fdb3f4a05d2821c9284ad
   submitOrder() {
     //will need the customerId && chefId to submit order to DB
     //hardcoded info for demo purposes
@@ -136,7 +130,7 @@ export default class Checkout extends Component {
         console.log("The error message inside checkout post is ", error);
       });
   }
-  
+
   componentDidMount() {
     console.log("compont did mont start");
     let cart = this.props.fetchCart();

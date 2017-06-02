@@ -20,6 +20,7 @@ export default SetProfile = (context, userId) => {
       user: user.data[0],
       authId: user.data[0].authId,
       chefReviews: user.data[0].chefReviews,
+      customerReviews: user.data[0].customerReviews,
       firstName: user.data[0].firstName,
       lastName: user.data[0].lastName,
       fullName: fullName,

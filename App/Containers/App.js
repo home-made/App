@@ -7,6 +7,7 @@ import HomePage from "./HomePage";
 import Cuisines from "../Components/Cuisines";
 import ChefMap from "../Components/ChefMap";
 import ChefList from "../Components/ChefList";
+import UserProfile from "../Components/UserProfile";
 import Profile from "../Components/Profile";
 import Checkout from "../Components/Checkout";
 import EditProfile from "../Components/EditProfile";
@@ -161,6 +162,14 @@ export default class App extends Component {
               fetchChefs={this.fetchChefs}
               setChef={this.setChef}
             />
+
+            <Scene
+              key="userProfile"
+              setCart={this.setCart}
+              component={UserProfile}
+            />
+
+
             <Scene
               key="profile"
               setCart={this.setCart}
