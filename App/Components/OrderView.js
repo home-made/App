@@ -40,11 +40,11 @@ export default class OrderView extends Component {
       status: 1
     };
     axios
-      .put("http://localhost:3000/orders", request)
-      .then(() => Actions.orders({ type: ActionConst.RESET }));
+      .put('http://localhost:3000/orders', request)
+      .then(() => Actions.orders());
   }
 
-  handleDecline() {
+ handleDecline() {
     let request = {
       chefId: this.props.chefId,
       date: this.props.date,
@@ -66,6 +66,7 @@ export default class OrderView extends Component {
     axios
       .put("http://localhost:3000/orders", request)
       .then(() => Actions.orders({ type: ActionConst.RESET }));
+
   }
 
   render() {
