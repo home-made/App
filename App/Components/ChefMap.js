@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Dimensions, Text, View, Linking } from 'react-native';
+import { StyleSheet, Dimensions, Text, View, Linking, ActivityIndicator} from 'react-native';
 import MapView from 'react-native-maps';
 import { Actions, Router, Scene, Modal } from "react-native-router-flux";
 import GetGeoLocation from '../utils/GetGeoLocation';
@@ -10,6 +10,7 @@ export default class ChefMap extends Component {
     super(props);
 
     this.state = {
+      mapLoaded: false,
       region: null,
       data: []
     };
@@ -44,33 +45,40 @@ export default class ChefMap extends Component {
   }
 
   render() {
-    console.log("CHEF MAP PROPS ARE: ", this.props)
-    return (
-      <View style={{ flex: 1, marginTop: -40 }}>
-
-        <View style={styles.container}>
-          <MapView
-            showsUserLocation={true}
-            style={styles.map}
-            region={this.state.region}
-          >
-            {this.state.data.map((chef, idx) => {
-              var name = chef.firstName + " " + chef.lastName;
-              var coords =  {latlng: {latitude: chef.location.geo_lat, longitude: chef.location.geo_lng}, title: name};
-              
-              return <MapView.Marker
-
-                //onPress={()=> this.props.setChef(chef)}
-                onPress={()=> this.giveDirections(chef)}
-                key={name}
-                coordinate={coords.latlng}
-                title={name}
-              />
-            })}
-          </MapView>
+    if (!this.state.mapLoaded) {
+      return (
+        <View style={{flex: 1, justifyContent: 'center'}}>
+          <ActivityIndicator size="large" />
         </View>
-      </View>
-    );
+
+      )
+    } else {
+      console.log("CHEF MAP PROPS ARE: ", this.props)
+      return (
+        <View style={{ flex: 1, marginTop: -40 }}>
+          <View style={styles.container}>
+            <MapView
+              showsUserLocation={true}
+              style={styles.map}
+              region={this.state.region}
+            >
+              {this.state.data.map((chef, idx) => {
+                var name = chef.firstName + " " + chef.lastName;
+                var coords =  {latlng: {latitude: chef.location.geo_lat, longitude: chef.location.geo_lng},   title: name};
+                
+                return <MapView.Marker
+                  //onPress={()=> this.props.setChef(chef)}
+                  onPress={()=> this.giveDirections(chef)}
+                  key={name}
+                  coordinate={coords.latlng}
+                  title={name}
+                />
+              })}
+            </MapView>
+          </View>
+        </View>
+      );
+    }
   }
 }
 
