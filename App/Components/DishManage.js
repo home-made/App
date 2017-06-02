@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { Router, Scene, Actions, ActionConst } from "react-native-router-flux";
-import { StyleSheet, View, ScrollView , AsyncStorage} from "react-native";
+import { StyleSheet, View, ScrollView , Text} from "react-native";
 import {  Container,
   Header,
   Tabs,
@@ -10,17 +9,11 @@ import {  Container,
   Tab3,
   TabHeading,
   List,
-  Body,
-  Text,
-  Thumbnail,
   ListItem } from "native-base";
-import axios from 'react-native-axios'
+
 export default class ChefPanel extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-
-    }
   }
   componentWillMount(){
     async function getAuthID() {
@@ -37,36 +30,17 @@ export default class ChefPanel extends Component {
 
     getAuthID().then(() => {
       axios.get("http://localhost:3000/dish/0/" + authID).then(inactive => {
-        this.setState({ inactive: inactive.data }, () =>
+        this.setState({ inactive: inactive.data[0] }, () =>
           console.log("INACTIVE DISHES ARE ", this.state.inactive)
         );
         axios.get("http://localhost:3000/dish/1/" + authID).then(active => {
-          this.setState({ active: active.data }, () =>
+          this.setState({ active: active.data[0] }, () =>
             console.log("ACTIVE DISHES ARE ", this.state.active)
           );
         });
       });
     });
   }
-  returnRow(data) {
-    return (
-      <ListItem onPress={() => {
-          this.props.setDish(data)
-          Actions.dishedit()
-          }}>
-        <Thumbnail square size={80} source={{uri: data.dishImages[0]}} />
-        <Body>
-          <Text style={{ marginLeft: 10 }}>
-            {data.name}
-          </Text>
-          <Text note>
-            Status: {data.isActive ? 'ACTIVE' : 'INACTIVE'}
-          </Text>
-        </Body>
-      </ListItem>
-    );
-  }
-
   render() {
     var inactiveOrders = [];
     var activeOrders = [];
@@ -89,14 +63,13 @@ export default class ChefPanel extends Component {
             {!this.state.active
               ? <Text />
               : this.state.active.forEach(item =>
-                  activeOrders.push(this.returnRow(item))
+                  acceptedOrders.push(this.returnRow(item))
                 )}
             <List style={{ marginTop: 10 }} dataArray={this.state.active}>
-              {activeOrders}
+              {acceptedOrders}
             </List>
           </Tab>
         </Tabs>
-        <Text> CHef Panel</Text>
       </ScrollView>
     );
   }

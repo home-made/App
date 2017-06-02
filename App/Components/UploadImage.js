@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import Camera from "react-native-camera";
+import { AsyncStorage } from "react-native";
+
 import { Actions } from "react-native-router-flux";
 import { RNS3 } from 'react-native-aws3';
 
@@ -24,6 +26,24 @@ class Upload extends Component {
   }
    componentDidMount(){
      console.log('here')
+     async function getProfile() {
+      try {
+        const data = await AsyncStorage.getItem('profile');
+        if (data !== null && data !== undefined) {
+          // console.log('async data: ', data);
+          data = JSON.parse(data);
+          return data
+          // userId = data.identityId, userName = data.name, userPic = data.extraInfo.picture_large;
+        }
+      } catch (err) {
+        console.log('Error getting data: ', err);
+      }
+    }
+
+    getProfile()
+      .then((data) => {
+        this.setState({userId: data.userId})
+      })
      this.setState({cameraMode:this.props.fetchCameraMode()}, () =>console.log(this.state))
     this.setState({dish:this.props.fetchDish()},() =>console.log(this.state.dish))
   }
@@ -33,10 +53,9 @@ class Upload extends Component {
     let opt= {
       target: Camera.constants.CaptureTarget.disk
     }
-    // console.log('dish status is',this.state)
+    console.log('upload status is',this.state.cameraMode)
     // console.log(mode)
     axios.get('http://localhost:3000/api/').then(res =>{ 
-      console.log(res)
       this.camera.capture(opt).then(data => {
         console.log(data);
         let file = {
@@ -45,7 +64,8 @@ class Upload extends Component {
           name: "image.jpg",
           type: "image/jpeg"
         }
-        // if(this.state.cameraMode === 'dish'){
+
+        if(this.state.cameraMode === 'dish'){
           let options = {
             keyPrefix: `dish${this.state.dish.name}`,
             bucket: "homemadedishes",
@@ -63,18 +83,34 @@ class Upload extends Component {
           this.props.setDish(dish)
           console.log('baby dish',dish)
           Actions.dishconfirm()
-          /**
-           * {
-           *   postResponse: {
-           *     bucket: "your-bucket",
-           *     etag : "9f620878e06d28774406017480a59fd4",
-           *     key: "uploads/image.png",
-           *     location: "https://your-bucket.s3.amazonaws.com/uploads%2Fimage.png"
-           *   }
-           * }
-           */
           });
-        // }
+        } else{
+          console.log(res)
+          let options = {
+            keyPrefix: `profile${this.state.userId}`,
+            bucket: "homemadeprofile",
+            region: "us-west-1",
+            accessKey: res.data.key,
+            secretKey: res.data.secret,
+            successActionStatus: 201
+          }
+          RNS3.put(file, options).then(response => {
+          if (response.status !== 201)
+            throw new Error("Failed to upload image to S3");
+          console.log(response.body.postResponse.location);
+          axios.put('http://localhost:3000/user', {
+            authId: this.state.userId,
+            profileUrl: [response.body.postResponse.location],
+          }).then(res=>{
+            console.log(res)
+          })
+          // let user = this.state.user
+          // user['profileUrl']=response.body.postResponse.location;
+          // this.setUser(user)
+          // console.log('baby user',user)
+          Actions.edit()
+          });
+        }
       })
     }).catch(err =>{
     console.log(err)
