@@ -17,14 +17,16 @@ export default class ChefList extends Component {
     let chefs = this.state.chefs;
 
     if (chefs.length === 0) {
-      console.log("inside the if block for ChefList and chefs is ", chefs)
+      console.log("inside the if block for ChefList and chefs is ", chefs);
       return (
         <Container style={{ marginTop: 60 }}>
           <Content>
-            <Text>Whoops! There are currently no chefs available for this cuisine!</Text>
+            <Text>
+              Whoops! There are currently no chefs available for this cuisine!
+            </Text>
           </Content>
         </Container>
-      )
+      );
     } else {
       return (
         <Container>
@@ -35,7 +37,7 @@ export default class ChefList extends Component {
               renderRow={chef => (
                 <ListItem
                   onPress={() => {
-                    console.log("CHEF IS", chef)
+                    console.log("CHEF IS", chef);
                     this.props.setChef(chef);
                   }}
                 >
@@ -45,7 +47,9 @@ export default class ChefList extends Component {
                       uri: chef.profileUrl
                     }}
                   />
-                  <Text style={{ marginLeft: 10 }}>{`${chef.firstName} ${chef.status}`}</Text>
+                  <Text
+                    style={{ marginLeft: 10 }}
+                  >{`${chef.firstName} ${chef.status}`}</Text>
                 </ListItem>
               )}
             />

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Image, View, StyleSheet, AsyncStorage } from "react-native";
+import { Image, View, StyleSheet, AsyncStorage, Switch } from "react-native";
 import {
   Container,
   Content,
@@ -13,16 +13,18 @@ import {
   Icon
 } from "native-base";
 import { Actions, ActionConst } from "react-native-router-flux";
-import { Switch } from "react-native-switch";
+// import { Switch } from "react-native-switch";
 import axios from "axios";
 
 export default class NavBar extends Component {
   constructor(props) {
     super(props);
-    
+
     this.state = {
       chefStatus: null,
+      chefView: false
     };
+    this.orders = this.orders.bind(this);
   }
 
   componentWillMount() {
@@ -31,26 +33,24 @@ export default class NavBar extends Component {
       try {
         const data = await AsyncStorage.getItem("profile");
         if (data !== null && data !== undefined) {
-          console.log('profile in componentwillmount: ', JSON.parse(data));
+          console.log("profile in componentwillmount: ", JSON.parse(data));
           authId = JSON.parse(data).userId;
         }
       } catch (err) {
         console.log("Error getting data: ", err);
       }
     }
-    getUserAuthId()
-      .then(() => {
-        console.log(authId);
-        axios.get(`http://localhost:3000/user/${authId}`)
-          .then((res) => {
-            console.log(res.data)
-            this.setState({
-              chefStatus: res.data[0].isChef
-            })
-          });
+    getUserAuthId().then(() => {
+      console.log(authId);
+      axios.get(`http://localhost:3000/user/${authId}`).then(res => {
+        console.log(res.data);
+        this.setState({
+          chefStatus: res.data[0].isChef
+        });
       });
+    });
   }
-  
+
   cuisines() {
     Actions.cuisines({ type: ActionConst.RESET });
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
@@ -94,30 +94,15 @@ export default class NavBar extends Component {
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
   dishcreate() {
-    Actions.dishcreate({type:ActionConst.RESET});
+    Actions.dishcreate({ type: ActionConst.RESET });
   }
   orders() {
-    let chefView;
-    async function getChefViewBool() {
-      try {
-        const data = await AsyncStorage.getItem("profile");
-        if (data !== null && data !== undefined) {
-          data = JSON.parse(data);
-          chefView = data.chefView;
-        }
-      } catch (err) {
-        console.log("Error getting data: ", err);
-      }
+    console.log("CHEFVIEW IS", this.state.chefView);
+    if (this.state.chefView) {
+      Actions.orders({ type: ActionConst.RESET });
+    } else {
+      Actions.userOrders({ type: ActionConst.RESET });
     }
-    getChefViewBool().then(() => {
-      console.log("chefView is", chefView);
-      if (chefView) {
-        Actions.orders({ type: ActionConst.RESET });
-      } else {
-        Actions.userOrders({ type: ActionConst.RESET });
-      }
-    });
-
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
 
@@ -148,19 +133,9 @@ export default class NavBar extends Component {
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
 
-  async toggleChefMode() {
-    try {
-      const profile = await AsyncStorage.getItem("profile");
-
-      profile = JSON.parse(profile);
-      profile.chefView = !profile.chefView;
-      profile = JSON.stringify(profile);
-      if (profile !== null && profile !== undefined) {
-        await AsyncStorage.setItem("profile", profile);
-      }
-    } catch (err) {
-      console.log("Error getting data: ", err);
-    }
+  toggleChefMode() {
+         Actions.orders({ type: ActionConst.RESET });
+        setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
 
   render() {
@@ -238,7 +213,7 @@ export default class NavBar extends Component {
 
           <ListItem icon onPress={this.dishcreate} style={styles.content}>
             <Left>
-              <Icon name='ios-camera' />
+              <Icon name="ios-camera" />
             </Left>
             <Body>
               <Text style={styles.entries}>Create Dish</Text>
@@ -247,19 +222,10 @@ export default class NavBar extends Component {
 
           <ListItem icon onPress={this.chefPanel} style={styles.content}>
             <Left>
-              <Icon name='ios-clipboard' />
+              <Icon name="ios-clipboard" />
             </Left>
             <Body>
               <Text style={styles.entries}>Manage Dishes</Text>
-            </Body>
-          </ListItem>
-
-          <ListItem icon onPress={this.checkout} style={styles.content}>
-            <Left>
-              <Icon name="ios-basket" />
-            </Left>
-            <Body>
-              <Text style={styles.entries}>Checkout</Text>
             </Body>
           </ListItem>
 
@@ -281,14 +247,16 @@ export default class NavBar extends Component {
             </Body>
           </ListItem>
 
-          {!this.state.chefStatus ? <ListItem icon onPress={this.chefform} style={styles.content}>
-            <Left>
-              <Icon name="ios-star" />
-            </Left>
-            <Body>
-              <Text style={styles.entries}>Be A Chef!</Text>
-            </Body>
-          </ListItem> : null}
+          {!this.state.chefStatus
+            ? <ListItem icon onPress={this.chefform} style={styles.content}>
+                <Left>
+                  <Icon name="ios-star" />
+                </Left>
+                <Body>
+                  <Text style={styles.entries}>Be A Chef!</Text>
+                </Body>
+              </ListItem>
+            : null}
 
           <ListItem icon onPress={this.logout} style={styles.content}>
             <Left>
@@ -299,21 +267,23 @@ export default class NavBar extends Component {
             </Body>
           </ListItem>
 
-          <ListItem avatar>
-            <Body>
-              <Text>Chef Mode</Text>
-              <Text />
-              <Switch
-                value={true}
-                onValueChange={this.toggleChefMode}
-                disabled={false}
-                backgroundActive={"green"}
-                backgroundInactive={"gray"}
-                circleActiveColor={"white"}
-                circleInActiveColor={"white"}
-              />
-            </Body>
-          </ListItem>
+          {this.state.chefStatus
+            ? <ListItem avatar style={{ marginTop: 10 }}>
+                <Switch
+                  onValueChange={value => {
+                    this.setState({ chefView: value }, () => {
+                      if (this.state.chefView) {
+                        this.toggleChefMode()
+                      }
+                    });
+                  }}
+                  value={this.state.chefView}
+                  style={{ marginRight: 10 }}
+                />
+
+                <Text>Chef Mode</Text>
+              </ListItem>
+            : null}
         </Content>
       </Container>
     );

@@ -18,9 +18,9 @@ export default class DishView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        selectedItem: 'undefined',
-        selected1: 0,
-      dish:{
+      selectedItem: "undefined",
+      selected1: 0,
+      dish: {
         name: "",
         cashDonation: 0,
         quantity: 0,
@@ -29,12 +29,14 @@ export default class DishView extends Component {
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-  componentWillMount(){
-    this.setState({genres:['Select a Cuisine Style'].concat(this.props.getStyles())})
-    this.props.setCameraMode('dish')
+  componentWillMount() {
+    this.setState({
+      genres: ["Select a Cuisine Style"].concat(this.props.getStyles())
+    });
+    this.props.setCameraMode("dish");
   }
   handleSubmit() {
-    console.log(this.state.dish)
+    console.log(this.state.dish);
     // axios.post("http://localhost:3000/dish/add", {
     //   cuisineType: "Chinese",
     //   name: this.state.name,
@@ -48,41 +50,44 @@ export default class DishView extends Component {
     //   isActive: true,
     //   quantity: 1
     // });
-    this.props.setDish(this.state.dish)
+    this.props.setDish(this.state.dish);
     // this.props.setCameraMode()
-    Actions.uploadimage()
+    Actions.uploadimage();
   }
-  onValueChange (value) {
-    console.log(this.state.genres[value])
-    let dish = this.state.dish
-    dish['cuisineType'] = this.state.genres[value]
-    this.setState({
-        selected1 : value, dish
-    },() =>console.log(this.state.dish));
+  onValueChange(value) {
+    console.log(this.state.genres[value]);
+    let dish = this.state.dish;
+    dish["cuisineType"] = this.state.genres[value];
+    this.setState(
+      {
+        selected1: value,
+        dish
+      },
+      () => console.log(this.state.dish)
+    );
   }
   render() {
-    const price = '$' + this.state.cashDonation;
+    const price = "$" + this.state.cashDonation;
     const { container } = styles;
     const onButtonPress = () => {
       this.setState({ dishText: "freshly" });
     };
     return (
-      <Container   style={{
+      <Container
+        style={{
           flex: 1,
-          flexDirection: "column",
-
-
-        }}>
-        <Content >
+          flexDirection: "column"
+        }}
+      >
+        <Content>
           <Form style={{ marginTop: 100 }}>
             <Item>
               <Input
                 placeholder="Name"
                 onChangeText={name => {
-                   let dish = this.state.dish;
+                  let dish = this.state.dish;
                   dish.name = name;
-                  this.setState({dish},()=>console.log(this.state.dish));
-
+                  this.setState({ dish }, () => console.log(this.state.dish));
                 }}
                 value={this.state.dish.name}
               />
@@ -90,27 +95,24 @@ export default class DishView extends Component {
             <Item>
               <Input
                 placeholder="Description"
-                onChangeText={description =>{
+                onChangeText={description => {
                   let dish = this.state.dish;
-                  dish.description = description
-                  this.setState({dish},()=>console.log(this.state.dish));
+                  dish.description = description;
+                  this.setState({ dish }, () => console.log(this.state.dish));
                 }}
                 value={this.state.dish.description}
               />
             </Item>
             <Item stackedLabel>
               <Label>$</Label>
-              <Input 
+              <Input
                 placeholder="Donation Amount"
                 keyboardType={"number-pad"}
                 onChangeText={cashDonation => {
-                    let dish = this.state.dish;
-                    dish.cashDonation = cashDonation
-                    this.setState({ dish},()=> console.log(this.state.dish))
-
-                  }
-                }
-              
+                  let dish = this.state.dish;
+                  dish.cashDonation = cashDonation;
+                  this.setState({ dish }, () => console.log(this.state.dish));
+                }}
                 value={this.state.dish.cashDonation}
               />
             </Item>
@@ -118,30 +120,33 @@ export default class DishView extends Component {
               <Input
                 placeholder="Quantity"
                 keyboardType={"number-pad"}
-                onChangeText={quantity =>{
-                    let dish = this.state.dish;
-                    dish.quantity = quantity;
-                    this.setState({ dish},()=> console.log(this.state.dish))
-                  }}
+                onChangeText={quantity => {
+                  let dish = this.state.dish;
+                  dish.quantity = quantity;
+                  this.setState({ dish }, () => console.log(this.state.dish));
+                }}
                 value={this.state.dish.quantity}
               />
             </Item>
-             <Picker
-                supportedOrientations={['portrait','landscape']}
-                iosHeader="Select one"
-                mode="dropdown"
-                selectedValue={this.state.selected1}
-                onValueChange={this.onValueChange.bind(this)}>
-                {/*<Item label="Select a Cuisine Style" value={0} />*/}
-                { this.state.genres ? this.state.genres.map((curr,ind) => {
-                  return (
-                    <Item label={curr} value={ind} />
-                  );
-
-                }): {}}
+            <Picker
+              supportedOrientations={["portrait", "landscape"]}
+              iosHeader="Select one"
+              mode="dropdown"
+              selectedValue={this.state.selected1}
+              onValueChange={this.onValueChange.bind(this)}
+            >
+              {/*<Item label="Select a Cuisine Style" value={0} />*/}
+              {this.state.genres
+                ? this.state.genres.map((curr, ind) => {
+                    return <Item label={curr} value={ind} />;
+                  })
+                : {}}
             </Picker>
-            <Button style={{ marginTop: 70}} onPress={() => this.handleSubmit()}>
-              <Text>Next </Text>
+            <Button
+              style={{ marginTop: 70, alignItems: "center" }}
+              onPress={() => this.handleSubmit()}
+            >
+              <Text>Next</Text>
             </Button>
           </Form>
         </Content>
