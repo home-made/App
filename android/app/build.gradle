@@ -126,8 +126,15 @@ android {
 }
 
 dependencies {
+<<<<<<< HEAD
+<<<<<<< HEAD
+    compile project(':react-native-s3')
+=======
+>>>>>>> master
+=======
     compile project(':react-native-vector-icons')
     compile project(':react-native-signature-capture')
+>>>>>>> master
     compile project(':react-native-maps')
     compile project(':react-native-lock')
     compile project(':react-native-image-picker')

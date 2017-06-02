@@ -33,6 +33,7 @@
     "react-native-vector-icons": "^4.2.0",
     "react-redux": "^5.0.5",
     "redux": "^3.6.0",
+    "socket.io-client": "^2.0.2",
     "yarn": "^0.24.5"
   },
   "devDependencies": {

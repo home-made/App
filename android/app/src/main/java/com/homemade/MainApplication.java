@@ -3,8 +3,15 @@ package com.homemade;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+<<<<<<< HEAD
+<<<<<<< HEAD
+import com.mybigday.rns3.RNS3Package;
+=======
+>>>>>>> master
+=======
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.rssignaturecapture.RSSignatureCapturePackage;
+>>>>>>> master
 import com.airbnb.android.react.maps.MapsPackage;
 import com.auth0.lock.react.LockReactPackage;
 import com.imagepicker.ImagePickerPackage;
@@ -31,8 +38,15 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+<<<<<<< HEAD
+<<<<<<< HEAD
+            new RNS3Package(),
+=======
+>>>>>>> master
+=======
             new VectorIconsPackage(),
             new RSSignatureCapturePackage(),
+>>>>>>> master
             new MapsPackage(),
             new LockReactPackage(),
             new ImagePickerPackage(),
