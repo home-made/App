@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import SocketIO from "socket.io-client";
 import {
   View,
   StyleSheet,
@@ -16,10 +17,11 @@ import {
   Icon,
   Right
 } from "native-base";
+
 import { Actions } from "react-native-router-flux";
 import FontAwesome, { Icons } from "react-native-fontawesome";
 import axios from "axios";
-
+var socket;
 export default class UserOrderPanel extends Component {
   constructor() {
     super();
@@ -33,6 +35,17 @@ export default class UserOrderPanel extends Component {
   componentWillMount() {
     console.log("IN USER ORDER PANEL WILL MOUNT");
     let authID;
+    socket = new SocketIO("localhost:3000");
+    socket.connect();
+      console.log('b4id is',socket.id)
+
+    socket.on("connect", () => {
+      console.log('id is',socket.id)
+      socket.on("fresh", message => {
+        console.log(message);
+        console.log('send heem')
+      });
+    });
 
     async function getAuthID() {
       try {
