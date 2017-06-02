@@ -67,8 +67,8 @@ export default class ChefMap extends Component {
                 var coords =  {latlng: {latitude: chef.location.geo_lat, longitude: chef.location.geo_lng},   title: name};
                 
                 return <MapView.Marker
-                  //onPress={()=> this.props.setChef(chef)}
-                  onPress={()=> this.giveDirections(chef)}
+                  onPress={()=> this.props.setChef(chef)}
+                  //onPress={()=> this.giveDirections(chef)}
                   key={name}
                   coordinate={coords.latlng}
                   title={name}
