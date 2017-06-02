@@ -17,6 +17,45 @@ import { Switch } from "react-native-switch";
 import axios from "axios";
 
 export default class NavBar extends Component {
+  constructor(props) {
+    super(props);
+    
+    this.state = {
+      chefStatus: null,
+    };
+  }
+
+  componentWillMount() {
+    let authId;
+    async function getUserAuthId() {
+      try {
+        const data = await AsyncStorage.getItem("profile");
+        if (data !== null && data !== undefined) {
+          console.log(JSON.parse(data));
+          authId = JSON.parse(data).userId;
+        }
+      } catch (err) {
+        console.log("Error getting data: ", err);
+      }
+    }
+    getUserAuthId()
+      .then(() => {
+        console.log(authId);
+        axios.get(`http://localhost:3000/user/${authId}`)
+          .then((res) => {
+            console.log(res.data)
+            this.setState({
+              chefStatus: res.data[0].isChef
+            })
+          });
+      });
+  }
+  
+  statistics() {
+    Actions.statistics({ type: ActionConst.RESET });
+    setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
+  }
+
   cuisines() {
     Actions.cuisines({ type: ActionConst.RESET });
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
@@ -156,6 +195,15 @@ export default class NavBar extends Component {
         </View>
 
         <Content>
+          <ListItem icon onPress={this.statistics} style={styles.content}>
+            <Left>
+              <Icon name="ios-stats" />
+            </Left>
+            <Body>
+              <Text style={styles.entries}>Statistics</Text>
+            </Body>
+          </ListItem>
+
           <ListItem icon onPress={this.cuisines} style={styles.content}>
             <Left>
               <Icon name="ios-pizza" />
@@ -228,14 +276,14 @@ export default class NavBar extends Component {
             </Body>
           </ListItem>
 
-          <ListItem icon onPress={this.chefform} style={styles.content}>
+          {!this.state.chefStatus ? <ListItem icon onPress={this.chefform} style={styles.content}>
             <Left>
               <Icon name="ios-star" />
             </Left>
             <Body>
               <Text style={styles.entries}>Be A Chef!</Text>
             </Body>
-          </ListItem>
+          </ListItem> : null}
 
           <ListItem icon onPress={this.logout} style={styles.content}>
             <Left>
