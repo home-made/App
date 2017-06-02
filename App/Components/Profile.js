@@ -61,31 +61,35 @@ export default class Profile extends Component {
     this.setState({ cart: cart }, console.log("CART IS", this.state.cart));
   }
 
-  handleCheckout(){
+  handleCheckout() {
     let customerId;
     async function checkStorage() {
       try {
-        const data = await AsyncStorage.getItem('profile');
+        const data = await AsyncStorage.getItem("profile");
         if (data !== null && data !== undefined) {
-          console.log('async data: ', data);
+          console.log("async data: ", data);
           customerId = JSON.parse(data).userId;
         }
       } catch (err) {
-        console.log('Error getting data: ', err);
+        console.log("Error getting data: ", err);
       }
     }
-    checkStorage()
-      .then(() => {
-        this.setState({checkout: {
-          data: this.state.cart,
-          chefId: this.state.chef[0].authId,
-          customerId: customerId,
-        }},() =>{ 
+    checkStorage().then(() => {
+      this.setState(
+        {
+          checkout: {
+            data: this.state.cart,
+            chefId: this.state.chef[0].authId,
+            customerId: customerId
+          }
+        },
+        () => {
           console.log(this.state.checkout);
-          this.props.setCart(this.state.checkout)
-          Actions.checkout({type:ActionConst.RESET});
-        })
-      });
+          this.props.setCart(this.state.checkout);
+          Actions.checkout({ type: ActionConst.RESET });
+        }
+      );
+    });
   }
 
   render() {
@@ -134,9 +138,20 @@ export default class Profile extends Component {
                   return (
                     <View>
                       <DishView dish={dish} addToCart={this.handleAddToCart} />
-                      {this.state.cart.length > 0 ? (<Container style={{alignItems:"center", marginBottom: -600}}><Content><Button success onPress={() => this.handleCheckout()}>
-                        <Text> Checkout </Text>
-                      </Button></Content></Container>) : (<Text></Text>)}
+                      {this.state.cart.length > 0
+                        ? <Container
+                            style={{ alignItems: "center", marginBottom: -600 }}
+                          >
+                            <Content>
+                              <Button
+                                success
+                                onPress={() => this.handleCheckout()}
+                              >
+                                <Text> Checkout </Text>
+                              </Button>
+                            </Content>
+                          </Container>
+                        : <Text />}
                     </View>
                   );
                 } else {

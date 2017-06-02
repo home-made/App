@@ -28,7 +28,7 @@ export default class DishView extends Component {
               supportedOrientations: ['portrait','landscape'],
               text: 'Added to Cart!',
               position: 'bottom',
-              buttonText: 'Okay'
+              duration: 1000
             });}}>
               <Text>Add to cart</Text>
             </Button>

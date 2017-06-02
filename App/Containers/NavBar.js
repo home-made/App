@@ -65,12 +65,14 @@ export default class NavBar extends Component {
     Actions.chefList({ type: ActionConst.RESET });
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
+
   dishcreate() {
     Actions.dishcreate({ type: ActionConst.RESET });
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
+
   profile() {
-    Actions.profile({ type: ActionConst.RESET });
+    Actions.userProfile({ type: ActionConst.RESET });
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
 
@@ -91,7 +93,9 @@ export default class NavBar extends Component {
     Actions.edit({ type: ActionConst.RESET });
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
-
+  dishcreate() {
+    Actions.dishcreate({type:ActionConst.RESET});
+  }
   orders() {
     let chefView;
     async function getChefViewBool() {
