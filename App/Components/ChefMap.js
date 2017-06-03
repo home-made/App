@@ -67,6 +67,7 @@ export default class ChefMap extends Component {
             >
               {this.state.data.map((chef, idx) => {
                 var name = chef.firstName + " " + chef.lastName;
+
                 var coords = {
                   latlng: {
                     latitude: chef.location.geo_lat,
@@ -83,6 +84,7 @@ export default class ChefMap extends Component {
                     title={name}
                   />
                 );
+
               })}
             </MapView>
           </View>

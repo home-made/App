@@ -12,13 +12,14 @@ import {
 } from "native-base";
 import { Actions, ActionConst } from "react-native-router-flux";
 import { Grid, Row, Col } from "react-native-easy-grid";
-import DishView from "./DishView";
+import DishViewCard from "./DishViewCard";
 import Review from "./Review";
 
 export default class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.displayCheckout = this.displayCheckout.bind(this);
     this.handleReviewsPress = this.handleReviewsPress.bind(this);
     this.handleMenuPress = this.handleMenuPress.bind(this);
     this.handleAddToCart = this.handleAddToCart.bind(this);
@@ -42,6 +43,21 @@ export default class Profile extends Component {
       });
       this.setState({ reviewers: reviews });
     });
+  }
+
+  displayCheckout(){
+    if (this.state.cart.length > 0) {
+      return (
+            <Button
+              success
+              onPress={() => this.handleCheckout()}
+            >
+              <Text> Checkout </Text>
+            </Button>
+      )
+    } else {
+      return <Text />
+    }                        
   }
 
   handleReviewsPress() {
@@ -92,7 +108,14 @@ export default class Profile extends Component {
     });
   }
 
+  returnRow(dish){
+    return (
+      <Text> {dish.name} </Text>
+    ) 
+  }
+
   render() {
+    let dishes = [];
     return (
       <Container style={{ marginTop: 60 }}>
         <Content>
@@ -124,12 +147,10 @@ export default class Profile extends Component {
               </Body>
             </CardItem>
           </Card>
-          <Row style={{ justifyContent: "center", alignItems: "center" }}>
-            <Button onPress={this.handleReviewsPress}>
-              <Text>Reviews</Text>
-            </Button>
-            <Text> </Text>
+          <Row style={{  alignItems: 'center', justifyContent: 'space-between' }}>
+            <Button onPress={this.handleReviewsPress}><Text>Reviews</Text></Button>
             <Button onPress={this.handleMenuPress}><Text>Menu</Text></Button>
+            {this.displayCheckout()}
           </Row>
 
           {this.state.menu
@@ -137,26 +158,12 @@ export default class Profile extends Component {
                 if (idx === this.state.chef[1].length - 1) {
                   return (
                     <View>
-                      <DishView dish={dish} addToCart={this.handleAddToCart} />
-                      {this.state.cart.length > 0
-                        ? <Container
-                            style={{ alignItems: "center", marginBottom: -600 }}
-                          >
-                            <Content>
-                              <Button
-                                success
-                                onPress={() => this.handleCheckout()}
-                              >
-                                <Text> Checkout </Text>
-                              </Button>
-                            </Content>
-                          </Container>
-                        : <Text />}
+                      <DishViewCard dish={dish} addToCart={this.handleAddToCart} />
                     </View>
                   );
                 } else {
                   return (
-                    <DishView dish={dish} addToCart={this.handleAddToCart} />
+                    <DishViewCard dish={dish} addToCart={this.handleAddToCart} />
                   );
                 }
               })

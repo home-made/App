@@ -52,6 +52,7 @@ export default class App extends Component {
     this.updateLocation = this.updateLocation.bind(this);
   }
 
+
   componentWillMount() {
     console.log("APP MOUNTED");
     this.setLocation();
