@@ -12,7 +12,7 @@ import {
 } from "native-base";
 import { Actions, ActionConst } from "react-native-router-flux";
 import { Grid, Row, Col } from "react-native-easy-grid";
-import DishView from "./DishView";
+import DishViewCard from "./DishViewCard";
 import Review from "./Review";
 
 export default class Profile extends Component {
@@ -91,8 +91,13 @@ export default class Profile extends Component {
       );
     });
   }
-
+  returnRow(dish){
+    return (
+      <Text> {dish.name} </Text>
+    ) 
+  }
   render() {
+    let dishes = [];
     return (
       <Container style={{ marginTop: 60 }}>
         <Content>
@@ -137,7 +142,8 @@ export default class Profile extends Component {
                 if (idx === this.state.chef[1].length - 1) {
                   return (
                     <View>
-                      <DishView dish={dish} addToCart={this.handleAddToCart} />
+                      <DishViewCard dish={dish} addToCart={this.handleAddToCart} />
+                      
                       {this.state.cart.length > 0
                         ? <Container
                             style={{ alignItems: "center", marginBottom: -600 }}
@@ -156,7 +162,7 @@ export default class Profile extends Component {
                   );
                 } else {
                   return (
-                    <DishView dish={dish} addToCart={this.handleAddToCart} />
+                    <DishViewCard dish={dish} addToCart={this.handleAddToCart} />
                   );
                 }
               })
