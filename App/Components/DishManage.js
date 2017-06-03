@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import { StyleSheet, View, ScrollView , Text} from "react-native";
-import {  Container,
+import { StyleSheet, View, ScrollView, Text } from "react-native";
+import {
+  Container,
   Header,
   Tabs,
   Tab,
@@ -9,13 +10,14 @@ import {  Container,
   Tab3,
   TabHeading,
   List,
-  ListItem } from "native-base";
+  ListItem
+} from "native-base";
 
 export default class ChefPanel extends Component {
   constructor(props) {
     super(props);
   }
-  componentWillMount(){
+  componentWillMount() {
     async function getAuthID() {
       try {
         const data = await AsyncStorage.getItem("profile");
@@ -47,7 +49,7 @@ export default class ChefPanel extends Component {
     return (
       <ScrollView>
         <Header hasTabs />
-        <Tabs >
+        <Tabs>
           <Tab heading={<TabHeading><Text>Inactive</Text></TabHeading>}>
             {!this.state.inactive
               ? <Text />

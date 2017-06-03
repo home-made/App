@@ -37,13 +37,13 @@ export default class UserOrderPanel extends Component {
     let authID;
     socket = new SocketIO("localhost:3000");
     socket.connect();
-      console.log('b4id is',socket.id)
+    console.log("b4id is", socket.id);
 
     socket.on("connect", () => {
-      console.log('id is',socket.id)
+      console.log("id is", socket.id);
       socket.on("fresh", message => {
         console.log(message);
-        console.log('send heem')
+        console.log("send heem");
       });
     });
 
@@ -66,17 +66,20 @@ export default class UserOrderPanel extends Component {
           .get("http://localhost:3000/orders/" + authID)
           .then(orders => {
             let order = orders.data[orders.data.length - 1];
-            axios.get("http://localhost:3000/user/" + order.chefId).then(chefDetails => {
-              console.log("CHEF DETAILS ARE", chefDetails)
-              this.setState({ order, chefLocation: chefDetails.data[0].location, phone: chefDetails.data[0].phoneNumber});
-            })
-            
+            axios
+              .get("http://localhost:3000/user/" + order.chefId)
+              .then(chefDetails => {
+                console.log("CHEF DETAILS ARE", chefDetails);
+                this.setState({
+                  order,
+                  chefLocation: chefDetails.data[0].location,
+                  phone: chefDetails.data[0].phoneNumber
+                });
+              });
           })
           .catch(err => console.log(err));
       })
       .catch(err => console.log(err));
-
-
   }
 
   _onRefresh = () => {
@@ -118,7 +121,10 @@ export default class UserOrderPanel extends Component {
                     <Button
                       style={{ marginTop: 10 }}
                       onPress={() => {
-                        this.props.setChefLocationAndPhoneNumber(this.state.chefLocation, this.state.phone);
+                        this.props.setChefLocationAndPhoneNumber(
+                          this.state.chefLocation,
+                          this.state.phone
+                        );
                       }}
                     >
                       <Text>Get Directions</Text>

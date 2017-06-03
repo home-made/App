@@ -15,7 +15,7 @@ import {
 import axios from "axios";
 import { Actions } from "react-native-router-flux";
 import SocketIO from "socket.io-client";
-var socket =  new SocketIO("localhost:3000");
+var socket = new SocketIO("localhost:3000");
 export default class OrderPanel extends Component {
   constructor() {
     super();
@@ -38,10 +38,10 @@ export default class OrderPanel extends Component {
     let authID;
     console.log("CHEF ORDER PANEL WILL MOUNT");
     socket.connect();
-    console.log('b4id is',socket.id)
+    console.log("b4id is", socket.id);
 
     socket.on("connect", () => {
-      console.log('id is',socket.id)
+      console.log("id is", socket.id);
       socket.on("fresh", message => {
         console.log(message);
       });

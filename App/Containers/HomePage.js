@@ -114,6 +114,7 @@ export default class HomePage extends Component {
                 err =>
                   (err ? console.log("ERROR: ", err) : console.log("Info set!"))
               );
+              
               profile = JSON.parse(profile);
               console.log("RIGHT BEFORE ACTIONS PROFILE IS", profile)
               // App.render();
