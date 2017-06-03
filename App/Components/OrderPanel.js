@@ -45,8 +45,8 @@ export default class OrderPanel extends Component {
       socket.on("fresh", message => {
         console.log(message);
       });
-
     });
+
     async function getAuthID() {
       try {
         const data = await AsyncStorage.getItem("profile");
