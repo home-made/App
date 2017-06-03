@@ -28,11 +28,11 @@ export default {
   ],
 
   spendingsLastMonth: [
-    {"number":  8, "name": 'Fun activities'},
-    {"number": 7, "name": 'Dog'},
-    {"number": 16, "name": 'Food'},
-    {"number": 23, "name": 'Car'},
-    {"number": 42, "name": 'Rent'},
-    {"number":  4, "name": 'Misc'},
+    {"number":  8, "name": 'Hot Dogs'},
+    {"number": 7, "name": 'Hamburgers'},
+    {"number": 16, "name": 'Gumbo'},
+    {"number": 23, "name": 'Tacos'},
+    {"number": 42, "name": 'Pulled Pork Sandwich'},
+    {"number":  4, "name": 'Mac & Cheese'},
   ],
 };
