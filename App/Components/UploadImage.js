@@ -84,7 +84,8 @@ class Upload extends Component {
           console.log('baby dish',dish)
           Actions.dishconfirm()
           });
-        } else{
+        }
+        if (this.state.cameraMode === 'profile') {
           console.log(res)
           let options = {
             keyPrefix: `profile${this.state.userId}`,
