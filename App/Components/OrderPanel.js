@@ -46,6 +46,7 @@ export default class OrderPanel extends Component {
         console.log(message);
       });
     });
+
     async function getAuthID() {
       try {
         const data = await AsyncStorage.getItem("profile");
