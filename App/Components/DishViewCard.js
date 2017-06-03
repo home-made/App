@@ -22,21 +22,16 @@ export default class DishViewCard extends Component {
       <Container>
         <Content>
           <Card style={{ resizeMode: 'contain', flex: 1 }}>
-            <CardItem>
-              <Left>
-                <Body>
-                  <Text>NativeBase</Text>
-                  <Text note>April 15, 2016</Text>
-                </Body>
-              </Left>
-            </CardItem>
+
             <CardItem>
               <Body>
-                <Image style={ styles.image } source={{ uri: this.props.dish.dishImages[0]}} />
-              <Text>
-                  //Your text here
-                  
-              </Text>
+
+              <Text>{this.props.dish.name}</Text>
+              <Text>Description: {this.props.dish.description}</Text>
+              <Text note>Quantity Available: {this.props.dish.quantity}</Text>
+
+              <Image style={ styles.image } source={{ uri: this.props.dish.dishImages[0]}} />
+              
 
                 <Icon onPress={() => { 
                 this.props.addToCart(this.props.dish);
