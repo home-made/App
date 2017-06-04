@@ -15,13 +15,14 @@ import OrderPanel from "../Components/OrderPanel";
 import OrderView from "../Components/OrderView";
 import ChefPanel from "../Components/ChefPanel";
 import UserOrderPanel from "../Components/UserOrderPanel";
-import ManageDish from '../Components/EditDish'
+import ManageDish from '../Components/EditDish';
 import UploadImage from "../Components/UploadImage";
 import DishCreate from "../Components/DishCreate";
 import DishConfirm from "../Components/DishConfirm";
 import Feedback from "../Components/Feedback";
 import SignaturePage from "../Components/SignaturePage";
 import ChefForm from './ChefForm';
+import Statistics from '../Components/Statistics';
 
 import GeoPoint from 'geopoint';
 import axios from "axios";
@@ -263,6 +264,7 @@ export default class App extends Component {
             <Scene key="feedback" component={Feedback} title="Feedback" />
             <Scene key="chefform" component={ChefForm} title="Chef Form" />
             <Scene key="signature" component={SignaturePage} title="Signature Page" />
+            <Scene key="statistics" component={Statistics} title="Statistics" />
           </Scene>
         </Scene>
       </Scene>

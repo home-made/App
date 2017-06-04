@@ -14,7 +14,8 @@ import { Actions } from "react-native-router-flux";
 import Promise from "bluebird";
 import Auth0Lock from "react-native-lock";
 import axios from "axios";
-
+import SocketIO from "socket.io-client";
+var socket;
 
 export default class HomePage extends Component {
   constructor(props) {
@@ -43,6 +44,7 @@ export default class HomePage extends Component {
   componentDidMount() {
     console.log("HOME PAGE MOUNTED");
     this.checkStorage();
+  
   }
 
   componentWillUnmount() {}
@@ -81,7 +83,6 @@ export default class HomePage extends Component {
         closable: true
       },
       (err, profile, token) => {
-        console.log('profile is ',profile)
         if (err) {
           console.log(err);
         } else {
