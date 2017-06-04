@@ -113,6 +113,7 @@ export default class NavBar extends Component {
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
   orders() {
+    console.log('clicked')
     console.log("CHEFVIEW IS", this.state.chefView);
     if (this.state.chefView) {
       Actions.orders({ type: ActionConst.RESET });
@@ -244,7 +245,6 @@ export default class NavBar extends Component {
               <Text style={styles.entries}>Manage Dishes</Text>
             </Body>
           </ListItem>
-
           <ListItem icon onPress={this.edit} style={styles.content}>
             <Left>
               <Icon name="ios-create" />
@@ -253,9 +253,11 @@ export default class NavBar extends Component {
               <Text style={styles.entries}>Edit Profile</Text>
             </Body>
           </ListItem>
-          <ListItem icon onPress={() => {
-            this.orders
-            }} style={styles.content}>
+          <ListItem icon onPress={()=>{
+              this.orders();
+              this.setState({orderNotification:0})
+              }
+              } style={styles.content}>
             <Left>
               <Icon name="ios-filing" />
             </Left>
