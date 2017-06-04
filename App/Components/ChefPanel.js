@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { Router, Scene, Actions, ActionConst } from "react-native-router-flux";
-import { StyleSheet, View, ScrollView , AsyncStorage} from "react-native";
-import {  Container,
+import { StyleSheet, View, ScrollView, AsyncStorage } from "react-native";
+import {
+  Container,
   Header,
   Tabs,
   Tab,
@@ -13,16 +14,15 @@ import {  Container,
   Body,
   Text,
   Thumbnail,
-  ListItem } from "native-base";
-import axios from 'react-native-axios'
+  ListItem
+} from "native-base";
+import axios from "react-native-axios";
 export default class ChefPanel extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-
-    }
+    this.state = {};
   }
-  componentWillMount(){
+  componentWillMount() {
     async function getAuthID() {
       try {
         const data = await AsyncStorage.getItem("profile");
@@ -49,13 +49,15 @@ export default class ChefPanel extends Component {
     });
   }
   returnRow(data) {
-    console.log(!!this.state.active)
+    console.log("DATA IS", data)
     return (
-      <ListItem onPress={() => {
-          this.props.setDish(data)
-          Actions.dishedit()
-          }}>
-        <Thumbnail square size={80} source={{uri: data.dishImages[0]}} />
+      <ListItem
+        onPress={() => {
+          this.props.setDish(data);
+          Actions.dishedit();
+        }}
+      >
+        <Thumbnail square size={80} source={{ uri: data.dishImages[0] }} />
         <Body>
           <Text style={{ marginLeft: 10 }}>
             {data.name}

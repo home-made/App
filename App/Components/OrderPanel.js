@@ -15,7 +15,7 @@ import {
 import axios from "axios";
 import { Actions } from "react-native-router-flux";
 import SocketIO from "socket.io-client";
-var socket =  new SocketIO("localhost:3000");
+var socket = new SocketIO("localhost:3000");
 export default class OrderPanel extends Component {
   constructor() {
     super();
@@ -37,7 +37,6 @@ export default class OrderPanel extends Component {
   componentWillMount() {
     let authID;
     console.log("CHEF ORDER PANEL WILL MOUNT");
-    
     async function getAuthID() {
       try {
         const data = await AsyncStorage.getItem("profile");

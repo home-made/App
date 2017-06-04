@@ -67,11 +67,20 @@ export default class UserOrderPanel extends Component {
           .get("http://localhost:3000/orders/" + authID)
           .then(orders => {
             let order = orders.data[orders.data.length - 1];
-            this.setState({ order: order }, () => {
-              console.log(this.state.order)
-              this.sendOrderSocket(this.state.order)
-            }
-            );
+            axios
+              .get("http://localhost:3000/user/" + order.chefId)
+              .then(chefDetails => {
+                console.log("CHEF DETAILS ARE", chefDetails);
+                this.setState({
+                  order,
+                  chefLocation: chefDetails.data[0].location,
+                  phone: chefDetails.data[0].phoneNumber
+                }, () => {
+                    console.log(this.state.order)
+                    this.sendOrderSocket(this.state.order)
+                  }
+                );
+              });
           })
           .catch(err => console.log(err));
       })
@@ -122,6 +131,22 @@ export default class UserOrderPanel extends Component {
               ? <Text>Order Status: Pending</Text>
               : <Text>Order Status: Accepted</Text>}
             <Content>
+              {this.state.order.status === 1
+                ? <View>
+                    <Button
+                      style={{ marginTop: 10 }}
+                      onPress={() => {
+                        this.props.setChefLocationAndPhoneNumber(
+                          this.state.chefLocation,
+                          this.state.phone
+                        );
+                      }}
+                    >
+                      <Text>Get Directions</Text>
+                    </Button>
+                  </View>
+                : null}
+
               {this.state.order.status === 2
                 ? <View>
                     <Button

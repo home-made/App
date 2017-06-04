@@ -17,7 +17,10 @@ export default class Cuisines extends Component {
         <List style={{ marginTop: 60 }}>
           {this.state.genres.map((genre, index) => {
             return (
-              <ListItem onPress={() => this.props.setCuisineType(genre)} key={index}>
+              <ListItem
+                onPress={() => this.props.setCuisineType(genre)}
+                key={index}
+              >
                 <Text>
                   {genre}
                 </Text>
@@ -29,4 +32,3 @@ export default class Cuisines extends Component {
     );
   }
 }
-

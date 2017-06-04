@@ -9,38 +9,38 @@ export default class EditProfile extends Component {
     super();
     this.state = {
       showToast: false,
-      userId: '',
-      userName: '',
-      userPic: ''
+      userId: "",
+      userName: "",
+      userPic: ""
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentWillMount() {
     let userId, userName, userPic;
-    
+
     async function getProfile() {
       try {
-        const data = await AsyncStorage.getItem('profile');
+        const data = await AsyncStorage.getItem("profile");
         if (data !== null && data !== undefined) {
           data = JSON.parse(data);
-          console.log('async data: ', data);
-          userId = data.identityId, userName = data.name, userPic = data.picture
+          console.log("async data: ", data);
+          (userId = data.identityId), (userName = data.name), (userPic =
+            data.picture);
         }
       } catch (err) {
-        console.log('Error getting data: ', err);
+        console.log("Error getting data: ", err);
       }
     }
 
-    getProfile()
-      .then(() => {
-        this.setState({ userId: userId, userName: userName, userPic: userPic })
-      })
+    getProfile().then(() => {
+      this.setState({ userId: userId, userName: userName, userPic: userPic });
+    });
   }
 
   handleSubmit() {
     let send = { authId: this.state.userId };
-    console.log('SEND: ', send);
+    console.log("SEND: ", send);
     if (this.state.address) {
       send.address = this.state.address;
     }
@@ -81,12 +81,12 @@ export default class EditProfile extends Component {
           }}
         />
         <Button
-            style={{ marginTop: 10 }}
-            onPress={() => {
-              this.props.setCameraMode('profile')
-                Actions.uploadimage()
-              }}
-          >
+          style={{ marginTop: 10 }}
+          onPress={() => {
+            this.props.setCameraMode("profile");
+            Actions.uploadimage();
+          }}
+        >
           <Text>Update Profile Pic</Text>
         </Button>
         <Item>
@@ -121,12 +121,15 @@ export default class EditProfile extends Component {
         <Item>
           <Button
             style={{ marginTop: 10 }}
-            onPress={() => {Actions.cuisines(); Toast.show({
-              supportedOrientations: ['portrait','landscape'],
-              text: 'Profile Updated',
-              position: 'bottom',
-              buttonText: 'Okay'
-            });}}
+            onPress={() => {
+              Actions.cuisines();
+              Toast.show({
+                supportedOrientations: ["portrait", "landscape"],
+                text: "Profile Updated",
+                position: "bottom",
+                buttonText: "Okay"
+              });
+            }}
           >
             <Text>Submit</Text>
           </Button>
