@@ -53,6 +53,7 @@ export default class App extends Component {
     this.getLatAndLon = this.getLatAndLon.bind(this);
   }
 
+
   componentWillMount() {
     console.log("APP MOUNTED");
     this.setLocation();

@@ -5,6 +5,7 @@ import { Icons } from "react-native-vector-icons/Ionicons";
 import { Actions, ActionConst } from 'react-native-router-flux';
 import axios from 'axios';
 
+let authId;
 export default class SignaturePage extends Component {
   constructor(props) {
     super(props);
@@ -31,48 +32,49 @@ export default class SignaturePage extends Component {
       .then(() => {
         this.setState({
           authId: userId
-        })
+        }, () => console.log('authId after setState: ', this.state.authId))
       });
   }
 
   saveSign() {
     this.refs["sign"].saveImage();
-    axios.put(`http://localhost:3000/user/${this.state.authId}`, { isChef: true })
-      .then((res) => console.log(res.data))
-      .catch((err) => console.log('Error updating user to chef status: ', err));
-      this.setState({
-        isChef: true
-      })
-    Actions.homepage({ type: ActionConst.RESET });
-    setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
+    authId = this.state.authId;
   }
 
   resetSign() {
     this.refs["sign"].resetImage();
   }
 
-  onSaveEvent(result) {
+  _onSaveEvent(result) {
     //result.encoded - for the base64 encoded png
     //result.pathName - for the file path name
     console.log(result);
+
+    axios.put(`http://localhost:3000/user/${authId}`, { isChef: true, pathname: result.pathName })
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log('Error updating user to chef status: ', err));
+
+    Actions.homepage({ type: ActionConst.RESET });
+    setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
-  onDragEvent() {
+
+  _onDragEvent() {
+    // This callback will be called when the user enters signature
     console.log("dragged");
   }
 
   render() {
-    console.log(this.props)
     return (
       <View style={{ flex: 1, flexDirection: "column", marginTop: 63 }}>
         <SignatureCapture
           style={[{ flex: 1 }, styles.signature]}
           ref="sign"
-          onSaveEvent={this.onSaveEvent}
-          onDragEvent={this.onDragEvent}
+          onSaveEvent={this._onSaveEvent}
+          onDragEvent={this._onDragEvent}
           saveImageFileInExtStorage={false}
           showNativeButtons={false}
           showTitleLabel={false}
-          viewMode={"portrait"}
+          viewMode={"landscape"}
         />
 
         <View style={{ flex: 1, flexDirection: "row" }}>

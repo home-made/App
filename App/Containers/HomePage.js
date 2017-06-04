@@ -100,7 +100,7 @@ export default class HomePage extends Component {
               profile = JSON.stringify(profile);
               setStorage();
             }
-          });
+          }).catch((err) => console.log(err));
             
         
           async function setStorage() {

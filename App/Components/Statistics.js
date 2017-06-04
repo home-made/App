@@ -54,7 +54,7 @@ export default class App extends Component {
       <ScrollView>
         <View style={styles.container}>
           <Text style={styles.chart_title}>
-            Distribution of spending this month
+            Top Sellers
           </Text>
           <PieChart
             pieWidth={150}
@@ -66,7 +66,7 @@ export default class App extends Component {
             data={data.spendingsLastMonth}
           />
           <Text style={styles.chart_title}>
-            Spending per year in
+            Reviews for
             {" "}
             {data.spendingsLastMonth[this.state.activeIndex].name}
           </Text>
