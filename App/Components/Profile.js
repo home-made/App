@@ -115,6 +115,7 @@ export default class Profile extends Component {
   }
 
   render() {
+    {console.log("the state inside Profile.js is ", this.state)}
     let dishes = [];
     return (
       <Container style={{ marginTop: 60 }}>
@@ -123,7 +124,7 @@ export default class Profile extends Component {
             <CardItem>
 
               <Body>
-                <Text>{this.state.chef[0].firstName}</Text>
+                <Text>{this.state.chef[0].firstName} {this.state.chef[0].lastName}</Text>
                 <Text note>{this.state.chef[0].status}</Text>
               </Body>
 
@@ -157,9 +158,8 @@ export default class Profile extends Component {
             ? this.state.chef[1].map((dish, idx) => {
                 if (idx === this.state.chef[1].length - 1) {
                   return (
-                    <View>
-                      <DishViewCard dish={dish} addToCart={this.handleAddToCart} />
-                    </View>
+                    <DishViewCard dish={dish} addToCart={this.handleAddToCart} />
+                  
                   );
                 } else {
                   return (
@@ -179,12 +179,3 @@ export default class Profile extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 60,
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
-  }
-});

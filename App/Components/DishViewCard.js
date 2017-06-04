@@ -38,7 +38,7 @@ export default class DishViewCard extends Component {
                 Toast.show({
                   supportedOrientations: ["portrait", "landscape"],
                   text: "Added to Cart!",
-                  position: "bottom",
+                  position: "center",
                   duration: 1000
                 }); 
               }} name="cart"></Icon>
