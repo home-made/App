@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { Image, StyleSheet, Text, View, ScrollView } from "react-native";
+import { Image, StyleSheet, View, ScrollView } from "react-native";
 import axios from "axios";
-import { Container, Content, List, ListItem } from "native-base";
+import { Container, Content, Text, List, ListItem } from "native-base";
 
 export default class ChefList extends Component {
   constructor(props) {
@@ -19,11 +19,9 @@ export default class ChefList extends Component {
     if (chefs.length === 0) {
       console.log("inside the if block for ChefList and chefs is ", chefs);
       return (
-        <Container style={{ marginTop: 60 }}>
+        <Container style={{ marginTop: 70 }}>
           <Content>
-            <Text>
-              Whoops! There are currently no chefs available for this cuisine!
-            </Text>
+            <Text note>Whoops! There are currently no chefs available for this cuisine!</Text>
           </Content>
         </Container>
       );
@@ -47,9 +45,8 @@ export default class ChefList extends Component {
                       uri: chef.profileUrl
                     }}
                   />
-                  <Text
-                    style={{ marginLeft: 10 }}
-                  >{`${chef.firstName} ${chef.status}`}</Text>
+                  <Text style={{ marginLeft: 10 }}>{`${chef.firstName}\n`}</Text>
+                  <Text style={{ marginLeft: -50 }} note>{`\n${chef.status || ''}`}</Text>
                 </ListItem>
               )}
             />

@@ -22,6 +22,7 @@ import { Actions } from "react-native-router-flux";
 import FontAwesome, { Icons } from "react-native-fontawesome";
 import axios from "axios";
 var socket;
+
 export default class UserOrderPanel extends Component {
   constructor() {
     super();
@@ -35,24 +36,23 @@ export default class UserOrderPanel extends Component {
   componentWillMount() {
     console.log("IN USER ORDER PANEL WILL MOUNT");
     let authID;
-    socket = new SocketIO("localhost:3000");
-    socket.connect();
-    console.log("b4id is", socket.id);
-
-    socket.on("connect", () => {
-      console.log("id is", socket.id);
-      socket.on("fresh", message => {
-        console.log(message);
-        console.log("send heem");
-      });
-    });
-
+    socket = new SocketIO('http://localhost:3000')
+    socket.connect()
+    socket.on('init', (splash)=>{
+      console.log(splash)
+    })
+    socket.on('chef', (splash)=>{
+      console.log('new',splash)
+    })
+    socket.on('message', (res)=>{
+      console.log(res)
+    })
     async function getAuthID() {
       try {
         const data = await AsyncStorage.getItem("profile");
         if (data !== null && data !== undefined) {
           data = JSON.parse(data);
-          console.log("DATA INSIDE USER ORDER PANEL IS ", data);
+          console.log("DATA IS ", data);
           authID = data.userId;
         }
       } catch (err) {
@@ -62,6 +62,7 @@ export default class UserOrderPanel extends Component {
 
     getAuthID()
       .then(() => {
+        console.log("AUTHID IS", authID);
         axios
           .get("http://localhost:3000/orders/" + authID)
           .then(orders => {
@@ -74,7 +75,11 @@ export default class UserOrderPanel extends Component {
                   order,
                   chefLocation: chefDetails.data[0].location,
                   phone: chefDetails.data[0].phoneNumber
-                });
+                }, () => {
+                    console.log(this.state.order)
+                    this.sendOrderSocket(this.state.order)
+                  }
+                );
               });
           })
           .catch(err => console.log(err));
@@ -85,7 +90,17 @@ export default class UserOrderPanel extends Component {
   _onRefresh = () => {
     this.componentWillMount();
   };
+  sendOrderSocket(order){
+    console.log(socket.id)
+    // var orders = setInterval(() =>{
+    //   getChefOrder = (tweet) =>{
+    //     socket.volatile.emit('chef',this.state.order)
+    //   }
+    // },100)
+    // let orders = this.state.order
+    socket.emit('neworder',order.chefId)
 
+  }
   render() {
     if (!this.state.order) return <ScrollView />;
     else {
@@ -144,7 +159,7 @@ export default class UserOrderPanel extends Component {
                       <Text>Leave Feedback</Text>
                     </Button>
                   </View>
-                : null}
+                : <Text />}
             </Content>
           </View>
 
