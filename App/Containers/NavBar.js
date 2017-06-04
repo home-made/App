@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import SocketIO from "socket.io-client";
 import { Image, View, StyleSheet, AsyncStorage, Switch } from "react-native";
 import {
   Container,
@@ -28,6 +29,14 @@ export default class NavBar extends Component {
   }
 
   componentWillMount() {
+    socket = new SocketIO('http://localhost:3000') 
+    socket.connect()
+    socket.on('init', (splash)=>{
+      console.log(splash)
+    })
+    socket.on('message',(message)=>{
+      console.log(message)
+    })
     let authId;
     async function getUserAuthId() {
       try {
@@ -40,16 +49,22 @@ export default class NavBar extends Component {
         console.log("Error getting data: ", err);
       }
     }
-    getUserAuthId().then(() => {
-      console.log(authId);
-      axios.get(`http://localhost:3000/user/${authId}`).then(res => {
-        console.log(res.data);
-        this.setState({
-          chefStatus: res.data[0].isChef
-        });
+    getUserAuthId()
+      .then(() => {
+        console.log(authId);
+        axios.get(`http://localhost:3000/user/${authId}`)
+          .then((res) => {
+            console.log(res.data)
+            this.setState({
+              chefStatus: res.data[0].isChef
+            },()=>{
+              if(this.state.chefStatus){
+                socket.emit('newchef',res.data)
+              }
+            })
+          });
       });
-    });
-  }
+}
 
   cuisines() {
     Actions.cuisines({ type: ActionConst.RESET });
@@ -92,9 +107,6 @@ export default class NavBar extends Component {
   edit() {
     Actions.edit({ type: ActionConst.RESET });
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
-  }
-  dishcreate() {
-    Actions.dishcreate({ type: ActionConst.RESET });
   }
   orders() {
     console.log("CHEFVIEW IS", this.state.chefView);
@@ -237,7 +249,6 @@ export default class NavBar extends Component {
               <Text style={styles.entries}>Edit Profile</Text>
             </Body>
           </ListItem>
-
           <ListItem icon onPress={this.orders} style={styles.content}>
             <Left>
               <Icon name="ios-filing" />
@@ -246,7 +257,6 @@ export default class NavBar extends Component {
               <Text style={styles.entries}>Orders</Text>
             </Body>
           </ListItem>
-
           {!this.state.chefStatus
             ? <ListItem icon onPress={this.chefform} style={styles.content}>
                 <Left>
@@ -257,6 +267,7 @@ export default class NavBar extends Component {
                 </Body>
               </ListItem>
             : null}
+
 
           <ListItem icon onPress={this.logout} style={styles.content}>
             <Left>
