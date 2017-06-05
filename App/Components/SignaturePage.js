@@ -1,26 +1,33 @@
 import React, { Component } from "react";
-import { View, StyleSheet, Text, TouchableHighlight, AsyncStorage } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  TouchableHighlight,
+  AsyncStorage
+} from "react-native";
 import SignatureCapture from "react-native-signature-capture";
 import { Icons } from "react-native-vector-icons/Ionicons";
-import { Actions, ActionConst } from 'react-native-router-flux';
-import axios from 'axios';
+import { Actions, ActionConst } from "react-native-router-flux";
+import DropdownAlert from 'react-native-dropdownalert';
+import axios from "axios";
 
 let authId;
 export default class SignaturePage extends Component {
   constructor(props) {
     super(props);
-    
+
     this.state = {
-      authId: '',
+      authId: "",
       isChef: false
-    }
+    };
   }
-  
+
   componentWillMount() {
     let userId;
     async function grabAuthId() {
       try {
-        const profile = await AsyncStorage.getItem('profile');
+        const profile = await AsyncStorage.getItem("profile");
         if (profile !== null && profile !== undefined) {
           userId = JSON.parse(profile).userId;
         }
@@ -28,17 +35,22 @@ export default class SignaturePage extends Component {
         console.log("Error getting profile: ", err);
       }
     }
-    grabAuthId()
-      .then(() => {
-        this.setState({
+    grabAuthId().then(() => {
+      this.setState(
+        {
           authId: userId
-        }, () => console.log('authId after setState: ', this.state.authId))
-      });
+        },
+        () => console.log("authId after setState: ", this.state.authId)
+      );
+    });
   }
 
   saveSign() {
     this.refs["sign"].saveImage();
     authId = this.state.authId;
+
+    this.showAlert();
+    setTimeout(() => Actions.homepage({ type: ActionConst.RESET }), 100);
   }
 
   resetSign() {
@@ -50,17 +62,34 @@ export default class SignaturePage extends Component {
     //result.pathName - for the file path name
     console.log(result);
 
-    axios.put(`http://localhost:3000/user/${authId}`, { isChef: true, pathname: result.pathName })
-      .then((res) => console.log(res.data))
-      .catch((err) => console.log('Error updating user to chef status: ', err));
+    axios
+      .put(`http://localhost:3000/user/${authId}`, {
+        isChef: true,
+        pathname: result.pathName
+      })
+      .then(res => console.log(res.data))
+      .catch(err => console.log("Error updating user to chef status: ", err));
 
-    Actions.homepage({ type: ActionConst.RESET });
-    setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
 
   _onDragEvent() {
-    // This callback will be called when the user enters signature
     console.log("dragged");
+  }
+
+  showAlert() {
+    this.dropdown.alertWithType(
+      "success",
+      "Signature saved successfully!",
+      "You're now a chef!",
+    );
+  }
+
+  dismissAlert = () => {
+    this.dropdown.onClose();
+  };
+
+  onClose(data) {
+    console.log(data);
   }
 
   render() {
@@ -77,7 +106,7 @@ export default class SignaturePage extends Component {
           viewMode={"landscape"}
         />
 
-        <View style={{ flex: 1, flexDirection: "row" }}>
+        <View style={{ flex: 0.4, flexDirection: "row" }}>
           <TouchableHighlight
             style={styles.buttonStyle}
             onPress={() => {
@@ -95,17 +124,47 @@ export default class SignaturePage extends Component {
           >
             <Text>Reset</Text>
           </TouchableHighlight>
-
         </View>
-        <View style={{ flex: 0.3, alignItems: 'center'}}>
+
+        <View
+          style={{
+            flex: 0.5,
+            flexDirection: "row",
+            alignSelf: "center",
+            justifyContent: "center"
+          }}
+        >
+          <TouchableHighlight
+            style={styles.buttonStyle}
+            onPress={() => {
+              Actions.chefform({ type: ActionConst.RESET });
+            }}
+          >
+            <Text>Back</Text>
+          </TouchableHighlight>
+        </View>
+
+        <View style={{ flex: 0.25, alignItems: "center" }}>
           <Text style={{ alignItems: "center", justifyContent: "center" }}>
             By signing this form, I agree to these
           </Text>
-          <Text style={{ alignItems: "center", justifyContent: "center", color: 'blue' }}>
+          <Text
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              color: "blue"
+            }}
+          >
             terms and conditions
           </Text>
         </View>
-
+        <DropdownAlert
+          ref={ref => this.dropdown = ref}
+          containerStyle={{
+            backgroundColor: "#6441A4"
+          }}
+          onClose={data => this.onClose(data)}
+        />
       </View>
     );
   }
