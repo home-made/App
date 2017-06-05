@@ -100,14 +100,17 @@ export default class NavBar extends Component {
     Actions.checkout({ type: ActionConst.RESET });
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
+
   chefPanel() {
     Actions.chefPanel({ type: ActionConst.RESET });
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
+
   edit() {
     Actions.edit({ type: ActionConst.RESET });
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
+
   orders() {
     console.log("CHEFVIEW IS", this.state.chefView);
     if (this.state.chefView) {

@@ -3,13 +3,14 @@ import {
   View,
   StyleSheet,
   Text,
-  TouchableHighlight,
   AsyncStorage
 } from "react-native";
 import SignatureCapture from "react-native-signature-capture";
-import { Icons } from "react-native-vector-icons/Ionicons";
+import Icon from "react-native-vector-icons/Ionicons";
 import { Actions, ActionConst } from "react-native-router-flux";
 import DropdownAlert from 'react-native-dropdownalert';
+import ActionButton from 'react-native-circular-action-menu';
+import Button from 'apsl-react-native-button'
 import axios from "axios";
 
 let authId;
@@ -50,7 +51,6 @@ export default class SignaturePage extends Component {
     authId = this.state.authId;
 
     this.showAlert();
-    setTimeout(() => Actions.homepage({ type: ActionConst.RESET }), 100);
   }
 
   resetSign() {
@@ -63,7 +63,7 @@ export default class SignaturePage extends Component {
     console.log(result);
 
     axios
-      .put(`http://localhost:3000/user/${authId}`, {
+      .put(`http://localhost:3000/user/sig/${authId}`, {
         isChef: true,
         pathname: result.pathName
       })
@@ -80,7 +80,7 @@ export default class SignaturePage extends Component {
     this.dropdown.alertWithType(
       "success",
       "Signature saved successfully!",
-      "You're now a chef!",
+      `Press ✔️ to become a chef!`,
     );
   }
 
@@ -96,7 +96,7 @@ export default class SignaturePage extends Component {
     return (
       <View style={{ flex: 1, flexDirection: "column", marginTop: 63 }}>
         <SignatureCapture
-          style={[{ flex: 1 }, styles.signature]}
+          style={ styles.signature}
           ref="sign"
           onSaveEvent={this._onSaveEvent}
           onDragEvent={this._onDragEvent}
@@ -105,43 +105,31 @@ export default class SignaturePage extends Component {
           showTitleLabel={false}
           viewMode={"landscape"}
         />
-
-        <View style={{ flex: 0.4, flexDirection: "row" }}>
-          <TouchableHighlight
-            style={styles.buttonStyle}
-            onPress={() => {
-              this.saveSign();
-            }}
-          >
-            <Text>Save</Text>
-          </TouchableHighlight>
-
-          <TouchableHighlight
-            style={styles.buttonStyle}
-            onPress={() => {
-              this.resetSign();
-            }}
-          >
-            <Text>Reset</Text>
-          </TouchableHighlight>
+        
+        <View style={{flex: .5, flexDirection: 'row'}}>
+          <Button style={styles.buttonStyle1} textStyle={{fontSize: 18}} onPress={() => { this.saveSign()} }>
+            Save
+          </Button>
+          <Button style={styles.buttonStyle2} textStyle={{fontSize: 18}} onPress={() => { this.resetSign()} }>
+            Reset
+          </Button>
         </View>
 
         <View
           style={{
-            flex: 0.5,
-            flexDirection: "row",
-            alignSelf: "center",
-            justifyContent: "center"
+            flex: .5,
+            justifyContent: 'center',
+            alignSelf: 'center',
           }}
         >
-          <TouchableHighlight
-            style={styles.buttonStyle}
-            onPress={() => {
-              Actions.chefform({ type: ActionConst.RESET });
-            }}
-          >
-            <Text>Back</Text>
-          </TouchableHighlight>
+          <ActionButton buttonColor="rgba(231,76,60,1)" position={'center'} radius={80} outRangeScale={0.8} degrees={360} icon={<Text style={{color: 'white', fontSize: 37}}>🖕🏻</Text>}>
+            <ActionButton.Item buttonColor='#F0B073' title="Confirm" onPress={() => {Actions.homepage({ type: ActionConst.RESET })}}>
+              <Icon name='md-checkmark' style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+            <ActionButton.Item buttonColor='#52F26A' title="Back" onPress={() => {Actions.chefform({ type: ActionConst.RESET })}}>
+              <Icon name='md-arrow-back' style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+          </ActionButton>
         </View>
 
         <View style={{ flex: 0.25, alignItems: "center" }}>
@@ -164,6 +152,7 @@ export default class SignaturePage extends Component {
             backgroundColor: "#6441A4"
           }}
           onClose={data => this.onClose(data)}
+          closeInterval={7000}
         />
       </View>
     );
@@ -176,12 +165,19 @@ const styles = StyleSheet.create({
     borderColor: "#000033",
     borderWidth: 1
   },
-  buttonStyle: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    height: 50,
-    backgroundColor: "#eeeeee",
-    margin: 10
+  actionButtonIcon: {
+    fontSize: 25,
+    height: 26,
+    color: 'white',
+  },
+  buttonStyle1: {
+    flex: 1, justifyContent: "center", alignItems: "center", height: 50,
+    margin: 10,
+    backgroundColor: '#30C82E'
+  },
+  buttonStyle2: {
+    flex: 1, justifyContent: "center", alignItems: "center", height: 50,
+    margin: 10,
+    backgroundColor: '#CF6151'
   }
-});
+  });
