@@ -43,7 +43,7 @@ export default class App extends Component {
     this.setCart = this.setCart.bind(this);
     this.fetchDishDetails = this.fetchDishDetails.bind(this);
     this.setDishDetails = this.setDishDetails.bind(this);
-    // this.getCuisineStyles = this.getCuisineStyles.bind(this);
+    this.getCuisineStyles = this.getCuisineStyles.bind(this);
     this.fetchUploadStatus = this.fetchUploadStatus.bind(this);
     this.setUploadStatus = this.setUploadStatus.bind(this);
     this.setChefLocationAndPhoneNumber = this.setChefLocationAndPhoneNumber.bind(
@@ -102,11 +102,11 @@ export default class App extends Component {
     }
   }
 
-  // getCuisineStyles() {
-  //   return "All Cuisines,American,Barbecue,Burgers,Chinese,Indian,Italian,Japanese,Korean,Mediterranean,Mexican,Pizza,Sandwiches,Sushi,Thai,Vegetarian,Vietnamese,American,Ethiopian,Other".split(
-  //     ","
-  //   );
-  // }
+  getCuisineStyles() {
+    return "All Cuisines,American,Barbecue,Burgers,Chinese,Indian,Italian,Japanese,Korean,Mediterranean,Mexican,Pizza,Sandwiches,Sushi,Thai,Vegetarian,Vietnamese,American,Ethiopian,Other".split(
+      ","
+    );
+  }
 
   setChef(chef) {
     console.log("INSIDE SET CHEF", chef);
