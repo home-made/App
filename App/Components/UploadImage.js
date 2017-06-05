@@ -84,8 +84,7 @@ class Upload extends Component {
           console.log('baby dish',dish)
           Actions.dishconfirm()
           });
-        }
-        if (this.state.cameraMode === 'profile') {
+        } else{
           console.log(res)
           let options = {
             keyPrefix: `profile${this.state.userId}`,
@@ -99,9 +98,9 @@ class Upload extends Component {
           if (response.status !== 201)
             throw new Error("Failed to upload image to S3");
           console.log(response.body.postResponse.location);
-          axios.put('http://localhost:3000/user', {
-            authId: this.state.userId,
-            profileUrl: [response.body.postResponse.location],
+          // console.log('http://localhost:3000/user' + this.state.userId)
+          axios.put('http://localhost:3000/user/' + this.state.userId, {
+            profileUrl: response.body.postResponse.location,
           }).then(res=>{
             console.log(res)
           })
@@ -120,7 +119,8 @@ class Upload extends Component {
 
   render() {
     const { container, preview, capture } = styles;
-    
+     var image = this.state.user? this.state.user.profilePic : this.state.userPic
+     console.log(image)
     return (
       <View style={container}>
         <Camera

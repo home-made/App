@@ -39,7 +39,10 @@ export default class OrderPanel extends Component {
     }
     var dateAndTime = month+'/'+day+' '+time;
     return (
-      <ListItem onPress={() => Actions.orderView(data)}>
+      <ListItem onPress={() => {
+            Actions.orderView(data)
+            setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
+        }}>
         <Text style={{ marginLeft: 10 }}>
           Placed at: {dateAndTime}{"\n"}
           Cash total: ${data.cashTotal}

@@ -13,7 +13,7 @@ export default class EditProfile extends Component {
       userName: "",
       userPic: ""
     };
-    this.handleSubmit = this.handleSubmit.bind(this);
+    // this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentWillMount() {
@@ -23,9 +23,10 @@ export default class EditProfile extends Component {
       try {
         const data = await AsyncStorage.getItem("profile");
         if (data !== null && data !== undefined) {
+
           data = JSON.parse(data);
           console.log("async data: ", data);
-          (userId = data.identityId), (userName = data.name), (userPic =
+          (userId = data.identityId || data.userId), (userName = data.name), (userPic =
             data.picture);
         }
       } catch (err) {
@@ -34,7 +35,12 @@ export default class EditProfile extends Component {
     }
 
     getProfile().then(() => {
-      this.setState({ userId: userId, userName: userName, userPic: userPic });
+      this.setState({ userId: userId, userName: userName, userPic: userPic }, ()=>{
+        console.log(this.state.userId)
+        axios.get('http://localhost:3000/user/'+this.state.userId).then(res=>{ 
+            this.setState({user:res.data[0]},() => console.log(this.state.user))
+          })
+      });
     });
   }
 
@@ -50,11 +56,12 @@ export default class EditProfile extends Component {
     if (this.state.status) {
       send.state = this.state.status;
     }
-
-    axios.put("http://localhost:3000/user", send).then(Actions.cuisines());
+    console.log("http://localhost:3000/user/" + send.authId)
+    axios.put("http://localhost:3000/user/" + send.authId, send).then(Actions.cuisines());
   }
 
   render() {
+    // console.log(image)
     return (
       <View
         style={{
@@ -122,6 +129,7 @@ export default class EditProfile extends Component {
           <Button
             style={{ marginTop: 10 }}
             onPress={() => {
+              this.handleSubmit()
               Actions.cuisines();
               Toast.show({
                 supportedOrientations: ["portrait", "landscape"],
