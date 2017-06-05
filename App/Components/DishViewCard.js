@@ -27,7 +27,7 @@ export default class DishViewCard extends Component {
               <Body>
 
               <Text>{this.props.dish.name}</Text>
-              <Text>Description: {this.props.dish.description}</Text>
+              <Text note>{this.props.dish.description}</Text>
               <Text note>Quantity Available: {this.props.dish.quantity}</Text>
 
               <Image style={ styles.image } source={{ uri: this.props.dish.dishImages[0]}} />

@@ -128,8 +128,11 @@ export default class App extends Component {
     this.setState({ cuisineType: genre }, () => {
       console.log("CUISINETYPE: ", this.state.cuisineType);
       let url = `http://localhost:3000/chef/style/${this.state.cuisineType}`;
-      axios
-        .get(url)
+
+      let config = {headers: {'lat': this.state.latitude, 'lon': this.state.longitude}}
+
+      //originally wasn't sending lat/lon to fetch chefs by cuisine based on location
+      axios.get(url, config)
         .then(res => {
           console.log("res.data inside App.js for setCuisine is ", res.data);
           this.setState({ chefs: res.data }, () => {
