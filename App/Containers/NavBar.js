@@ -30,7 +30,7 @@ export default class NavBar extends Component {
   }
 
   componentWillMount() {
-    socket = new SocketIO('http://localhost:3000') 
+    socket = new SocketIO('http://ec2-52-91-163-176.compute-1.amazonaws.com:3000') 
     socket.connect()
     socket.on('init', (splash)=>{
       console.log(splash)
@@ -56,7 +56,7 @@ export default class NavBar extends Component {
     getUserAuthId()
       .then(() => {
         console.log(authId);
-        axios.get(`http://localhost:3000/user/${authId}`)
+        axios.get(`http://ec2-52-91-163-176.compute-1.amazonaws.com:3000/user/${authId}`)
           .then((res) => {
             console.log(res.data)
             this.setState({
