@@ -43,7 +43,7 @@ export default class OrderView extends Component {
     };
     axios
       .put('http://localhost:3000/orders', request)
-      .then(() => Actions.orders());
+      .then(() => Actions.orders({ type: ActionConst.RESET }));
   }
 
  handleDecline() {
@@ -67,7 +67,7 @@ export default class OrderView extends Component {
     };
     axios
       .put("http://localhost:3000/orders", request)
-      .then(() => Actions.orders({ type: ActionConst.RESET }));
+      .then((res) => {console.log("COMPLETED ORDER:", res.data); Actions.orders({ type: ActionConst.RESET })});
 
   }
 

@@ -26,8 +26,17 @@ export default class EditProfile extends Component {
 
           data = JSON.parse(data);
           console.log("async data: ", data);
-          (userId = data.identityId || data.userId), (userName = data.name), (userPic =
-            data.picture);
+          if (data.identityId) {
+            userId = data.identityId;
+          } else {
+            userId = data.userId;
+          }
+          userName = data.name;
+          if (data.extraInfo) {
+            userPic = data.extraInfo.picture_large;
+          } else {
+            data.picture;
+          }
         }
       } catch (err) {
         console.log("Error getting data: ", err);
@@ -45,6 +54,7 @@ export default class EditProfile extends Component {
   }
 
   handleSubmit() {
+    console.log("HANDLE SUBMIT CALLED");
     let send = {};
     console.log("SEND: ", send);
     if (this.state.address) {
@@ -56,8 +66,12 @@ export default class EditProfile extends Component {
     if (this.state.status) {
       send.status = this.state.status;
     }
-    console.log("http://localhost:3000/user/" + this.state.userId)
-    axios.put("http://localhost:3000/user/" + this.state.userId, send).then(Actions.cuisines());
+    axios
+      .put("http://localhost:3000/user/" + this.state.userId, send)
+      .then(res => {
+        console.log(res.data);
+        Actions.cuisines();
+      });
   }
 
   render() {
@@ -129,8 +143,7 @@ export default class EditProfile extends Component {
           <Button
             style={{ marginTop: 10 }}
             onPress={() => {
-              this.handleSubmit()
-              Actions.cuisines();
+              this.handleSubmit();
               Toast.show({
                 supportedOrientations: ["portrait", "landscape"],
                 text: "Profile Updated",

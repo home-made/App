@@ -222,8 +222,8 @@ export default class App extends Component {
               key="cuisines"
               component={Cuisines}
               title="Cuisines"
-              getStyles={this.getCuisineStyles}
               setCuisineType={this.setCuisineType}
+              getStyles={this.getCuisineStyles}
             />
             <Scene
               key="dishedit"

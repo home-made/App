@@ -83,19 +83,25 @@ export default class ManageDish extends Component {
   }
   render() {
     return (
-      <Container
-        style={{
-          flex: 1,
-          flexDirection: "column"
-        }}
-      >
+      <Container style={{}}>
         <Content>
           <Image
             source={{ uri: this.state.dish.dishImages[0] }}
-            style={{ width: 200, height: 200 }}
-            resizeMode={Image.resizeMode.center}
+            style={{
+              height: 200,
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: 60,
+              marginBottom: 10
+            }}
           />
-          <Form style={{ marginTop: 100 }}>
+          <Content
+            contentContainerStyle={{
+              alignItems: "center",
+              justifyContent: "center",
+              alignContent: "center"
+            }}
+          >
             <Text> {this.state.dish.isActive ? "Active" : "Inactive"}</Text>
             <Switch
               onValueChange={value => {
@@ -105,61 +111,80 @@ export default class ManageDish extends Component {
                   console.log(this.state.dish.isActive)
                 );
               }}
-              style={{ marginBottom: 10 }}
+              style={{ alignItems: "center", justifyContent: "center" }}
               value={this.state.dish.isActive}
             />
-            <Item>
-              <Input
-                placeholder="Name"
-                onChangeText={name => {
-                  let dish = this.state.dish;
-                  dish.name = name;
-                  this.setState({ dish }, () => console.log(this.state.dish));
-                }}
-                value={this.state.dish.name}
-              />
-            </Item>
-            <Item>
-              <Input
-                placeholder="Description"
-                onChangeText={description => {
-                  let dish = this.state.dish;
-                  dish.description = description;
-                  this.setState({ dish }, () => console.log(this.state.dish));
-                }}
-                value={this.state.dish.description}
-              />
-            </Item>
-            <Item stackedLabel>
-              <Label>$</Label>
-              <Input
-                placeholder="Donation Amount"
-                onChangeText={cashDonation => {
-                  let dish = this.state.dish;
-                  dish.cashDonation = cashDonation;
-                  this.setState({ dish }, () => console.log(this.state.dish));
-                }}
-                value={this.state.dish.cashDonation}
-              />
-            </Item>
-            <Item>
-              <Input
-                placeholder="Quantity"
-                keyboardType={"number-pad"}
-                onChangeText={quantity => {
-                  let dish = this.state.dish;
-                  dish.quantity = quantity;
-                  this.setState({ dish }, () => console.log(this.state.dish));
-                }}
-                value={this.state.dish.quantity}
-              />
-            </Item>
+          </Content>
+          <Item stackedLabel>
+            <Label style={{ marginLeft: 5 }}>Title:</Label>
+
+            <Input
+              placeholder="Name"
+              onChangeText={name => {
+                let dish = this.state.dish;
+                dish.name = name;
+                this.setState({ dish }, () => console.log(this.state.dish));
+              }}
+              value={this.state.dish.name}
+                            style={{ marginBottom: -10 }}
+
+            />
+          </Item>
+          <Item stackedLabel>
+            <Label style={{ marginLeft: 5 }}>Description:</Label>
+
+            <Input
+              placeholder="Description"
+              onChangeText={description => {
+                let dish = this.state.dish;
+                dish.description = description;
+                this.setState({ dish }, () => console.log(this.state.dish));
+              }}
+              value={this.state.dish.description}
+              style={{ marginBottom: -10 }}
+            />
+          </Item>
+          <Item>
+            <Label style={{ marginLeft: 5, marginBottom: -10  }}>$</Label>
+            <Input
+              placeholder="Donation Amount"
+              onChangeText={cashDonation => {
+                let dish = this.state.dish;
+                dish.cashDonation = cashDonation;
+                this.setState({ dish }, () => console.log(this.state.dish));
+              }}
+              value={this.state.dish.cashDonation}
+                            style={{ marginBottom: -10 }}
+
+            />
+          </Item>
+          <Item stackedLabel>
+            <Label style={{ marginLeft: 5, marginBottom: -10 }}>
+              Quantity:
+            </Label>
+            <Input
+              placeholder="Quantity"
+              keyboardType={"number-pad"}
+              onChangeText={quantity => {
+                let dish = this.state.dish;
+                dish.quantity = quantity;
+                this.setState({ dish }, () => console.log(this.state.dish));
+              }}
+              value={this.state.dish.quantity}
+              style={{ marginBottom: -10 }}
+            />
+          </Item>
+          <Item stackedLabel>
+            <Label style={{ marginLeft: 5 }}>Cuisine Type</Label>
+
             <Picker
+              style={{ marginLeft: -195, marginTop: -10, marginBottom: -10 }}
               supportedOrientations={["portrait", "landscape"]}
               iosHeader="Select one"
               mode="dropdown"
               selectedValue={this.state.selected1}
               onValueChange={this.onValueChange.bind(this)}
+              
             >
               {/*<Item label="Select a Cuisine Style" value={0} />*/}
               {this.state.genres
@@ -168,13 +193,12 @@ export default class ManageDish extends Component {
                   })
                 : {}}
             </Picker>
-            <Button
-              style={{ marginTop: 70 }}
-              onPress={() => this.handleSubmit()}
-            >
+          </Item>
+          <View style={{ alignItems: "center", justifyContent: "center" }}>
+            <Button onPress={() => this.handleSubmit()}>
               <Text>Submit </Text>
             </Button>
-          </Form>
+          </View>
         </Content>
       </Container>
     );

@@ -22,7 +22,7 @@ export default class DishView extends Component {
         />
         <Text> {this.props.dish.name}</Text>
         <Text> ${this.props.dish.cashDonation}</Text>
-        <Container style={{ alignContent: "center", marginBottom: -600 }}>
+        <Container style={{ alignContent: "center"}}>
           <Content>
             <Button
               onPress={() => {
@@ -47,6 +47,7 @@ export default class DishView extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center"
+    alignItems: "center",
+    marginBottom: -600
   }
 });

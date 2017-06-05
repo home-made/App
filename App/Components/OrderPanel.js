@@ -50,6 +50,11 @@ export default class OrderPanel extends Component {
       </ListItem>
     );
   }
+  
+  componentWillReceiveProps() {
+    console.log("IN ORDER PANEL COMPONENT WILL RECEIVE PROPS");
+    this.componentWillMount();
+  }
 
   componentWillMount() {
     let authID;
