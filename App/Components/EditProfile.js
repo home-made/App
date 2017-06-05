@@ -55,7 +55,7 @@ export default class EditProfile extends Component {
       send.address = this.state.address;
     }
     if (this.state.phone) {
-      send.phone = this.state.phone;
+      send.phoneNumber = this.state.phone;
     }
     if (this.state.status) {
       send.state = this.state.status;
