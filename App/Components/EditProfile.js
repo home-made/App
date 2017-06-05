@@ -51,7 +51,10 @@ export default class EditProfile extends Component {
       send.state = this.state.status;
     }
 
-    axios.put("http://localhost:3000/user", send).then(Actions.cuisines());
+    axios.put(`http://localhost:3000/user/${this.state.userId}`, send).then((res) => {
+      console.log(res.data);
+      Actions.cuisines()
+    });
   }
 
   render() {
@@ -122,7 +125,7 @@ export default class EditProfile extends Component {
           <Button
             style={{ marginTop: 10 }}
             onPress={() => {
-              Actions.cuisines();
+              this.handleSubmit();
               Toast.show({
                 supportedOrientations: ["portrait", "landscape"],
                 text: "Profile Updated",
