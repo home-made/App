@@ -24,7 +24,6 @@ export default class OrderPanel extends Component {
   }
 
   returnRow(data) {
-    console.log('rowsie',data)
     var year = data.date.slice(0,4)
     var month =data.date.slice(5,7)
     var day = data.date.slice(8,10)
@@ -74,24 +73,21 @@ export default class OrderPanel extends Component {
     getAuthID().then(() => {
       axios.get("http://localhost:3000/orders/0/" + authID).then(pending => {
         this.setState({pendingCustomers: pending.data[1]},()=>  this.setState({ pending: pending.data[0] }, () => {
-          console.log("PENDING ORDERS ARE ", this.state.pending)
-          console.log("PENDING CUSTOMERS ARE ", this.state.pendingCustomers)
+
           if(this.state.pending){
           }
         }
         ));
         axios.get("http://localhost:3000/orders/1/" + authID).then(accepted => {
           this.setState({acceptedCustomers: accepted.data[1]},()=> this.setState({ accepted: accepted.data[0] }, () => {
-            console.log("ACCEPTED ORDERS ARE ", this.state.accepted)
-            console.log("ACCEPTED CUSTOMERS ARE ", this.state.acceptedCustomers)
+
             }
           ));
           axios
             .get("http://localhost:3000/orders/2/" + authID)
             .then(complete => {
               this.setState({completedCustomers: complete.data[1]},()=> this.setState({ complete: complete.data[0] }, () => {
-                console.log("COMPLETE ORDERS ARE ", this.state.complete)
-                console.log("COMPLETE CUSTOMERS ARE ", this.state.completeCustomers)                
+         
               }
               ));
             });

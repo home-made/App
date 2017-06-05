@@ -41,9 +41,10 @@ export default class OrderView extends Component {
       _id: this.props._id,
       status: 1
     };
+    console.log('accept looks like', request)
     axios
       .put('http://localhost:3000/orders', request)
-      .then(() => Actions.orders({ type: ActionConst.RESET }));
+      .then((res) => {console.log("RESPONSE IS", res.data); Actions.orders({ type: ActionConst.RESET })});
   }
 
  handleDecline() {
@@ -55,7 +56,7 @@ export default class OrderView extends Component {
     };
     axios
       .put("http://localhost:3000/orders", request)
-      .then(() => Actions.orders());
+      .then(() => Actions.orders({ type: ActionConst.RESET }));
   }
 
   handleComplete() {
@@ -86,7 +87,9 @@ export default class OrderView extends Component {
                 onPress={() =>
                   Actions.feedback({
                     chefId: this.props.chefId,
-                    customerId: this.props.customerId
+                    customerId: this.props.customerId, 
+                    date: this.props.date,
+                    _id: this.props._id
                   })}
               >
                 <Text>Leave Feedback</Text>

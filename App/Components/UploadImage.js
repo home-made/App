@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Camera from "react-native-camera";
 import { AsyncStorage } from "react-native";
-
 import { Actions,ActionConst } from "react-native-router-flux";
 import { RNS3 } from 'react-native-aws3';
 

@@ -154,7 +154,7 @@ export default class NavBar extends Component {
   }
 
   toggleChefMode() {
-         Actions.orders({ type: ActionConst.RESET });
+        //  Actions.orders({ type: ActionConst.RESET });
         setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
 
@@ -213,14 +213,15 @@ export default class NavBar extends Component {
             </Body>
           </ListItem>
 
-          <ListItem icon onPress={this.statistics} style={styles.content}>
+          {this.state.chefView
+            ? <ListItem icon onPress={this.statistics} style={styles.content}>
             <Left>
               <Icon name="ios-stats" />
             </Left>
             <Body>
               <Text style={styles.entries}>Statistics</Text>
             </Body>
-          </ListItem>
+          </ListItem> : null}
 
           <ListItem icon onPress={this.chefMap} style={styles.content}>
             <Left>
@@ -231,31 +232,35 @@ export default class NavBar extends Component {
             </Body>
           </ListItem>
 
-          <ListItem icon onPress={this.dishcreate} style={styles.content}>
+          {this.state.chefView
+            ? <ListItem icon onPress={this.dishcreate} style={styles.content}>
             <Left>
               <Icon name="ios-camera" />
             </Left>
             <Body>
               <Text style={styles.entries}>Create Dish</Text>
             </Body>
-          </ListItem>
+          </ListItem> : null}
 
-          <ListItem icon onPress={this.chefPanel} style={styles.content}>
+          {this.state.chefView
+            ? <ListItem icon onPress={this.chefPanel} style={styles.content}>
             <Left>
               <Icon name="ios-clipboard" />
             </Left>
             <Body>
               <Text style={styles.entries}>Manage Dishes</Text>
             </Body>
-          </ListItem>
-          <ListItem icon onPress={this.edit} style={styles.content}>
+          </ListItem> : null}
+
+          {this.state.chefView
+            ? <ListItem icon onPress={this.edit} style={styles.content}>
             <Left>
               <Icon name="ios-create" />
             </Left>
             <Body>
               <Text style={styles.entries}>Edit Profile</Text>
             </Body>
-          </ListItem>
+          </ListItem> : null} 
           <ListItem icon onPress={()=>{
               this.orders();
               this.setState({orderNotification:0})
@@ -296,11 +301,7 @@ export default class NavBar extends Component {
             ? <ListItem avatar style={{ marginTop: 10 }}>
                 <Switch
                   onValueChange={value => {
-                    this.setState({ chefView: value }, () => {
-                      if (this.state.chefView) {
-                        this.toggleChefMode()
-                      }
-                    });
+                    this.setState({ chefView: value });
                   }}
                   value={this.state.chefView}
                   style={{ marginRight: 10 }}
