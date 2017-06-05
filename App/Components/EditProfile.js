@@ -90,24 +90,24 @@ export default class EditProfile extends Component {
             height: 150,
             width: 150,
             marginTop: 70,
-            marginBottom: 20
+  
           }}
           source={{
             uri: this.state.userPic
           }}
         />
+        <Item>
         <Button
-          style={{ marginTop: 10 }}
+          style={{ margin: 10}}
           onPress={() => {
             this.props.setCameraMode("profile");
             Actions.uploadimage();
           }}
         >
-          <Text>Update Profile Pic</Text>
+          <Text>Update Profile Picture</Text>
         </Button>
-        <Item>
-          <Text>Update Address:</Text>
         </Item>
+
         <Item>
           <Input
             placeholder="Address"
@@ -116,18 +116,14 @@ export default class EditProfile extends Component {
               this.setState({ address }, () => console.log(address))}
           />
         </Item>
-        <Item>
-          <Text>Update Phone Number:</Text>
-        </Item>
+
         <Item>
           <Input
             placeholder="Phone Number"
             onChangeText={phone => this.setState({ phone })}
           />
         </Item>
-        <Item>
-          <Text>Update Status:</Text>
-        </Item>
+
         <Item>
           <Input
             placeholder="Status"
