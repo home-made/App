@@ -55,6 +55,7 @@ export default class EditProfile extends Component {
   }
 
   render() {
+    console.log("the state inside EditProfile.js is ", this.state);
     return (
       <View
         style={{

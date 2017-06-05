@@ -131,6 +131,7 @@ export default class App extends Component {
     this.setState({ cuisineType: genre }, () => {
       console.log("CUISINETYPE: ", this.state.cuisineType);
       let url = `http://localhost:3000/chef/style/${this.state.cuisineType}`;
+
       let config = {
         headers: {lat: this.state.latitude, lon: this.state.longitude}
       }
