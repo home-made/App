@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Camera from "react-native-camera";
 import { AsyncStorage } from "react-native";
 
-import { Actions } from "react-native-router-flux";
+import { Actions,ActionConst } from "react-native-router-flux";
 import { RNS3 } from 'react-native-aws3';
 
 import {
@@ -108,7 +108,7 @@ class Upload extends Component {
           // user['profileUrl']=response.body.postResponse.location;
           // this.setUser(user)
           // console.log('baby user',user)
-          Actions.edit()
+          Actions.edit({ type: ActionConst.RESET })
           });
         }
       })
@@ -119,8 +119,7 @@ class Upload extends Component {
 
   render() {
     const { container, preview, capture } = styles;
-     var image = this.state.user? this.state.user.profilePic : this.state.userPic
-     console.log(image)
+
     return (
       <View style={container}>
         <Camera
