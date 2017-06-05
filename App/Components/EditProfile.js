@@ -13,7 +13,7 @@ export default class EditProfile extends Component {
       userName: "",
       userPic: ""
     };
-    this.handleSubmit = this.handleSubmit.bind(this);
+    // this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentWillMount() {
@@ -23,6 +23,7 @@ export default class EditProfile extends Component {
       try {
         const data = await AsyncStorage.getItem("profile");
         if (data !== null && data !== undefined) {
+
           data = JSON.parse(data);
           console.log("async data: ", data);
           if (data.identityId) {
@@ -43,13 +44,18 @@ export default class EditProfile extends Component {
     }
 
     getProfile().then(() => {
-      this.setState({ userId: userId, userName: userName, userPic: userPic });
+      this.setState({ userId: userId, userName: userName, userPic: userPic }, ()=>{
+        console.log(this.state.userId)
+        axios.get('http://localhost:3000/user/'+this.state.userId).then(res=>{ 
+            this.setState({user:res.data[0]},() => console.log(this.state.user))
+          })
+      });
     });
   }
 
   handleSubmit() {
     console.log("HANDLE SUBMIT CALLED");
-    let send = { authId: this.state.userId };
+    let send = {};
     console.log("SEND: ", send);
     if (this.state.address) {
       send.address = this.state.address;
@@ -58,7 +64,7 @@ export default class EditProfile extends Component {
       send.phoneNumber = this.state.phone;
     }
     if (this.state.status) {
-      send.state = this.state.status;
+      send.status = this.state.status;
     }
 
     axios
@@ -70,7 +76,7 @@ export default class EditProfile extends Component {
   }
 
   render() {
-    console.log("the state inside EditProfile.js is ", this.state);
+    console.log("the state inside EditProfile.js is ", this.state)
     return (
       <View
         style={{
@@ -139,7 +145,8 @@ export default class EditProfile extends Component {
                 supportedOrientations: ["portrait", "landscape"],
                 text: "Profile Updated",
                 position: "bottom",
-                buttonText: "Okay"
+                buttonText: "Okay",
+                duration:1000
               });
             }}
           >

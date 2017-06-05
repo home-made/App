@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import Camera from "react-native-camera";
 import { AsyncStorage } from "react-native";
-
-import { Actions } from "react-native-router-flux";
+import { Actions,ActionConst } from "react-native-router-flux";
 import { RNS3 } from 'react-native-aws3';
 
 import {
@@ -84,8 +83,7 @@ class Upload extends Component {
           console.log('baby dish',dish)
           Actions.dishconfirm()
           });
-        }
-        if (this.state.cameraMode === 'profile') {
+        } else{
           console.log(res)
           let options = {
             keyPrefix: `profile${this.state.userId}`,
@@ -99,13 +97,17 @@ class Upload extends Component {
           if (response.status !== 201)
             throw new Error("Failed to upload image to S3");
           console.log(response.body.postResponse.location);
-          axios.put('http://localhost:3000/user/'+ this.state.userId, {
-            authId: this.state.userId,
-            profileUrl: [response.body.postResponse.location],
+          // console.log('http://localhost:3000/user' + this.state.userId)
+          axios.put('http://localhost:3000/user/' + this.state.userId, {
+            profileUrl: response.body.postResponse.location,
           }).then(res=>{
             console.log(res)
           })
-          Actions.edit()
+          // let user = this.state.user
+          // user['profileUrl']=response.body.postResponse.location;
+          // this.setUser(user)
+          // console.log('baby user',user)
+          Actions.edit({ type: ActionConst.RESET })
           });
         }
       })
@@ -116,7 +118,7 @@ class Upload extends Component {
 
   render() {
     const { container, preview, capture } = styles;
-    
+
     return (
       <View style={container}>
         <Camera

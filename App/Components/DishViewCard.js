@@ -22,7 +22,6 @@ export default class DishViewCard extends Component {
       <Container>
         <Content >
           <Card style={{ resizeMode: 'contain' }}>
-
             <CardItem>
               <Body>
               <Text>{this.props.dish.name}</Text>
