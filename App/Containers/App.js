@@ -50,6 +50,7 @@ export default class App extends Component {
       this
     );
     this.updateLocation = this.updateLocation.bind(this);
+    this.getLatAndLon = this.getLatAndLon.bind(this);
   }
 
 
@@ -57,7 +58,9 @@ export default class App extends Component {
     console.log("APP MOUNTED");
     this.setLocation();
   }
-  
+  getLatAndLon() {
+    return {lat: this.state.latitude, lon: this.state.longitude};
+  }
   setLocation() {
     navigator.geolocation.getCurrentPosition(
       position => {
@@ -124,15 +127,15 @@ export default class App extends Component {
   }
 
   setCuisineType(genre) {
-    console.log(genre);
+    console.log("IN SET CUISINE TYPE", this.state.geo);
     this.setState({ cuisineType: genre }, () => {
       console.log("CUISINETYPE: ", this.state.cuisineType);
       let url = `http://localhost:3000/chef/style/${this.state.cuisineType}`;
-
-      let config = {headers: {'lat': this.state.latitude, 'lon': this.state.longitude}}
-
-      //originally wasn't sending lat/lon to fetch chefs by cuisine based on location
-      axios.get(url, config)
+      let config = {
+        headers: {lat: this.state.latitude, lon: this.state.longitude}
+      }
+      axios
+        .get(url, config)
         .then(res => {
           console.log("res.data inside App.js for setCuisine is ", res.data);
           this.setState({ chefs: res.data }, () => {
@@ -259,7 +262,7 @@ export default class App extends Component {
               getChef={this.getChef}
             />
 
-            <Scene key="chefMap" component={ChefMap} setChef={this.setChef} />
+            <Scene key="chefMap" component={ChefMap} setChef={this.setChef} getLocation={this.getLatAndLon} />
 
             <Scene
               key="checkout"
