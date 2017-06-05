@@ -180,9 +180,9 @@ export default class Profile extends Component {
               </Body>
             </CardItem>
           </Card>
-          <Row style={{  alignItems: 'center', justifyContent: 'space-between' }}>
-            <Button onPress={this.handleReviewsPress}><Text>Reviews</Text></Button>
-            <Button onPress={this.handleMenuPress}><Text>Menu</Text></Button>
+          <Row style={{  alignItems: 'center', justifyContent: 'center'}}>
+            <Button style={{marginRight: 10}} onPress={this.handleReviewsPress}><Text>Reviews</Text></Button>
+            <Button style={{marginRight: 10}} onPress={this.handleMenuPress}><Text>Menu</Text></Button>
             {this.displayCheckout()}
           </Row>
 
