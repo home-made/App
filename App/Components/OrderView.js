@@ -24,6 +24,8 @@ export default class OrderView extends Component {
 
   componentWillMount() {
     let dishes = [];
+   console.log('proganda',this.props)
+
     for (var key in this.props.cart) {
       dishes.push(this.props.cart[key]);
     }
@@ -53,7 +55,7 @@ export default class OrderView extends Component {
     };
     axios
       .put("http://localhost:3000/orders", request)
-      .then(() => Actions.orders({ type: ActionConst.RESET }));
+      .then(() => Actions.orders());
   }
 
   handleComplete() {

@@ -179,16 +179,13 @@ export default class App extends Component {
 
     /*
     AsyncStorage.getItem('profile').then(profile => {
-
       var userId = JSON.parse(profile).userId;
       var context = this;
       
       SetProfile(context, userId);
-
     }).catch(error => {
       console.log("Error inside AsyncStorage for Profile.js is ", error);
     });
-
 */
   }
 
@@ -224,6 +221,7 @@ export default class App extends Component {
               component={Cuisines}
               title="Cuisines"
               setCuisineType={this.setCuisineType}
+              getStyles={this.getCuisineStyles}
             />
             <Scene
               key="dishedit"
@@ -331,4 +329,4 @@ const styles = StyleSheet.create({
     textAlign: "center",
     margin: 10
   }
-});
+})

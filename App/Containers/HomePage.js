@@ -94,6 +94,10 @@ export default class HomePage extends Component {
           axios.post(`http://localhost:3000/user/${profile.userId}`, profile).then((user) => {
 
             console.log("The user data inside HomePage is ", user)
+            if (user.data.profileUrl) {
+              profile.extraInfo.picture_large = user.data.profileUrl
+              profile.picture = user.data.profileUrl
+            }
             if (user.data.isChef) {
                 profile.isChef = true;
                 profile.chefView = true;

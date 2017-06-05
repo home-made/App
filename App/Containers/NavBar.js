@@ -23,7 +23,8 @@ export default class NavBar extends Component {
 
     this.state = {
       chefStatus: null,
-      chefView: false
+      chefView: false,
+      orderNotification: 0
     };
     this.orders = this.orders.bind(this);
   }
@@ -35,7 +36,10 @@ export default class NavBar extends Component {
       console.log(splash)
     })
     socket.on('message',(message)=>{
-      console.log(message)
+      let counter = this.state.orderNotification
+      counter++
+      console.log(counter)
+      this.setState({orderNotification: counter},()=> console.log('new order', this.state.orderNotification))
     })
     let authId;
     async function getUserAuthId() {
@@ -64,7 +68,7 @@ export default class NavBar extends Component {
             })
           });
       });
-}
+  }
 
   cuisines() {
     Actions.cuisines({ type: ActionConst.RESET });
@@ -112,6 +116,7 @@ export default class NavBar extends Component {
   }
 
   orders() {
+    console.log('clicked')
     console.log("CHEFVIEW IS", this.state.chefView);
     if (this.state.chefView) {
       Actions.orders({ type: ActionConst.RESET });
@@ -243,7 +248,6 @@ export default class NavBar extends Component {
               <Text style={styles.entries}>Manage Dishes</Text>
             </Body>
           </ListItem>
-
           <ListItem icon onPress={this.edit} style={styles.content}>
             <Left>
               <Icon name="ios-create" />
@@ -252,13 +256,20 @@ export default class NavBar extends Component {
               <Text style={styles.entries}>Edit Profile</Text>
             </Body>
           </ListItem>
-          <ListItem icon onPress={this.orders} style={styles.content}>
+          <ListItem icon onPress={()=>{
+              this.orders();
+              this.setState({orderNotification:0})
+              }
+              } style={styles.content}>
             <Left>
               <Icon name="ios-filing" />
             </Left>
             <Body>
               <Text style={styles.entries}>Orders</Text>
             </Body>
+            <Right>
+              {this.state.orderNotification>0? <Text note> {this.state.orderNotification}</Text> :null}
+            </Right>
           </ListItem>
           {!this.state.chefStatus
             ? <ListItem icon onPress={this.chefform} style={styles.content}>
