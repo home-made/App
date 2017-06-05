@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, AsyncStorage, Image, Container } from "react-native";
 import { View, Input, Item, Button, Text, Toast } from "native-base";
-import { Actions } from "react-native-router-flux";
+import { Actions, ActionConst } from "react-native-router-flux";
 import axios from "axios";
 
 export default class EditProfile extends Component {
@@ -61,16 +61,17 @@ export default class EditProfile extends Component {
       send.address = this.state.address;
     }
     if (this.state.phone) {
-      send.phone = this.state.phone;
+      send.phoneNumber = this.state.phone;
     }
     if (this.state.status) {
       send.status = this.state.status;
     }
+
     axios
       .put("http://localhost:3000/user/" + this.state.userId, send)
       .then(res => {
         console.log(res.data);
-        Actions.cuisines();
+        Actions.cuisines({ type: ActionConst.RESET });
       });
   }
 

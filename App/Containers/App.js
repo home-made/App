@@ -46,9 +46,7 @@ export default class App extends Component {
     this.getCuisineStyles = this.getCuisineStyles.bind(this);
     this.fetchUploadStatus = this.fetchUploadStatus.bind(this);
     this.setUploadStatus = this.setUploadStatus.bind(this);
-    this.setChefLocationAndPhoneNumber = this.setChefLocationAndPhoneNumber.bind(
-      this
-    );
+    this.setChefLocationAndPhoneNumber = this.setChefLocationAndPhoneNumber.bind(this);
     this.updateLocation = this.updateLocation.bind(this);
     this.getLatAndLon = this.getLatAndLon.bind(this);
   }
@@ -305,7 +303,11 @@ export default class App extends Component {
             />
             <Scene key="feedback" component={Feedback} title="Feedback" />
             <Scene key="chefform" component={ChefForm} title="Chef Form" />
-            <Scene key="signature" component={SignaturePage} title="Signature Page" />
+            <Scene key="signature"
+              component={SignaturePage}
+              title="Signature Page"
+              showAlert={this.showAlert}
+            />
             <Scene key="statistics" component={Statistics} title="Statistics" />
           </Scene>
         </Scene>
