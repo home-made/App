@@ -22,6 +22,8 @@ export default class Profile extends Component {
     this.displayCheckout = this.displayCheckout.bind(this);
     this.handleReviewsPress = this.handleReviewsPress.bind(this);
     this.handleMenuPress = this.handleMenuPress.bind(this);
+    this.toggleReviews = this.toggleReviews.bind(this);
+    this.toggleMenu = this.toggleMenu.bind(this);
     this.handleAddToCart = this.handleAddToCart.bind(this);
     this.handleCheckout = this.handleCheckout.bind(this);
   }
@@ -68,6 +70,36 @@ export default class Profile extends Component {
 
   handleMenuPress() {
     this.setState({ reviews: false, menu: true }, console.log(this.state));
+  }
+
+  toggleReviews(){
+    console.log("Reviews inside Profile.js are ", this.state.reviewers);
+    if (this.state.reviews) {
+     return this.state.reviewers.map(review => {
+        return <Review review={review} />;
+      });
+    } else {
+      return <Text />
+    }
+  }
+
+  toggleMenu(){
+    console.log("Menu inside Profile.js is ", this.state.chef);
+    if (this.state.menu) {   
+      return this.state.chef[1].map((dish, idx) => {
+        if (idx === this.state.chef[1].length - 1) {
+          return (
+            <DishViewCard dish={dish} addToCart={this.handleAddToCart} />
+          )
+        } else {
+          return (
+            <DishViewCard dish={dish} addToCart={this.handleAddToCart} />
+          )
+        }
+      }); 
+    } else {
+      return <Text />
+    }
   }
 
   handleAddToCart(e) {
@@ -154,26 +186,9 @@ export default class Profile extends Component {
             {this.displayCheckout()}
           </Row>
 
-          {this.state.menu
-            ? this.state.chef[1].map((dish, idx) => {
-                if (idx === this.state.chef[1].length - 1) {
-                  return (
-                    <DishViewCard dish={dish} addToCart={this.handleAddToCart} />
-                  
-                  );
-                } else {
-                  return (
-                    <DishViewCard dish={dish} addToCart={this.handleAddToCart} />
-                  );
-                }
-              })
-            : <Text />}
-
-          {this.state.reviews
-            ? this.state.reviewers.map(review => {
-                return <Review review={review} />;
-              })
-            : <Text />}
+          {this.state.reviews ? this.toggleReviews() : <Text />}
+          {this.state.menu ? this.toggleMenu() : <Text />}
+          
         </Content>
       </Container>
     );

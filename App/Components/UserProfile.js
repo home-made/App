@@ -9,7 +9,7 @@ import {
   Left,
   Body,
   Button,
-  H1
+  H3
 } from "native-base";
 import { Actions, ActionConst } from "react-native-router-flux";
 import { Grid, Row, Col } from "react-native-easy-grid";
@@ -47,7 +47,7 @@ export default class Profile extends Component {
     if (!this.state.chefReviews.length > 0) {
       return (
         <Container>
-          <H1>Your Reviews as a Chef</H1>
+          <H3>Your Reviews as a Chef</H3>
           <Text>You currently don't have any reviews as a chef.\u1F61E</Text>
           <Text>Want to get rated as a chef? Click on the 'Be A Chef' tab in app to sign up!\u1F373</Text> 
         </Container>
@@ -78,7 +78,7 @@ export default class Profile extends Component {
     if (!this.state.customerReviews.length > 0) {
       return (
         <Container>
-          <H1>Your Reviews as a Customer</H1>
+          <H3>Your Reviews as a Customer</H3>
           <Text>You currently don't have any reviews as a customer.\u1F60B</Text>
           <Text>Maybe you should start ordering from our app to start getting reviews!</Text> 
         </Container>
@@ -166,61 +166,6 @@ export default class Profile extends Component {
         </Content>
       </Container>
 
-
-  /*
-      <Container style={{ marginTop: 60 }}>
-        <Content>
-          <Card>
-            <CardItem>
-              <Body>
-                <Text>
-                  Name:
-                  {" "}
-                  {!this.state.fullName != "n/a"
-                    ? this.state.fullName
-                    : this.state.firstName}
-                </Text>
-                <Text note>
-                  Status:
-                  {" "}
-                  {!this.state.status
-                    ? "No status at this time."
-                    : this.state.status}
-                </Text>
-              </Body>
-            </CardItem>
-
-            <CardItem>
-              <Body>
-                <Row style={{ justifyContent: "center", alignItems: "center" }}>
-
-                  <Image
-                    style={{
-                      width: 120,
-                      height: 120,
-                      justifyContent: "center",
-                      alignItems: "center",
-                      borderRadius: 60
-                    }}
-                    source={{
-                      uri: !this.state.userPic
-                        ? ""
-                        : this.state.userPic
-                    }}
-                  />
-                </Row>
-              </Body>
-            </CardItem>
-          </Card>
-        </Content>
-
-        {this.displayCustomerReviews()}
-        {this.displayChefReviews()}
-      </Container>
-
-
-
-*/
     );
   }
 }
