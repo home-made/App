@@ -6,16 +6,16 @@ export default class Cuisines extends Component {
   constructor(props) {
     super(props);
   }
-
+  componentWillMount(){
+    let genres =
+    this.setState({genres: this.props.getStyles()},()=> console.log(this.state.genres))
+  }
   render() {
-    let genres = "All Cuisines,American,Barbecue,Burgers,Chinese,Indian,Italian,Japanese,Korean,Mediterranean,Mexican,Pizza,Sandwiches,Sushi,Thai,Vegetarian,Vietnamese,American,Ethiopian,Other".split(
-      ","
-    );
 
     return (
       <ScrollView style={{ alignSelf: "stretch" }}>
         <List style={{ marginTop: 60 }}>
-          {genres.map((genre, index) => {
+          {this.state.genres.map((genre, index) => {
             return (
               <ListItem
                 onPress={() => this.props.setCuisineType(genre)}
