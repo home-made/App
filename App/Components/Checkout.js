@@ -4,7 +4,7 @@ import axios from "axios";
 import { Container, Content, List, Header, Text, Button } from "native-base";
 import CheckOutItem from "./CheckOutItem.js";
 import SocketIO from "socket.io-client";
-import { Actions } from "react-native-router-flux";
+import { Actions, ActionConst } from "react-native-router-flux";
 var socket;
 export default class Checkout extends Component {
   /*
@@ -82,7 +82,7 @@ export default class Checkout extends Component {
     subtract = newDishCounter[key].amount * newDishCounter[key].cashDonation;
     delete newDishCounter[key];
     this.setState({ dishCounter: newDishCounter }, () => { if(Object.keys(this.state.dishCounter).length === 0) {
-      Actions.cuisines();
+      Actions.cuisines({ type: ActionConst.RESET });
     }});
     total -= subtract;
 
@@ -156,7 +156,7 @@ export default class Checkout extends Component {
       .post("http://localhost:3000/orders", newOrder)
       .then(function(response) {
         console.log("New order was submitted to the database, response is: ", response);
-        Actions.userOrders();
+        Actions.userOrders({ type: ActionConst.RESET });
       })
       .catch(function(error) {
         console.log("The error message inside checkout post is ", error);

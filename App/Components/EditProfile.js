@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, AsyncStorage, Image, Container } from "react-native";
 import { View, Input, Item, Button, Text, Toast } from "native-base";
-import { Actions } from "react-native-router-flux";
+import { Actions, ActionConst } from "react-native-router-flux";
 import axios from "axios";
 
 export default class EditProfile extends Component {
@@ -25,8 +25,17 @@ export default class EditProfile extends Component {
         if (data !== null && data !== undefined) {
           data = JSON.parse(data);
           console.log("async data: ", data);
-          (userId = data.identityId), (userName = data.name), (userPic =
-            data.picture);
+          if (data.identityId) {
+            userId = data.identityId;
+          } else {
+            userId = data.userId;
+          }
+          userName = data.name;
+          if (data.extraInfo) {
+            userPic = data.extraInfo.picture_large;
+          } else {
+            data.picture;
+          }
         }
       } catch (err) {
         console.log("Error getting data: ", err);
@@ -39,6 +48,7 @@ export default class EditProfile extends Component {
   }
 
   handleSubmit() {
+    console.log("HANDLE SUBMIT CALLED");
     let send = { authId: this.state.userId };
     console.log("SEND: ", send);
     if (this.state.address) {
@@ -51,13 +61,16 @@ export default class EditProfile extends Component {
       send.state = this.state.status;
     }
 
-    axios.put(`http://localhost:3000/user/${this.state.userId}`, send).then((res) => {
-      console.log(res.data);
-      Actions.cuisines()
-    });
+    axios
+      .put("http://localhost:3000/user/" + this.state.userId, send)
+      .then(res => {
+        console.log(res.data);
+        Actions.cuisines({ type: ActionConst.RESET });
+      });
   }
 
   render() {
+    console.log("the state inside EditProfile.js is ", this.state);
     return (
       <View
         style={{
