@@ -5,11 +5,12 @@ import { Container, Content, List, ListItem, Text } from "native-base";
 export default class Cuisines extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      genres: "All Cuisines,American,Barbecue,Burgers,Chinese,Indian,Italian,Japanese,Korean,Mediterranean,Mexican,Pizza,Sandwiches,Sushi,Thai,Vegetarian,Vietnamese,American,Ethiopian,Other".split(
+      ",")
+    }
   }
-  componentWillMount(){
-    let genres =
-    this.setState({genres: this.props.getStyles()},()=> console.log(this.state.genres))
-  }
+
   render() {
 
     return (
