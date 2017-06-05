@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Image, StyleSheet, View, ScrollView } from "react-native";
 import axios from "axios";
-import { Container, Content, Text, List, ListItem } from "native-base";
+import { Container, Content, Text, List, ListItem, Body } from "native-base";
 
 export default class ChefList extends Component {
   constructor(props) {
@@ -28,6 +28,7 @@ export default class ChefList extends Component {
     } else {
       return (
         <Container>
+          {console.log("The chefs inside ChefList.js are ", chefs)}
           <Content>
             <List
               style={{ marginTop: 60 }}
@@ -45,8 +46,10 @@ export default class ChefList extends Component {
                       uri: chef.profileUrl
                     }}
                   />
-                  <Text style={{ marginLeft: 10 }}>{`${chef.firstName}\n`}</Text>
-                  <Text style={{ marginLeft: -50 }} note>{`\n${chef.status || ''}`}</Text>
+                  <Body>
+                  <Text>{chef.firstName} {chef.lastName}</Text>
+                  <Text note>{chef.status || ''}</Text>
+                  </Body>
                 </ListItem>
               )}
             />

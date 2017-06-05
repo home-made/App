@@ -45,7 +45,7 @@ export default class EditProfile extends Component {
   }
 
   handleSubmit() {
-    let send = { authId: this.state.userId };
+    let send = {};
     console.log("SEND: ", send);
     if (this.state.address) {
       send.address = this.state.address;
@@ -54,14 +54,14 @@ export default class EditProfile extends Component {
       send.phone = this.state.phone;
     }
     if (this.state.status) {
-      send.state = this.state.status;
+      send.status = this.state.status;
     }
-    console.log("http://localhost:3000/user/" + send.authId)
-    axios.put("http://localhost:3000/user/" + send.authId, send).then(Actions.cuisines());
+    console.log("http://localhost:3000/user/" + this.state.userId)
+    axios.put("http://localhost:3000/user/" + this.state.userId, send).then(Actions.cuisines());
   }
 
   render() {
-    // console.log(image)
+    console.log("the state inside EditProfile.js is ", this.state)
     return (
       <View
         style={{
@@ -135,7 +135,8 @@ export default class EditProfile extends Component {
                 supportedOrientations: ["portrait", "landscape"],
                 text: "Profile Updated",
                 position: "bottom",
-                buttonText: "Okay"
+                buttonText: "Okay",
+                duration:1000
               });
             }}
           >
