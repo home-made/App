@@ -81,7 +81,9 @@ export default class Checkout extends Component {
     var newDishCounter = this.state.dishCounter;
     subtract = newDishCounter[key].amount * newDishCounter[key].cashDonation;
     delete newDishCounter[key];
-    this.setState({ dishCounter: newDishCounter });
+    this.setState({ dishCounter: newDishCounter }, () => { if(Object.keys(this.state.dishCounter).length === 0) {
+      Actions.cuisines();
+    }});
     total -= subtract;
 
     this.setState({
