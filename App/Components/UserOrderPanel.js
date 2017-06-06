@@ -65,8 +65,12 @@ export default class UserOrderPanel extends Component {
         axios
           .get("http://localhost:3000/orders/" + authID)
           .then(orders => {
+            console.log("orders inside UserOrderPanel is ", orders)
+            
             let order = orders.data[orders.data.length - 1];
+            
             console.log("ORDER IS", order)
+            
             axios
               .get("http://localhost:3000/user/" + order.chefId)
               .then(chefDetails => {
@@ -103,7 +107,8 @@ export default class UserOrderPanel extends Component {
     socket.emit("neworder", order.chefId);
   }
   render() {
-    console.log(this.state.order);
+    console.log("state inside UserOrderPanel is ", this.state);
+    
     if (!this.state.order) return <ScrollView />;
     else {
       console.log("THERE IS AN ORDER");

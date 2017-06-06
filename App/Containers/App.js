@@ -22,8 +22,7 @@ import DishConfirm from "../Components/DishConfirm";
 import Feedback from "../Components/Feedback";
 import SignaturePage from "../Components/SignaturePage";
 import ChefForm from "./ChefForm";
-import Statistics from '../Components/Statistics';
-
+import Statistics from "../Components/Statistics";
 
 import GeoPoint from "geopoint";
 import axios from "axios";
@@ -46,18 +45,19 @@ export default class App extends Component {
     this.getCuisineStyles = this.getCuisineStyles.bind(this);
     this.fetchUploadStatus = this.fetchUploadStatus.bind(this);
     this.setUploadStatus = this.setUploadStatus.bind(this);
-    this.setChefLocationAndPhoneNumber = this.setChefLocationAndPhoneNumber.bind(this);
+    this.setChefLocationAndPhoneNumber = this.setChefLocationAndPhoneNumber.bind(
+      this
+    );
     this.updateLocation = this.updateLocation.bind(this);
     this.getLatAndLon = this.getLatAndLon.bind(this);
   }
-
 
   componentWillMount() {
     console.log("APP MOUNTED");
     this.setLocation();
   }
   getLatAndLon() {
-    return {lat: this.state.latitude, lon: this.state.longitude};
+    return { lat: this.state.latitude, lon: this.state.longitude };
   }
   setLocation() {
     navigator.geolocation.getCurrentPosition(
@@ -83,7 +83,7 @@ export default class App extends Component {
     console.log("CHEF IS", chef);
     const url = `http://maps.apple.com/?saddr=${this.state.latitude},${this.state.longitude}&daddr=${chef.geo_lat},${chef.geo_lng}&dirflg=d`;
     chefLocation = new GeoPoint(chef.geo_lat, chef.geo_lng);
-    console.log("CHEF LOCATION IS", chefLocation)
+    console.log("CHEF LOCATION IS", chefLocation);
     this.setState({ chefLocation, phone: phone });
     distanceInterval = setInterval(this.updateLocation, 5000);
     Linking.openURL(url);
@@ -101,7 +101,7 @@ export default class App extends Component {
   }
 
   getCuisineStyles() {
-    return "All Cuisines,American,Barbecue,Burgers,Chinese,Indian,Italian,Japanese,Korean,Mediterranean,Mexican,Pizza,Sandwiches,Sushi,Thai,Vegetarian,Vietnamese,American,Ethiopian,Other".split(
+    return "American,Barbecue,Burgers,Chinese,Indian,Italian,Japanese,Korean,Mediterranean,Mexican,Pizza,Sandwiches,Sushi,Thai,Vegetarian,Vietnamese,Ethiopian,Other".split(
       ","
     );
   }
@@ -131,8 +131,8 @@ export default class App extends Component {
       let url = `http://localhost:3000/chef/style/${this.state.cuisineType}`;
 
       let config = {
-        headers: {lat: this.state.latitude, lon: this.state.longitude}
-      }
+        headers: { lat: this.state.latitude, lon: this.state.longitude }
+      };
       axios
         .get(url, config)
         .then(res => {
@@ -258,7 +258,12 @@ export default class App extends Component {
               getChef={this.getChef}
             />
 
-            <Scene key="chefMap" component={ChefMap} setChef={this.setChef} getLocation={this.getLatAndLon} />
+            <Scene
+              key="chefMap"
+              component={ChefMap}
+              setChef={this.setChef}
+              getLocation={this.getLatAndLon}
+            />
 
             <Scene
               key="checkout"
@@ -303,7 +308,8 @@ export default class App extends Component {
             />
             <Scene key="feedback" component={Feedback} title="Feedback" />
             <Scene key="chefform" component={ChefForm} title="Chef Form" />
-            <Scene key="signature"
+            <Scene
+              key="signature"
               component={SignaturePage}
               title="Signature Page"
               showAlert={this.showAlert}
@@ -329,4 +335,4 @@ const styles = StyleSheet.create({
     textAlign: "center",
     margin: 10
   }
-})
+});
