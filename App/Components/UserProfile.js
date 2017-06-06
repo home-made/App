@@ -27,67 +27,21 @@ export default class Profile extends Component {
       showChefReviews: false,
       showCustomerReviews: true
     };
-    this.chefReviewsPress = this.chefReviewsPress.bind(this);
-    this.toggleChefReviews = this.toggleChefReviews.bind(this);
-    this.customerReviewsPress = this.customerReviewsPress.bind(this);
-    this.toggleCustomerReviews = this.toggleCustomerReviews.bind(this);
+    this.handleReviews = this.handleReviews.bind(this);
   }
 
-  chefReviewsPress(){
-    this.setState({
-      showChefReviews: !this.state.showChefReviews,
-      showCustomerReviews: !this.state.showCustomerReviews
-    });
-  }
+  handleReviews() {
+    var allReviews = this.state.chefReviews.concat(this.state.customerReviews);
 
-  toggleChefReviews() {
-    console.log("the chef reviews are ", this.state.chefReviews);
-    var reviews = this.state.chefReviews;
+    console.log("allReviews", allReviews);
 
-    if (!this.state.chefReviews.length > 0) {
-      return (
-        <Container>
-          <H3>Your Reviews as a Chef</H3>
-          <Text>You currently don't have any reviews as a chef.\u1F61E</Text>
-          <Text>Want to get rated as a chef? Click on the 'Be A Chef' tab in app to sign up!\u1F373</Text> 
-        </Container>
-      )
+    if (allReviews.length === 0) {
+      return <Text>You have no reviews at this time.</Text>;
     } else {
       return (
-        <Container>
-          <Text>Your Reviews as a Chef</Text>
-          {reviews.map(review => {
-            return <Review review={review} />;
-          })}
-        </Container>
-      );
-    }
-  }
-
-  customerReviewsPress(){
-    this.setState({
-      showChefReviews: !this.state.showChefReviews,
-      showCustomerReviews: !this.state.showCustomerReviews
-    });
-  }
-
-  toggleCustomerReviews() {
-    console.log("the reviews are ", this.state.customerReviews);
-    var reviews = this.state.customerReviews;
-
-    if (!this.state.customerReviews.length > 0) {
-      return (
-        <Container>
-          <H3>Your Reviews as a Customer</H3>
-          <Text>You currently don't have any reviews as a customer.\u1F60B</Text>
-          <Text>Maybe you should start ordering from our app to start getting reviews!</Text> 
-        </Container>
-      )
-    } else {
-      return (
-        <Container>
-          <Text>Your Reviews as a Customer</Text>
-          {reviews.map(review => {
+        <Container style={{ marginRight: 10, marginLeft: 10, marginTop: 10 }}>
+          <H3>Your Reviews</H3>
+          {allReviews.map(review => {
             return <Review review={review} />;
           })}
         </Container>
@@ -102,21 +56,41 @@ export default class Profile extends Component {
       try {
         const profile = await AsyncStorage.getItem("profile");
         if (profile !== null && profile !== undefined) {
-          console.log("profile inside UserProfile.js is ", JSON.parse(profile))
+          console.log("profile inside UserProfile.js is ", JSON.parse(profile));
           userId = JSON.parse(profile).userId;
 
           parsedProfile = JSON.parse(profile);
 
-          var userPic = parsedProfile.picture_large ? parsedProfile.picture_large : parsedProfile.picture;
+          var userPic = parsedProfile.picture_large
+            ? parsedProfile.picture_large
+            : parsedProfile.picture;
           var authId = parsedProfile.userId;
           var fullName = parsedProfile.name;
 
-          context.setState({
-            userPic, fullName
-          });
+          axios
+            .get(`http://localhost:3000/user/${authId}`)
+            .then(user => {
+              console.log(
+                "the user inside axiospost for UserProfile.js is ",
+                user
+              );
 
-          SetProfile(context, authId)
-   
+              context.setState({
+                fullName: fullName,
+                authId: authId,
+                userPic: userPic,
+                user: user.data[0],
+                chefReviews: user.data[0].chefReviews,
+                customerReviews: user.data[0].customerReviews,
+                status: user.data[0].status
+              });
+            })
+            .catch(error => {
+              console.log(
+                "Error inside axios get user for UserProfile.js is ",
+                error
+              );
+            });
         }
       } catch (err) {
         console.log("Error getting profile: ", err);
@@ -126,15 +100,21 @@ export default class Profile extends Component {
   }
 
   render() {
-    console.log("the state inside UserProfile is ", this.state)
+    console.log("the state inside UserProfile is ", this.state);
     return (
-    <Container style={{ marginTop: 60 }}>
+      <Container style={{ marginTop: 60 }}>
         <Content>
           <Card>
             <CardItem>
               <Body>
-                <Text>{!this.state.fullName ? "name unknown" : this.state.fullName}</Text>
-                <Text note>{!this.state.status ? "No status at this time." : this.state.status}</Text>
+                <Text>
+                  {!this.state.fullName ? "name unknown" : this.state.fullName}
+                </Text>
+                <Text note>
+                  {!this.state.status
+                    ? "No status at this time."
+                    : this.state.status}
+                </Text>
               </Body>
             </CardItem>
             <CardItem>
@@ -148,24 +128,19 @@ export default class Profile extends Component {
                       alignItems: "center",
                       borderRadius: 60
                     }}
-                    source={{ uri: !this.state.userPic ? "" : this.state.userPic }}
+                    source={{
+                      uri: !this.state.userPic ? "" : this.state.userPic
+                    }}
                   />
                 </Row>
               </Body>
             </CardItem>
           </Card>
 
-          <Row style={{  alignItems: 'center', justifyContent: 'center', margin:10 }}>
-            <Button onPress={this.chefReviewsPress}><Text>Chef Reviews</Text></Button>
-            <Button onPress={this.customerReviewsPress}><Text>Customer Reviews</Text></Button>
-          </Row>
-
-          {this.state.showCustomerReviews ? this.toggleCustomerReviews() : <Text />}
-          {this.state.showChefReviews ? this.toggleChefReviews() : <Text />}
+          {this.handleReviews()}
 
         </Content>
       </Container>
-
     );
   }
 }
@@ -178,11 +153,6 @@ const styles = StyleSheet.create({
     alignItems: "center"
   }
 });
-
-
-
-
-
 
 /*
 gmail UserProfile
@@ -260,17 +230,3 @@ regular email profile
    "chefView":false,"isChef":false}
 
 */
-
-
-
-
-
-
-
-
-
-
-
-
-
-

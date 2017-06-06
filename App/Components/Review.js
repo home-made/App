@@ -9,11 +9,12 @@ export default class Review extends Component {
   }
 
   render() {
+    console.log("props inside Review.js are ", this.props)
     return (
       <ListItem avatar>
         <Body>
           <Text>Review Score: {this.props.review.score}</Text>
-          <Text note>{this.props.review.reviewText}</Text>
+          <Text note>{this.props.review.userText}</Text>
         </Body>
       </ListItem>
     );
