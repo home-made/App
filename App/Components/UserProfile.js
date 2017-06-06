@@ -155,7 +155,7 @@ export default class Profile extends Component {
             </CardItem>
           </Card>
 
-          <Row style={{  alignItems: 'center', justifyContent: 'space-between' }}>
+          <Row style={{  alignItems: 'center', justifyContent: 'center', margin:10 }}>
             <Button onPress={this.chefReviewsPress}><Text>Chef Reviews</Text></Button>
             <Button onPress={this.customerReviewsPress}><Text>Customer Reviews</Text></Button>
           </Row>
