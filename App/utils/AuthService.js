@@ -1,99 +1,73 @@
-import Auth0Lock from 'auth0-lock';
-import jwtDecode from 'jwt-decode';
+// import { AsyncStorage } from 'react-native';
+// import Auth0Lock from 'react-native-lock';
+// import Promise from 'bluebird';
 
-// import LogoImg from 'images/test-icon.png';
+// // import auth client id and domain
+// const clientId,
+//       domain;
 
-export default class AuthService {
-  constructor(clientId, domain) {
-    // Configure Auth0 lock
-    this.lock = new Auth0Lock(clientId, domain, {
-      auth: {
-        redirectUrl: 'http://localhost:3000/callback',
-        responseType: 'token'
-      },
-      // theme: {
-      //   logo: LogoImg,
-      //   primaryColor: "#b81b1c"
-      // },
-      languageDictionary: {
-        title: 'React Redux Auth0 Kit'
-      }
-    })
-    // binds login functions to keep this context
-    this.login = this.login.bind(this)
-  }
+// export const lock = new Auth0Lock(clientId, domain);
 
-  // ======================================================
-  // Public methods
-  // ======================================================
-  login() {
-    // Call the show method to display the widget.
-    this.lock.show()
-  }
+// export const getProfile = (lockInstance, accessToken) => {
+//   return newPromise((resolve, reject) => {
+//     lockInstance.getUserInfo(accessToken, (err, profile) => {
+//       if (err) {
+//         reject(err);
+//       } else {
+//         resolve(profile);
+//       }
+//     })
+//   })
+// }
 
-  logout(){
-    // Clear user token and profile data from localStorage
-    localStorage.removeItem('id_token')
-    localStorage.removeItem('profile')
-  }
+// export const showLock = lockInstance => {
+//   lockInstance.show();
+// }
 
-  // ======================================================
-  // Static methods
-  // ======================================================
-  static getProfile() {
-    // Retrieves the profile data from localStorage
-    const profile = localStorage.getItem('profile')
-    return profile ? JSON.parse(localStorage.profile) : {}
-  }
+// export const setToken = ({ idToken , profile, accessToken }) => {
+//   try {
+//     AsyncStorage.multiSet(
+//       [
+//         ["idToken", idToken],
+//         ["profile", profile],
+//         ["accessToken", accessToken]
+//       ]
+//     )
+//   } catch (err) {
+//     throw err;
+//   }
+// }
 
-  static loggedIn() {
-    // Checks if there is a saved token and it's still valid
-    const token = AuthService.getToken()
-    return !!token && !AuthService.isTokenExpired(token)
-  }
+// export const removeToken = () => {
+//   try {
+//     AsyncStorage.multiRemove(
+//       [
+//         ["idToken", idToken],
+//         ["profile", profile],
+//         ["accessToken", accessToken]
+//       ]
+//     )
+//   } catch (err) {
+//     throw err;
+//   }
+// }
 
-  static setProfile(profile) {
-    // Saves profile data to localStorage
-    localStorage.setItem('profile', JSON.stringify(profile))
-    // Triggers profile_updated event to update the UI
-  }
+// export const getProfileInfo = () => {
+//   const profile = AsyncStorage.getItem('profile');
+//   return profile ? JSON.parse(profile) : {}
+// }
 
-  // getProfile(){
-  //   // Retrieves the profile data from localStorage
-  //   const profile = localStorage.getItem('profile')
-  //   return profile ? JSON.parse(localStorage.profile) : {}
-  // }
+// export const getAllTokens = () => {
+//   const token = AsyncStorage.getItem('idToken');
+//   const profile = getProfileInfo();
+//   const accessToken = AsyncStorage.getItem('accessToken');
+//   if (idToken && profile && accessToken) {
+//     return { idToken, profile, accessToken };
+//   } else {
+//     return null;
+//   }
+// }
 
-  static setToken(idToken) {
-    // Saves user token to localStorage
-    localStorage.setItem('id_token', idToken)
-  }
-
-  static getToken() {
-    // Retrieves the user token from localStorage
-    return localStorage.getItem('id_token')
-  }
-
-  static getTokenExpirationDate() {
-    const token = AuthService.getToken()
-    const decoded = jwtDecode(token)
-    if(!decoded.exp) {
-      return null
-    }
-
-    const date = new Date(0) // The 0 here is the key, which sets the date to the epoch
-    date.setUTCSeconds(decoded.exp)
-    return date
-  }
-
-  static isTokenExpired() {
-    const token = AuthService.getToken()
-    if (!token) return true
-    const date = AuthService.getTokenExpirationDate(token)
-    const offsetSeconds = 0
-    if (date === null) {
-      return false
-    }
-    return !(date.valueOf() > (new Date().valueOf() + (offsetSeconds * 1000)))
-  }
-}
+// export const getIdToken = () => {
+//   AsyncStorage.getItem('idToken');
+// }

@@ -1,6 +1,21 @@
 import { createStore, applyMiddleware } from 'redux';
-import { apiMiddleware, reducer } from './ApiRedux.js';
+import createSagaMiddleware from 'redux-saga';
+import logger from 'redux-logger';
 
-export default store = createStore(reducer, {}, applyMiddleware(apiMiddleware));
+export default (rootReducer, rootSaga) => {
+  let plugins = [
+    ...plugins,
+    logger
+  ]
 
-store.dispatch({ type: 'GET_CHEF_DATA' });
+  const sagaMiddleware = createSagaMiddleware();
+  plugins.push(sagaMiddleware);
+
+  const middleware = applyMiddleware(...plugins);
+
+  const store = createStore(rootReducer, middleware);
+  sagaMiddleware.run(rootSaga);
+
+  return store;
+
+}

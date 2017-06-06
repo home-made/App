@@ -86,6 +86,7 @@ export default class HomePage extends Component {
         if (err) {
           console.log(err);
         } else {
+          console.log(token);
           token = JSON.stringify(token);
           /* after we log into the app, we make a post request
              that either finds or creates a user. we find out 
