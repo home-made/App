@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Image, StyleSheet, TouchableHighlight } from "react-native";
+import { Image, StyleSheet, TouchableHighlight, Dimensions } from "react-native";
+const { width, height } = Dimensions.get('window');
 import {
   Container,
   Content,
@@ -15,11 +16,9 @@ import {
 import Icon from "react-native-vector-icons/FontAwesome";
 var styles = StyleSheet.create({
   image: {
-    width: 370,
+    width: width - 2,
     height: 250,
-    borderRadius: 20,
     alignSelf: "center",
-    resizeMode: "contain"
   }
 });
 
@@ -29,7 +28,7 @@ export default class DishViewCard extends Component {
       console.log("the props inside DishViewCard are ", this.props);
     }
     return (
-      <Container style={{ marginBottom: -270 }}>
+      <Container style={{ marginTop: -290 }}>
         <Content>
           <Card>
             <CardItem>
@@ -38,6 +37,7 @@ export default class DishViewCard extends Component {
                 <Text note>{this.props.dish.description}</Text>
                 <Text note>Quantity Available: {this.props.dish.quantity}</Text>
                 <Image
+                  
                   style={styles.image}
                   source={{ uri: this.props.dish.dishImages[0] }}
                 />
