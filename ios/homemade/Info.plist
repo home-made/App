@@ -5,9 +5,9 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Upload Image</string>
+	<string>View Cam</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>View Camera Roll</string>
+	<string>View Camera Roll Big Fella</string>
 	<key>CFBundleDisplayName</key>
 	<string>homemade</string>
 	<key>CFBundleExecutable</key>
