@@ -60,7 +60,6 @@ export default class Profile extends Component {
 
       let avgScore = scoresArray.reduce((a,b) => a + b);
       avgScore = Math.round(avgScore / numOfReviews);
-
       this.setState({ reviewers: reviews, avgScore });
     });
   }

@@ -1,11 +1,16 @@
 import React, { Component } from "react";
 import SocketIO from "socket.io-client";
+import ActionButton from "react-native-circular-action-menu";
+import Icon from 'react-native-vector-icons/Foundation';
+import Icon2 from 'react-native-vector-icons/Entypo';
+
 import {
   View,
   StyleSheet,
   ScrollView,
   AsyncStorage,
-  RefreshControl
+  RefreshControl,
+  Image
 } from "react-native";
 import {
   Button,
@@ -14,10 +19,9 @@ import {
   Content,
   Header,
   Left,
-  Icon,
   Right
 } from "native-base";
-
+import Communications from "react-native-communications";
 import { Actions } from "react-native-router-flux";
 import axios from "axios";
 var socket;
@@ -40,7 +44,7 @@ export default class UserOrderPanel extends Component {
   componentWillMount() {
     console.log("IN USER ORDER PANEL WILL MOUNT");
     let authID;
-    socket = new SocketIO("http://localhost:3000");
+    socket = new SocketIO("http://homemadeapp.org:3000");
     socket.connect();
     socket.on("init", splash => {
       console.log(splash);
@@ -70,16 +74,14 @@ export default class UserOrderPanel extends Component {
       .then(() => {
         console.log("AUTHID IS", authID);
         axios
-          .get("http://localhost:3000/orders/" + authID)
+          .get("http://homemadeapp.org:3000/orders/" + authID)
           .then(orders => {
             console.log("orders inside UserOrderPanel is ", orders)
             
             let order = orders.data[orders.data.length - 1];
-            
             console.log("ORDER IS", order)
-            
             axios
-              .get("http://localhost:3000/user/" + order.chefId)
+              .get("http://homemadeapp.org:3000/user/" + order.chefId)
               .then(chefDetails => {
                 console.log("CHEF DETAILS ARE", chefDetails);
 
@@ -91,7 +93,8 @@ export default class UserOrderPanel extends Component {
                     order,
                     chefName,
                     chefLocation: chefDetails.data[0].location,
-                    phone: chefDetails.data[0].phoneNumber
+                    phone: chefDetails.data[0].phoneNumber,
+                    chefDetails: chefDetails.data[0]
                   },
                   () => {
                     console.log(this.state.order);
@@ -157,6 +160,7 @@ export default class UserOrderPanel extends Component {
 
   render() {
     console.log("state inside UserOrderPanel is ", this.state);
+    console.log("props inside UserOrderPanel are", this.props);
 
     if (!this.state.order) return <ScrollView />;
     else {
@@ -188,14 +192,39 @@ export default class UserOrderPanel extends Component {
           }
         >
           <Text>Pull Down to Refresh</Text>
+
           <View style={{ alignItems: "center", marginTop: 150 }}>
 
-            
             <Text>Your order with {this.state.chefName}</Text> 
             <Text>was placed on:</Text>
             <Text>{orderDate}</Text>
             
             {this.displayOrderStatus()}
+
+            <Image
+              style={{
+                width: 150,
+                height: 150,
+                marginTop: -50,
+                marginBottom: 50,
+                borderRadius: 75
+              }}
+              source={{
+                uri: this.state.chefDetails.profileUrl
+              }}
+            />
+            <Text>Ordered from: {this.state.chefDetails.firstName}</Text>
+            <Text>Order placed: {this.state.order.date}</Text>
+            {this.state.order.status === 0
+              ? <Text>Order Status: Pending</Text>
+              : null}
+
+            {this.state.order.status === 1
+              ? <View><Text>Order Status: Accepted</Text></View>
+              : null}
+            {this.state.order.status === 2
+              ? <Text>Order Status: Complete</Text>
+              : null}
 
             <Content>
               {this.state.order.status === 1
@@ -213,6 +242,33 @@ export default class UserOrderPanel extends Component {
                     </Button>
                   </View>
                 : null}
+
+              <View style={{flexDirection: 'row'}}>
+              {this.state.order.status === 1
+                ? <View style={{ flex: 1, marginTop: 70}}>
+                    <ActionButton
+                      style={{}}
+                      icon={<Icon name="telephone"  size={30} style={{alignItems: "center", color: "white"}} />}
+                      buttonColor="#02E550"
+                      onPress={() =>
+                        Communications.phonecall(this.state.phone, true)
+                      }
+                    />
+
+      
+                  </View>
+                : null}
+                
+                {this.state.order.status === 1
+                ? <View style={{ flex: 1, marginTop: 70}}>
+                    <ActionButton
+                      style={{justifyContent: "flex-end"}}
+                      icon={<Icon2 name="message"  size={30} style={{alignItems: "center", color: "white"}} />}
+                      buttonColor="#02E550"
+                    />
+                  </View>
+                : null}
+                </View>
 
               {this.state.order.status === 2
                 ? <View>
