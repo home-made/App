@@ -46,13 +46,13 @@ export default class EditProfile extends Component {
       this.setState(
         { userId: userId, userName: userName, userPic: userPic },
         () => {
-          console.log(this.state.userId);
           axios
-            .get("http://localhost:3000/user/" + this.state.userId)
+            .get("http://localhost:3000/user/" + userId)
             .then(res => {
               this.setState({ user: res.data[0] }, () =>
-                console.log(this.state.user)
+                console.log('user is',this.state.user)
               );
+              this.render()
             });
         }
       );
@@ -85,6 +85,12 @@ export default class EditProfile extends Component {
 
   render() {
     console.log("the state inside EditProfile.js is ", this.state);
+    let image = this.state.userPic;
+    console.log(this.state)
+    if(this.state.user){
+      image = this.state.user.profileUrl;
+    }
+    console.log('new image is', image)
     return (
       <View
         style={{
@@ -106,7 +112,7 @@ export default class EditProfile extends Component {
             marginTop: 70
           }}
           source={{
-            uri: this.state.userPic
+            uri: image
           }}
         />
         <Item>

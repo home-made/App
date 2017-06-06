@@ -99,7 +99,16 @@ class Upload extends Component {
               if (response.status !== 201)
                 throw new Error("Failed to upload image to S3");
               console.log(response.body.postResponse.location);
-              // console.log('http://localhost:3000/user' + this.state.userId)
+              async function setImage(){
+                try{
+                   await AsyncStorage.getItem('profile').then(profile=> console.log('pro',JSON.parse(profile)))
+                  await AsyncStorage.mergeItem('profile.userPic',response.body.postResponse.location)
+                  console.log('saved!')
+                }catch (err){
+                  console.log(err)
+                }
+              }
+              setImage()
               axios
                 .put("http://localhost:3000/user/" + this.state.userId, {
                   profileUrl: response.body.postResponse.location
