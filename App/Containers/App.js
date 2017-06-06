@@ -304,6 +304,7 @@ export default class App extends Component {
               key="userOrders"
               component={UserOrderPanel}
               title="Orders"
+              getChef={this.getChef}
               setChefLocationAndPhoneNumber={this.setChefLocationAndPhoneNumber}
             />
             <Scene key="feedback" component={Feedback} title="Feedback" />
