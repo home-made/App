@@ -30,17 +30,19 @@ export default class NavBar extends Component {
   }
 
   componentWillMount() {
-    socket = new SocketIO('http://localhost:3000') 
-    socket.connect()
-    socket.on('init', (splash)=>{
-      console.log(splash)
-    })
-    socket.on('message',(message)=>{
-      let counter = this.state.orderNotification
-      counter++
-      console.log(counter)
-      this.setState({orderNotification: counter},()=> console.log('new order', this.state.orderNotification))
-    })
+    socket = new SocketIO("http://localhost:3000");
+    socket.connect();
+    socket.on("init", splash => {
+      console.log(splash);
+    });
+    socket.on("message", message => {
+      let counter = this.state.orderNotification;
+      counter++;
+      console.log(counter);
+      this.setState({ orderNotification: counter }, () =>
+        console.log("new order", this.state.orderNotification)
+      );
+    });
     let authId;
     async function getUserAuthId() {
       try {
@@ -53,21 +55,22 @@ export default class NavBar extends Component {
         console.log("Error getting data: ", err);
       }
     }
-    getUserAuthId()
-      .then(() => {
-        console.log(authId);
-        axios.get(`http://localhost:3000/user/${authId}`)
-          .then((res) => {
-            console.log(res.data)
-            this.setState({
-              chefStatus: res.data[0].isChef
-            },()=>{
-              if(this.state.chefStatus){
-                socket.emit('newchef',res.data)
-              }
-            })
-          });
+    getUserAuthId().then(() => {
+      console.log(authId);
+      axios.get(`http://localhost:3000/user/${authId}`).then(res => {
+        console.log(res.data);
+        this.setState(
+          {
+            chefStatus: res.data[0].isChef
+          },
+          () => {
+            if (this.state.chefStatus) {
+              socket.emit("newchef", res.data);
+            }
+          }
+        );
       });
+    });
   }
 
   cuisines() {
@@ -116,7 +119,7 @@ export default class NavBar extends Component {
   }
 
   orders() {
-    console.log('clicked')
+    console.log("clicked");
     console.log("CHEFVIEW IS", this.state.chefView);
     if (this.state.chefView) {
       Actions.orders({ type: ActionConst.RESET });
@@ -154,8 +157,8 @@ export default class NavBar extends Component {
   }
 
   toggleChefMode() {
-        //  Actions.orders({ type: ActionConst.RESET });
-        setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
+    //  Actions.orders({ type: ActionConst.RESET });
+    setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
 
   render() {
@@ -215,13 +218,14 @@ export default class NavBar extends Component {
 
           {this.state.chefView
             ? <ListItem icon onPress={this.statistics} style={styles.content}>
-            <Left>
-              <Icon name="ios-stats" />
-            </Left>
-            <Body>
-              <Text style={styles.entries}>Statistics</Text>
-            </Body>
-          </ListItem> : null}
+                <Left>
+                  <Icon name="ios-stats" />
+                </Left>
+                <Body>
+                  <Text style={styles.entries}>Statistics</Text>
+                </Body>
+              </ListItem>
+            : null}
 
           <ListItem icon onPress={this.chefMap} style={styles.content}>
             <Left>
@@ -234,38 +238,43 @@ export default class NavBar extends Component {
 
           {this.state.chefView
             ? <ListItem icon onPress={this.dishcreate} style={styles.content}>
-            <Left>
-              <Icon name="ios-camera" />
-            </Left>
-            <Body>
-              <Text style={styles.entries}>Create Dish</Text>
-            </Body>
-          </ListItem> : null}
+                <Left>
+                  <Icon name="ios-camera" />
+                </Left>
+                <Body>
+                  <Text style={styles.entries}>Create Dish</Text>
+                </Body>
+              </ListItem>
+            : null}
 
           {this.state.chefView
             ? <ListItem icon onPress={this.chefPanel} style={styles.content}>
-            <Left>
-              <Icon name="ios-clipboard" />
-            </Left>
-            <Body>
-              <Text style={styles.entries}>Manage Dishes</Text>
-            </Body>
-          </ListItem> : null}
+                <Left>
+                  <Icon name="ios-clipboard" />
+                </Left>
+                <Body>
+                  <Text style={styles.entries}>Manage Dishes</Text>
+                </Body>
+              </ListItem>
+            : null}
 
-          {this.state.chefView
-            ? <ListItem icon onPress={this.edit} style={styles.content}>
+          <ListItem icon onPress={this.edit} style={styles.content}>
             <Left>
               <Icon name="ios-create" />
             </Left>
             <Body>
               <Text style={styles.entries}>Edit Profile</Text>
             </Body>
-          </ListItem> : null} 
-          <ListItem icon onPress={()=>{
+          </ListItem>
+
+          <ListItem
+            icon
+            onPress={() => {
               this.orders();
-              this.setState({orderNotification:0})
-              }
-              } style={styles.content}>
+              this.setState({ orderNotification: 0 });
+            }}
+            style={styles.content}
+          >
             <Left>
               <Icon name="ios-filing" />
             </Left>
@@ -273,7 +282,9 @@ export default class NavBar extends Component {
               <Text style={styles.entries}>Orders</Text>
             </Body>
             <Right>
-              {this.state.orderNotification>0? <Text note> {this.state.orderNotification}</Text> :null}
+              {this.state.orderNotification > 0
+                ? <Text note> {this.state.orderNotification}</Text>
+                : null}
             </Right>
           </ListItem>
           {!this.state.chefStatus
@@ -286,7 +297,6 @@ export default class NavBar extends Component {
                 </Body>
               </ListItem>
             : null}
-
 
           <ListItem icon onPress={this.logout} style={styles.content}>
             <Left>
