@@ -95,7 +95,7 @@ export default class App extends Component {
       this.setLocation();
     } else {
       console.log("ABOUT TO CLEAR INTERVAL", this.state.phone);
-      axios.post("http://localhost:3000/text/", { phone: this.state.phone });
+      axios.post("http://homemadeapp.org:3000/text/", { phone: this.state.phone });
       clearInterval(distanceInterval);
     }
   }
@@ -109,7 +109,7 @@ export default class App extends Component {
   setChef(chef) {
     console.log("INSIDE SET CHEF", chef);
     axios
-      .get(`http://localhost:3000/chef/${chef.authId}`)
+      .get(`http://homemadeapp.org:3000/chef/${chef.authId}`)
       .then(res => {
         console.log(res);
         this.setState({ user: res.data }, () => {
@@ -128,7 +128,7 @@ export default class App extends Component {
     console.log("IN SET CUISINE TYPE", this.state.geo);
     this.setState({ cuisineType: genre }, () => {
       console.log("CUISINETYPE: ", this.state.cuisineType);
-      let url = `http://localhost:3000/chef/style/${this.state.cuisineType}`;
+      let url = `http://homemadeapp.org:3000/chef/style/${this.state.cuisineType}`;
 
       let config = {
         headers: { lat: this.state.latitude, lon: this.state.longitude }
@@ -211,7 +211,7 @@ export default class App extends Component {
           <Scene key="main" initial>
 
             <Scene
-              navigationBarStyle={{ backgroundColor: "black" }}
+              navigationBarStyle={{ backgroundColor: "white" }}
               titleStyle={{
                 fontFamily: "helvetica",
                 fontWeight: "bold",

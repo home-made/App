@@ -91,7 +91,7 @@ export default class HomePage extends Component {
              that either finds or creates a user. we find out 
              if user is a chef or not */
 
-          axios.post(`http://localhost:3000/user/${profile.userId}`, profile).then((user) => {
+          axios.post(`http://homemadeapp.org:3000/user/${profile.userId}`, profile).then((user) => {
 
             console.log("The user data inside HomePage is ", user)
             if (user.data.profileUrl) {

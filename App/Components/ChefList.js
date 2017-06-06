@@ -19,7 +19,7 @@ export default class ChefList extends Component {
     if (chefs.length === 0) {
       console.log("inside the if block for ChefList and chefs is ", chefs);
       return (
-        <Container style={{ marginTop: 70 }}>
+        <Container style={{ marginTop: 70, justifyContent: "center", flex: 1, alignItems: "center"}}>
           <Content>
             <Text note>
               Whoops! There are currently no chefs available for this cuisine!
