@@ -16,7 +16,7 @@ import {
 import Icon from "react-native-vector-icons/FontAwesome";
 var styles = StyleSheet.create({
   image: {
-    width: width - 2,
+    width: width - 4,
     height: 250,
     alignSelf: "center",
   }
@@ -28,7 +28,7 @@ export default class DishViewCard extends Component {
       console.log("the props inside DishViewCard are ", this.props);
     }
     return (
-      <Container style={{ marginTop: -290 }}>
+      <Container style={{ marginBottom: -290 }}>
         <Content>
           <Card>
             <CardItem>
