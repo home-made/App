@@ -32,8 +32,18 @@ export default class Profile extends Component {
 
   componentWillMount() {
     let chef = this.props.getChef();
+
+    console.log("the chef inside Profile.js of componentWillMount is ", chef)
     this.setState({ chef: this.props.getChef(), cart: [] }, () => {
+      
+      let scoresArray = [];
+      let numOfReviews = this.state.chef[0].chefReviews.length;
+
+      
       let reviews = this.state.chef[0].chefReviews.map(curr => {
+
+        scoresArray.push(curr.score);
+
         return {
           userText: curr.reviewText,
           user: this.state.chef[2][
@@ -42,10 +52,16 @@ export default class Profile extends Component {
                 return o.authId;
               })
               .indexOf(curr.reviewerId)
-          ]
+          ],
+          score: curr.score
         };
       });
-      this.setState({ reviewers: reviews });
+
+
+      let avgScore = scoresArray.reduce((a,b) => a + b);
+      avgScore = Math.floor(avgScore / numOfReviews);
+
+      this.setState({ reviewers: reviews, avgScore });
     });
   }
 
@@ -76,7 +92,7 @@ export default class Profile extends Component {
 
   toggleReviews(){
     console.log("Reviews inside Profile.js are ", this.state.reviewers);
-    if (this.state.reviews.length>0) {
+    if (this.state.reviewers.length > 0) {
      return this.state.reviewers.map(review => {
         return <Review review={review} />;
       });
@@ -161,6 +177,7 @@ export default class Profile extends Component {
               <Body>
                 <Text>{this.state.chef[0].firstName} {this.state.chef[0].lastName}</Text>
                 <Text note>{this.state.chef[0].status}</Text>
+                <Text note>Average Chef Score: {this.state.avgScore}</Text>
               </Body>
 
             </CardItem>
