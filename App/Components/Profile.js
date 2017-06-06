@@ -30,8 +30,16 @@ export default class Profile extends Component {
 
   componentWillMount() {
     let chef = this.props.getChef();
+
+    console.log("the chef inside Profile.js of componentWillMount is ", chef)
     this.setState({ chef: this.props.getChef(), cart: [] }, () => {
+      
+      let scoresArray = [];
+      
       let reviews = this.state.chef[0].chefReviews.map(curr => {
+
+        scoresArray.push(curr.score);
+
         return {
           userText: curr.reviewText,
           user: this.state.chef[2][
@@ -40,10 +48,15 @@ export default class Profile extends Component {
                 return o.authId;
               })
               .indexOf(curr.reviewerId)
-          ]
+          ],
+          score: curr.score
         };
       });
-      this.setState({ reviewers: reviews });
+
+
+
+
+      this.setState({ reviewers: reviews, scoresArray });
     });
   }
 
