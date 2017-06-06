@@ -37,6 +37,8 @@ export default class Profile extends Component {
     this.setState({ chef: this.props.getChef(), cart: [] }, () => {
       
       let scoresArray = [];
+      let numOfReviews = this.state.chef[0].chefReviews.length;
+
       
       let reviews = this.state.chef[0].chefReviews.map(curr => {
 
@@ -56,9 +58,10 @@ export default class Profile extends Component {
       });
 
 
+      let avgScore = scoresArray.reduce((a,b) => a + b);
+      avgScore = Math.floor(avgScore / numOfReviews);
 
-
-      this.setState({ reviewers: reviews, scoresArray });
+      this.setState({ reviewers: reviews, avgScore });
     });
   }
 
@@ -89,7 +92,7 @@ export default class Profile extends Component {
 
   toggleReviews(){
     console.log("Reviews inside Profile.js are ", this.state.reviewers);
-    if (this.state.reviews.length>0) {
+    if (this.state.reviewers.length > 0) {
      return this.state.reviewers.map(review => {
         return <Review review={review} />;
       });
@@ -174,6 +177,7 @@ export default class Profile extends Component {
               <Body>
                 <Text>{this.state.chef[0].firstName} {this.state.chef[0].lastName}</Text>
                 <Text note>{this.state.chef[0].status}</Text>
+                <Text note>Average Chef Score: {this.state.avgScore}</Text>
               </Body>
 
             </CardItem>
