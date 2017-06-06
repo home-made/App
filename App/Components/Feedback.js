@@ -8,7 +8,7 @@ import {
   Alert
 } from "react-native";
 import { Container, Content, Button, Text } from "native-base";
-import { Actions } from "react-native-router-flux";
+import { Actions, ActionConst } from "react-native-router-flux";
 import axios from "axios";
 
 export default class Feedback extends Component {
@@ -33,8 +33,9 @@ export default class Feedback extends Component {
       axios
         .post("http://localhost:3000/reviews/0/" + this.props.chefId, review)
         .then(() =>
+
           Alert.alert("Your feedback has been submitted!", "Thank you.", [
-            { text: "OK", onPress: () => Actions.cuisines() }
+            { text: "OK", onPress: () => Actions.cuisines({ type: ActionConst.RESET }) }
           ])
         );
     } else {
@@ -51,7 +52,7 @@ export default class Feedback extends Component {
         .then(res => {
           console.log(res);
           Alert.alert("Your feedback has been submitted!", "Thank you.", [
-            { text: "OK", onPress: () => Actions.cuisines() }
+            { text: "OK", onPress: () => Actions.orders({ type: ActionConst.RESET }) }
           ]);
         });
     }

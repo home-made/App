@@ -8,7 +8,9 @@ import {
   CardItem,
   Left,
   Body,
-  Button
+  Button,
+  ListItem,
+
 } from "native-base";
 import { Actions, ActionConst } from "react-native-router-flux";
 import { Grid, Row, Col } from "react-native-easy-grid";
@@ -74,12 +76,13 @@ export default class Profile extends Component {
 
   toggleReviews(){
     console.log("Reviews inside Profile.js are ", this.state.reviewers);
-    if (this.state.reviews) {
+    if (this.state.reviews.length>0) {
      return this.state.reviewers.map(review => {
         return <Review review={review} />;
       });
     } else {
-      return <Text />
+      return (<Text note> Sorry no reviews available at this time </Text>
+      )
     }
   }
 
@@ -89,11 +92,11 @@ export default class Profile extends Component {
       return this.state.chef[1].map((dish, idx) => {
         if (idx === this.state.chef[1].length - 1) {
           return (
-            <DishViewCard dish={dish} addToCart={this.handleAddToCart} />
+            <DishViewCard  dish={dish} addToCart={this.handleAddToCart} />
           )
         } else {
           return (
-            <DishViewCard dish={dish} addToCart={this.handleAddToCart} />
+            <DishViewCard  dish={dish} addToCart={this.handleAddToCart} />
           )
         }
       }); 

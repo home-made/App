@@ -21,7 +21,9 @@ export default class ChefList extends Component {
       return (
         <Container style={{ marginTop: 70 }}>
           <Content>
-            <Text note>Whoops! There are currently no chefs available for this cuisine!</Text>
+            <Text note>
+              Whoops! There are currently no chefs available for this cuisine!
+            </Text>
           </Content>
         </Container>
       );
@@ -47,8 +49,8 @@ export default class ChefList extends Component {
                     }}
                   />
                   <Body>
-                  <Text>{chef.firstName} {chef.lastName}</Text>
-                  <Text note>{chef.status || ''}</Text>
+                    <Text>{chef.firstName} {chef.lastName}</Text>
+                    <Text note>{chef.status || ""}</Text>
                   </Body>
                 </ListItem>
               )}

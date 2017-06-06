@@ -24,6 +24,8 @@ export default class OrderView extends Component {
 
   componentWillMount() {
     let dishes = [];
+    console.log("proganda", this.props);
+
     for (var key in this.props.cart) {
       dishes.push(this.props.cart[key]);
     }
@@ -39,12 +41,14 @@ export default class OrderView extends Component {
       _id: this.props._id,
       status: 1
     };
-    axios
-      .put('http://localhost:3000/orders', request)
-      .then(() => Actions.orders({ type: ActionConst.RESET }));
+    console.log("accept looks like", request);
+    axios.put("http://localhost:3000/orders", request).then(res => {
+      console.log("RESPONSE IS", res.data);
+      Actions.orders({ type: ActionConst.RESET });
+    });
   }
 
- handleDecline() {
+  handleDecline() {
     let request = {
       chefId: this.props.chefId,
       date: this.props.date,
@@ -63,10 +67,10 @@ export default class OrderView extends Component {
       _id: this.props._id,
       status: 2
     };
-    axios
-      .put("http://localhost:3000/orders", request)
-      .then((res) => {console.log("COMPLETED ORDER:", res.data); Actions.orders({ type: ActionConst.RESET })});
-
+    axios.put("http://localhost:3000/orders", request).then(res => {
+      console.log("COMPLETED ORDER:", res.data);
+      Actions.orders({ type: ActionConst.RESET });
+    });
   }
 
   render() {
@@ -84,7 +88,9 @@ export default class OrderView extends Component {
                 onPress={() =>
                   Actions.feedback({
                     chefId: this.props.chefId,
-                    customerId: this.props.customerId
+                    customerId: this.props.customerId,
+                    date: this.props.date,
+                    _id: this.props._id
                   })}
               >
                 <Text>Leave Feedback</Text>
@@ -96,7 +102,9 @@ export default class OrderView extends Component {
             : null}
 
           {this.props.status === 0
-            ? <Button style={{marginLeft: 10}} onPress={this.handleAccept}><Text>Accept</Text></Button>
+            ? <Button style={{ marginLeft: 10 }} onPress={this.handleAccept}>
+                <Text>Accept</Text>
+              </Button>
             : null}
 
           {this.props.status === 1

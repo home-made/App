@@ -13,7 +13,7 @@ export default class EditProfile extends Component {
       userName: "",
       userPic: ""
     };
-    this.handleSubmit = this.handleSubmit.bind(this);
+    // this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentWillMount() {
@@ -43,13 +43,27 @@ export default class EditProfile extends Component {
     }
 
     getProfile().then(() => {
-      this.setState({ userId: userId, userName: userName, userPic: userPic });
+      this.setState(
+        { userId: userId, userName: userName, userPic: userPic },
+        () => {
+          console.log(this.state.userId);
+          axios
+            .get("http://localhost:3000/user/" + this.state.userId)
+            .then(res => {
+              this.setState({ user: res.data[0] }, () =>
+                console.log(this.state.user)
+              );
+            });
+        }
+      );
     });
   }
-
+  componentWillReceiveProps() {
+    this.componentWillMount();
+  }
   handleSubmit() {
     console.log("HANDLE SUBMIT CALLED");
-    let send = { authId: this.state.userId };
+    let send = {};
     console.log("SEND: ", send);
     if (this.state.address) {
       send.address = this.state.address;
@@ -58,7 +72,7 @@ export default class EditProfile extends Component {
       send.phoneNumber = this.state.phone;
     }
     if (this.state.status) {
-      send.state = this.state.status;
+      send.status = this.state.status;
     }
 
     axios
@@ -89,25 +103,24 @@ export default class EditProfile extends Component {
             borderRadius: 75,
             height: 150,
             width: 150,
-            marginTop: 70,
-            marginBottom: 20
+            marginTop: 70
           }}
           source={{
             uri: this.state.userPic
           }}
         />
-        <Button
-          style={{ marginTop: 10 }}
-          onPress={() => {
-            this.props.setCameraMode("profile");
-            Actions.uploadimage();
-          }}
-        >
-          <Text>Update Profile Pic</Text>
-        </Button>
         <Item>
-          <Text>Update Address:</Text>
+          <Button
+            style={{ margin: 10 }}
+            onPress={() => {
+              this.props.setCameraMode("profile");
+              Actions.uploadimage();
+            }}
+          >
+            <Text>Update Profile Picture</Text>
+          </Button>
         </Item>
+
         <Item>
           <Input
             placeholder="Address"
@@ -116,18 +129,14 @@ export default class EditProfile extends Component {
               this.setState({ address }, () => console.log(address))}
           />
         </Item>
-        <Item>
-          <Text>Update Phone Number:</Text>
-        </Item>
+
         <Item>
           <Input
             placeholder="Phone Number"
             onChangeText={phone => this.setState({ phone })}
           />
         </Item>
-        <Item>
-          <Text>Update Status:</Text>
-        </Item>
+
         <Item>
           <Input
             placeholder="Status"
@@ -143,7 +152,8 @@ export default class EditProfile extends Component {
                 supportedOrientations: ["portrait", "landscape"],
                 text: "Profile Updated",
                 position: "bottom",
-                buttonText: "Okay"
+                buttonText: "Okay",
+                duration: 1000
               });
             }}
           >
