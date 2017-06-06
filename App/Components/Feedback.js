@@ -31,7 +31,7 @@ export default class Feedback extends Component {
         score: this.state.score
       };
       axios
-        .post("http://localhost:3000/reviews/0/" + this.props.chefId, review)
+        .post("http://homemadeapp.org:3000/reviews/0/" + this.props.chefId, review)
         .then(() =>
 
           Alert.alert("Your feedback has been submitted!", "Thank you.", [
@@ -46,7 +46,7 @@ export default class Feedback extends Component {
       };
       axios
         .post(
-          "http://localhost:3000/reviews/1/" + this.props.customerId,
+          "http://homemadeapp.org:3000/reviews/1/" + this.props.customerId,
           review
         )
         .then(res => {

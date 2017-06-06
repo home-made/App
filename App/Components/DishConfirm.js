@@ -61,7 +61,7 @@ export default class DishConfirm extends Component {
     });
   }
   onSubmit() {
-    axios.post("http://localhost:3000/dish/add", this.state.dish).then(res => {
+    axios.post("http://homemadeapp.org:3000/dish/add", this.state.dish).then(res => {
       console.log(res);
       Actions.chefPanel({ type: ActionConst.RESET });
     });
