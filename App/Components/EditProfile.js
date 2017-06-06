@@ -23,7 +23,6 @@ export default class EditProfile extends Component {
       try {
         const data = await AsyncStorage.getItem("profile");
         if (data !== null && data !== undefined) {
-
           data = JSON.parse(data);
           console.log("async data: ", data);
           if (data.identityId) {
@@ -44,15 +43,24 @@ export default class EditProfile extends Component {
     }
 
     getProfile().then(() => {
-      this.setState({ userId: userId, userName: userName, userPic: userPic }, ()=>{
-        console.log(this.state.userId)
-        axios.get('http://localhost:3000/user/'+this.state.userId).then(res=>{ 
-            this.setState({user:res.data[0]},() => console.log(this.state.user))
-          })
-      });
+      this.setState(
+        { userId: userId, userName: userName, userPic: userPic },
+        () => {
+          console.log(this.state.userId);
+          axios
+            .get("http://localhost:3000/user/" + this.state.userId)
+            .then(res => {
+              this.setState({ user: res.data[0] }, () =>
+                console.log(this.state.user)
+              );
+            });
+        }
+      );
     });
   }
-
+  componentWillReceiveProps() {
+    this.componentWillMount();
+  }
   handleSubmit() {
     console.log("HANDLE SUBMIT CALLED");
     let send = {};
@@ -76,7 +84,7 @@ export default class EditProfile extends Component {
   }
 
   render() {
-    console.log("the state inside EditProfile.js is ", this.state)
+    console.log("the state inside EditProfile.js is ", this.state);
     return (
       <View
         style={{
@@ -95,23 +103,22 @@ export default class EditProfile extends Component {
             borderRadius: 75,
             height: 150,
             width: 150,
-            marginTop: 70,
-  
+            marginTop: 70
           }}
           source={{
             uri: this.state.userPic
           }}
         />
         <Item>
-        <Button
-          style={{ margin: 10}}
-          onPress={() => {
-            this.props.setCameraMode("profile");
-            Actions.uploadimage();
-          }}
-        >
-          <Text>Update Profile Picture</Text>
-        </Button>
+          <Button
+            style={{ margin: 10 }}
+            onPress={() => {
+              this.props.setCameraMode("profile");
+              Actions.uploadimage();
+            }}
+          >
+            <Text>Update Profile Picture</Text>
+          </Button>
         </Item>
 
         <Item>
@@ -146,7 +153,7 @@ export default class EditProfile extends Component {
                 text: "Profile Updated",
                 position: "bottom",
                 buttonText: "Okay",
-                duration:1000
+                duration: 1000
               });
             }}
           >

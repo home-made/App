@@ -5,16 +5,16 @@ import { Container, Content, List, ListItem, Text } from "native-base";
 export default class Cuisines extends Component {
   constructor(props) {
     super(props);
-
   }
 
-  componentWillMount(){
+  componentWillMount() {
     let genres;
-    this.setState({genres: this.props.getStyles()},()=> console.log(this.state.genres))
+    this.setState({ genres: this.props.getStyles() }, () =>
+      console.log(this.state.genres)
+    );
   }
 
   render() {
-
     return (
       <ScrollView style={{ alignSelf: "stretch" }}>
         <List style={{ marginTop: 60 }}>

@@ -92,11 +92,11 @@ export default class Profile extends Component {
       return this.state.chef[1].map((dish, idx) => {
         if (idx === this.state.chef[1].length - 1) {
           return (
-            <DishViewCard dish={dish} addToCart={this.handleAddToCart} />
+            <DishViewCard  dish={dish} addToCart={this.handleAddToCart} />
           )
         } else {
           return (
-            <DishViewCard dish={dish} addToCart={this.handleAddToCart} />
+            <DishViewCard  dish={dish} addToCart={this.handleAddToCart} />
           )
         }
       }); 
