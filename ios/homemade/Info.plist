@@ -5,9 +5,9 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>NSCameraUsageDescription</key>
-	<string>View Cam</string>
+	<string>Upload Image</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>View Camera Roll Big Fella</string>
+	<string>View Camera Roll</string>
 	<key>CFBundleDisplayName</key>
 	<string>homemade</string>
 	<key>CFBundleExecutable</key>
@@ -56,7 +56,7 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string></string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSExceptionDomains</key>

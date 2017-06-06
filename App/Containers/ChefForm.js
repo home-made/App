@@ -11,7 +11,7 @@ import {
   Label,
   Item
 } from "native-base";
-import { Actions } from "react-native-router-flux";
+import { Actions, ActionConst } from "react-native-router-flux";
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import axios from 'axios';
 
@@ -56,7 +56,7 @@ export default class ChefForm extends Component {
         .then((res) => console.log(res.data))
         .catch((err) => console.log('Error updating user to chef status: ', err));
     }
-    Actions.signature();
+    Actions.signature({ type: ActionConst.RESET });
   }
 
   render() {
@@ -73,54 +73,54 @@ export default class ChefForm extends Component {
             </Content>
         </Container>
 
-            <GooglePlacesAutocomplete
-              placeholder='Address'
-              minLength={2}
-              autoFocus={false}
-              listViewDisplayed='auto'
-              fetchDetails={true}
-              renderDescription={(row) => row.description}
-              onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true 
-                console.log(data);
-                console.log(details);
-                this.setState({
-                  address: data.description
-                })
-              }}
-              getDefaultValue={() => {
-                return '';
-              }}
-              query={{
-                // https://developers.google.com/places/web-service/autocomplete 
-                key: 'AIzaSyDySPBT6q0rzspVjjJWZDnEGCaT3CJBMKQ',
-                language: 'en',
-                types: 'address'
-              }}
-              styles={{
-                description: {
-                  fontWeight: 'bold'
-                },
-                predefinedPlacesDescription: {
-                  color: '#1faadb'
-                },
-              }}
-              currentLocation={true}
-              currentLocationLabel="Current location"
-              nearbyPlacesAPI='GooglePlacesSearch' // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch 
-              GoogleReverseGeocodingQuery={{
-                // available options for GoogleReverseGeocoding API : https://developers.google.com/maps/documentation/geocoding/intro 
-              }}
-              GooglePlacesSearchQuery={{
-                // available options for GooglePlacesSearch API : https://developers.google.com/places/web-service/search 
-                rankby: 'distance',
-                types: 'food',
-              }}
-      
-      
-              filterReverseGeocodingByTypes={['locality', 'administrative_area_level_3']} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3'] if you want to display only cities 
-      
-              debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
-            />
+        <GooglePlacesAutocomplete
+          placeholder='Address'
+          minLength={2}
+          autoFocus={false}
+          listViewDisplayed='auto'
+          fetchDetails={true}
+          renderDescription={(row) => row.description}
+          onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true 
+            console.log(data);
+            console.log(details);
+            this.setState({
+              address: data.description
+            })
+          }}
+          getDefaultValue={() => {
+            return '';
+          }}
+          query={{
+            // https://developers.google.com/places/web-service/autocomplete 
+            key: 'AIzaSyDySPBT6q0rzspVjjJWZDnEGCaT3CJBMKQ',
+            language: 'en',
+            types: 'address'
+          }}
+          styles={{
+            description: {
+              fontWeight: 'bold'
+            },
+            predefinedPlacesDescription: {
+              color: '#1faadb'
+            },
+          }}
+          currentLocation={true}
+          currentLocationLabel="Current location"
+          nearbyPlacesAPI='GooglePlacesSearch' // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch 
+          GoogleReverseGeocodingQuery={{
+            // available options for GoogleReverseGeocoding API : https://developers.google.com/maps/documentation/geocoding/intro 
+          }}
+          GooglePlacesSearchQuery={{
+            // available options for GooglePlacesSearch API : https://developers.google.com/places/web-service/search 
+            rankby: 'distance',
+            types: 'food',
+          }}
+  
+  
+          filterReverseGeocodingByTypes={['locality', 'administrative_area_level_3']} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3'] if you want to display only cities 
+  
+          debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
+        />
 
         <View style={styles.button}>
           <Button

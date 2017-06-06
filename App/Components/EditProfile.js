@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, AsyncStorage, Image, Container } from "react-native";
 import { View, Input, Item, Button, Text, Toast } from "native-base";
-import { Actions } from "react-native-router-flux";
+import { Actions, ActionConst } from "react-native-router-flux";
 import axios from "axios";
 
 export default class EditProfile extends Component {
@@ -13,7 +13,7 @@ export default class EditProfile extends Component {
       userName: "",
       userPic: ""
     };
-    this.handleSubmit = this.handleSubmit.bind(this);
+    // this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentWillMount() {
@@ -23,6 +23,7 @@ export default class EditProfile extends Component {
       try {
         const data = await AsyncStorage.getItem("profile");
         if (data !== null && data !== undefined) {
+
           data = JSON.parse(data);
           console.log("async data: ", data);
           if (data.identityId) {
@@ -43,33 +44,39 @@ export default class EditProfile extends Component {
     }
 
     getProfile().then(() => {
-      this.setState({ userId: userId, userName: userName, userPic: userPic });
+      this.setState({ userId: userId, userName: userName, userPic: userPic }, ()=>{
+        console.log(this.state.userId)
+        axios.get('http://localhost:3000/user/'+this.state.userId).then(res=>{ 
+            this.setState({user:res.data[0]},() => console.log(this.state.user))
+          })
+      });
     });
   }
 
   handleSubmit() {
     console.log("HANDLE SUBMIT CALLED");
-    let send = { authId: this.state.userId };
+    let send = {};
     console.log("SEND: ", send);
     if (this.state.address) {
       send.address = this.state.address;
     }
     if (this.state.phone) {
-      send.phone = this.state.phone;
+      send.phoneNumber = this.state.phone;
     }
     if (this.state.status) {
-      send.state = this.state.status;
+      send.status = this.state.status;
     }
+
     axios
       .put("http://localhost:3000/user/" + this.state.userId, send)
       .then(res => {
         console.log(res.data);
-        Actions.cuisines();
+        Actions.cuisines({ type: ActionConst.RESET });
       });
   }
 
   render() {
-    console.log("the state inside EditProfile.js is ", this.state);
+    console.log("the state inside EditProfile.js is ", this.state)
     return (
       <View
         style={{
@@ -89,24 +96,24 @@ export default class EditProfile extends Component {
             height: 150,
             width: 150,
             marginTop: 70,
-            marginBottom: 20
+  
           }}
           source={{
             uri: this.state.userPic
           }}
         />
+        <Item>
         <Button
-          style={{ marginTop: 10 }}
+          style={{ margin: 10}}
           onPress={() => {
             this.props.setCameraMode("profile");
             Actions.uploadimage();
           }}
         >
-          <Text>Update Profile Pic</Text>
+          <Text>Update Profile Picture</Text>
         </Button>
-        <Item>
-          <Text>Update Address:</Text>
         </Item>
+
         <Item>
           <Input
             placeholder="Address"
@@ -115,18 +122,14 @@ export default class EditProfile extends Component {
               this.setState({ address }, () => console.log(address))}
           />
         </Item>
-        <Item>
-          <Text>Update Phone Number:</Text>
-        </Item>
+
         <Item>
           <Input
             placeholder="Phone Number"
             onChangeText={phone => this.setState({ phone })}
           />
         </Item>
-        <Item>
-          <Text>Update Status:</Text>
-        </Item>
+
         <Item>
           <Input
             placeholder="Status"
@@ -142,7 +145,8 @@ export default class EditProfile extends Component {
                 supportedOrientations: ["portrait", "landscape"],
                 text: "Profile Updated",
                 position: "bottom",
-                buttonText: "Okay"
+                buttonText: "Okay",
+                duration:1000
               });
             }}
           >
