@@ -138,7 +138,7 @@ export default class Checkout extends Component {
       cashTotal: this.state.cashTotal
     };
 
-    socket = new SocketIO('http://localhost:3000');
+    socket = new SocketIO('http://homemadeapp.org:3000');
     socket.connect();
     socket.on("connect", () => {
       socket.emit('user',newOrder);
@@ -153,7 +153,7 @@ export default class Checkout extends Component {
     this.sendNotification();
 
     axios
-      .post("http://localhost:3000/orders", newOrder)
+      .post("http://homemadeapp.org:3000/orders", newOrder)
       .then(function(response) {
         console.log("New order was submitted to the database, response is: ", response);
         Actions.userOrders({ type: ActionConst.RESET });

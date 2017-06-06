@@ -10,7 +10,7 @@ import {
 import MapView from "react-native-maps";
 import { Actions, Router, Scene, Modal } from "react-native-router-flux";
 import GetGeoLocation from "../utils/GetGeoLocation";
-
+import Icon from "react-native-vector-icons/Entypo"
 import axios from "axios";
 const { width, height } = Dimensions.get("window");
 export default class ChefMap extends Component {
@@ -48,7 +48,7 @@ export default class ChefMap extends Component {
     }
     this.setState({region}, () => {
       axios
-      .post("http://localhost:3000/chefTest", {
+      .post("http://homemadeapp.org:3000/chefTest", {
         lat: this.state.region.latitude,
         lon: this.state.region.longitude
       })
@@ -94,11 +94,20 @@ export default class ChefMap extends Component {
 
               return (
                 <MapView.Marker
-                  onPress={() => this.props.setChef(chef)}
-                  key={name}
+
                   coordinate={coords.latlng}
-                  title={name}
-                />
+                 
+                >
+                  <MapView.Callout
+                    style={{width: 'auto'}}
+              
+                  >
+                    <View style={{flexDirection: "row", alignItems: "center"}}>
+                    <Text>{name}</Text>
+                    <Icon size={18} onPress={() => this.props.setChef(chef) } style={{marginLeft: 5, height: 18}} name="chevron-with-circle-right" />
+                    </View>
+                  </MapView.Callout>
+                </MapView.Marker>
               );
             })}
           </MapView>

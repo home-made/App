@@ -30,7 +30,7 @@ export default class NavBar extends Component {
   }
 
   componentWillMount() {
-    socket = new SocketIO("http://localhost:3000");
+    socket = new SocketIO("http://homemadeapp.org:3000");
     socket.connect();
     socket.on("init", splash => {
       console.log(splash);
@@ -57,7 +57,7 @@ export default class NavBar extends Component {
     }
     getUserAuthId().then(() => {
       console.log(authId);
-      axios.get(`http://localhost:3000/user/${authId}`).then(res => {
+      axios.get(`http://homemadeapp.org:3000/user/${authId}`).then(res => {
         console.log(res.data);
         this.setState(
           {
@@ -193,7 +193,7 @@ export default class NavBar extends Component {
             flexDirection: "column"
           }}
         >
-          <Text style={{ textAlign: "center", fontSize: 25 }}>HOMEMADE</Text>
+          <Text style={{ textAlign: "center", fontSize: 25 }}>homemade</Text>
         </View>
 
         <Content>

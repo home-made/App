@@ -42,7 +42,7 @@ export default class OrderView extends Component {
       status: 1
     };
     console.log("accept looks like", request);
-    axios.put("http://localhost:3000/orders", request).then(res => {
+    axios.put("http://homemadeapp.org:3000/orders", request).then(res => {
       console.log("RESPONSE IS", res.data);
       Actions.orders({ type: ActionConst.RESET });
     });
@@ -56,7 +56,7 @@ export default class OrderView extends Component {
       status: 3
     };
     axios
-      .put("http://localhost:3000/orders", request)
+      .put("http://homemadeapp.org:3000/orders", request)
       .then(() => Actions.orders({ type: ActionConst.RESET }));
   }
 
@@ -67,7 +67,7 @@ export default class OrderView extends Component {
       _id: this.props._id,
       status: 2
     };
-    axios.put("http://localhost:3000/orders", request).then(res => {
+    axios.put("http://homemadeapp.org:3000/orders", request).then(res => {
       console.log("COMPLETED ORDER:", res.data);
       Actions.orders({ type: ActionConst.RESET });
     });
