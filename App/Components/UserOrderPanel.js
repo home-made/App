@@ -3,7 +3,7 @@ import SocketIO from "socket.io-client";
 import ActionButton from "react-native-circular-action-menu";
 import Icon from 'react-native-vector-icons/Foundation';
 import Icon2 from 'react-native-vector-icons/Entypo';
-
+import moment from "moment";
 import {
   View,
   StyleSheet,
@@ -134,7 +134,7 @@ export default class UserOrderPanel extends Component {
         >
           <Text>Pull Down to Refresh</Text>
 
-          <View style={{ alignItems: "center", marginTop: 100 }}>
+          <View style={{ alignItems: "center", marginTop: 150 }}>
             <Image
               style={{
                 width: 150,
@@ -147,8 +147,9 @@ export default class UserOrderPanel extends Component {
                 uri: this.state.chefDetails.profileUrl
               }}
             />
-            <Text>Ordered from: {this.state.chefDetails.firstName}</Text>
-            <Text>Order placed: {this.state.order.date}</Text>
+            <Text>Your order with {this.state.chefDetails.firstName}</Text> 
+            <Text>was placed on:</Text>
+            <Text>{moment(this.state.order.date).format('LLLL')}</Text>
             {this.state.order.status === 0
               ? <Text>Order Status: Pending</Text>
               : null}
@@ -160,6 +161,7 @@ export default class UserOrderPanel extends Component {
               ? <Text>Order Status: Complete</Text>
               : null}
 
+            <Content>
               {this.state.order.status === 1
                 ? <View>
                     <Button
@@ -176,9 +178,9 @@ export default class UserOrderPanel extends Component {
                   </View>
                 : null}
 
-              <View style={{flexDirection: 'row', alignItems: "center", justifyContent: "center"}}>
+              <View style={{flexDirection: 'row'}}>
               {this.state.order.status === 1
-                ? <View style={{ flex: 1, marginTop: 70, marginRight: -225}}>
+                ? <View style={{ flex: 1, marginTop: 70}}>
                     <ActionButton
                       style={{}}
                       icon={<Icon name="telephone"  size={30} style={{alignItems: "center", color: "white"}} />}
@@ -191,18 +193,14 @@ export default class UserOrderPanel extends Component {
       
                   </View>
                 : null}
-
+                
                 {this.state.order.status === 1
                 ? <View style={{ flex: 1, marginTop: 70}}>
                     <ActionButton
-                      style={{}}
+                      style={{justifyContent: "flex-end"}}
                       icon={<Icon2 name="message"  size={30} style={{alignItems: "center", color: "white"}} />}
                       buttonColor="#02E550"
-                      onPress={() =>
-                        Communications.text(this.state.phone)
-                      }
                     />
-   
                   </View>
                 : null}
                 </View>
@@ -220,6 +218,7 @@ export default class UserOrderPanel extends Component {
                     </Button>
                   </View>
                 : <Text />}
+            </Content>
           </View>
 
         </ScrollView>
