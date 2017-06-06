@@ -25,6 +25,10 @@ import Communications from "react-native-communications";
 import { Actions } from "react-native-router-flux";
 import axios from "axios";
 var socket;
+var moment = require('moment');
+
+
+
 
 export default class UserOrderPanel extends Component {
   constructor() {
@@ -34,6 +38,7 @@ export default class UserOrderPanel extends Component {
       order: null
     };
     this._onRefresh = this._onRefresh.bind(this);
+    this.displayOrderStatus = this.displayOrderStatus.bind(this);
   }
 
   componentWillMount() {
@@ -63,21 +68,30 @@ export default class UserOrderPanel extends Component {
       }
     }
 
+    var context = this;
+
     getAuthID()
       .then(() => {
         console.log("AUTHID IS", authID);
         axios
           .get("http://homemadeapp.org:3000/orders/" + authID)
           .then(orders => {
+            console.log("orders inside UserOrderPanel is ", orders)
+            
             let order = orders.data[orders.data.length - 1];
-            console.log("ORDER IS", order);
+            console.log("ORDER IS", order)
             axios
               .get("http://homemadeapp.org:3000/user/" + order.chefId)
               .then(chefDetails => {
                 console.log("CHEF DETAILS ARE", chefDetails);
+
+                var chefData = context.props.getChef();
+                var chefName = `${chefData[0].firstName} ${chefData[0].lastName}`;
+
                 this.setState(
                   {
                     order,
+                    chefName,
                     chefLocation: chefDetails.data[0].location,
                     phone: chefDetails.data[0].phoneNumber,
                     chefDetails: chefDetails.data[0]
@@ -107,11 +121,56 @@ export default class UserOrderPanel extends Component {
     // let orders = this.state.order
     socket.emit("neworder", order.chefId);
   }
+
+  displayOrderStatus(){
+    if (this.state.order.status === 0)
+      return(
+        <Content style={{ marginTop: 10 }}>
+          <Text>Your current order status is: Pending</Text>
+        </Content>
+      ) 
+        
+    else if (this.state.order.status === 1) {
+      return(
+        <Content style={{ marginTop: 20 }}>
+          <Text>Your current order status is: Accepted</Text>
+        </Content>
+      )    
+
+    } else if (this.state.order.status === 2) {
+      return(
+        <Content style={{ marginTop: 20 }}>
+          <Text>Your current order status is: Complete</Text>
+        </Content>
+      )
+
+    } else if (this.state.order.status === 3) {
+      return (
+        <Content style={{ marginTop: 20, marginRight: 5, marginLeft: 5 }}>
+          <Text>We're sorry, your order did not go through.</Text>
+          <Text>Please go back and place another order.</Text>
+        </Content>
+      )
+
+    } else {
+      return null;
+    }
+
+  }
+
   render() {
-    console.log(this.state, this.props);
+    console.log("state inside UserOrderPanel is ", this.state);
+    console.log("props inside UserOrderPanel are", this.props);
+
     if (!this.state.order) return <ScrollView />;
     else {
-      console.log("THERE IS AN ORDER");
+      console.log("THERE IS AN ORDER", this.state);
+      console.log("");
+      console.log("the chef is ", this.props.getChef())
+      var orderDate = moment(this.state.order.date).format('LLLL');
+      console.log("orderDate is ", orderDate);
+      
+
       return (
         <ScrollView
           contentContainerStyle={{
@@ -135,6 +194,13 @@ export default class UserOrderPanel extends Component {
           <Text>Pull Down to Refresh</Text>
 
           <View style={{ alignItems: "center", marginTop: 150 }}>
+
+            <Text>Your order with {this.state.chefName}</Text> 
+            <Text>was placed on:</Text>
+            <Text>{orderDate}</Text>
+            
+            {this.displayOrderStatus()}
+
             <Image
               style={{
                 width: 150,

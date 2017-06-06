@@ -101,7 +101,7 @@ export default class App extends Component {
   }
 
   getCuisineStyles() {
-    return "All Cuisines,American,Barbecue,Burgers,Chinese,Indian,Italian,Japanese,Korean,Mediterranean,Mexican,Pizza,Sandwiches,Sushi,Thai,Vegetarian,Vietnamese,American,Ethiopian,Other".split(
+    return "American,Barbecue,Burgers,Chinese,Indian,Italian,Japanese,Korean,Mediterranean,Mexican,Pizza,Sandwiches,Sushi,Thai,Vegetarian,Vietnamese,Ethiopian,Other".split(
       ","
     );
   }
@@ -304,6 +304,7 @@ export default class App extends Component {
               key="userOrders"
               component={UserOrderPanel}
               title="Orders"
+              getChef={this.getChef}
               setChefLocationAndPhoneNumber={this.setChefLocationAndPhoneNumber}
             />
             <Scene key="feedback" component={Feedback} title="Feedback" />
