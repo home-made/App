@@ -158,11 +158,11 @@ export default class Checkout extends Component {
   }
   checkAgain(customer) {
     let customerId = customer;
-    axios.get("http://localhost:3000/orders/" + customerId).then((orders) => {
+    axios.get("http://homemadeapp.org:3000/orders/" + customerId).then((orders) => {
       console.log("Orders inside Checkout.js checkAgain() are ", orders);
 
       if(orders.data[orders.data.length - 1].status === 0){
-        axios.put("http://localhost:3000/orders/", { _id: orders.data[orders.data.length - 1]._id, status: 3 } ).then((res) => {
+        axios.put("http://homemadeapp.org:3000/orders/", { _id: orders.data[orders.data.length - 1]._id, status: 3 } ).then((res) => {
           console.log("SUCCESSFULLY CANCELED", res.data);
         })
       }

@@ -28,26 +28,24 @@ export default class Profile extends Component {
       showCustomerReviews: true
     };
     this.handleReviews = this.handleReviews.bind(this);
-
   }
 
-  handleReviews(){
+  handleReviews() {
     var allReviews = this.state.chefReviews.concat(this.state.customerReviews);
 
-    console.log("allReviews", allReviews)
+    console.log("allReviews", allReviews);
 
     if (allReviews.length === 0) {
-      return <Text>You have no reviews at this time.</Text>
-    
+      return <Text>You have no reviews at this time.</Text>;
     } else {
-      return(
+      return (
         <Container style={{ marginRight: 10, marginLeft: 10, marginTop: 10 }}>
           <H3>Your Reviews</H3>
           {allReviews.map(review => {
-           return <Review review={review} />;
+            return <Review review={review} />;
           })}
         </Container>
-      )
+      );
     }
   }
 
@@ -58,33 +56,41 @@ export default class Profile extends Component {
       try {
         const profile = await AsyncStorage.getItem("profile");
         if (profile !== null && profile !== undefined) {
-          console.log("profile inside UserProfile.js is ", JSON.parse(profile))
+          console.log("profile inside UserProfile.js is ", JSON.parse(profile));
           userId = JSON.parse(profile).userId;
 
           parsedProfile = JSON.parse(profile);
 
-          var userPic = parsedProfile.picture_large ? parsedProfile.picture_large : parsedProfile.picture;
+          var userPic = parsedProfile.picture_large
+            ? parsedProfile.picture_large
+            : parsedProfile.picture;
           var authId = parsedProfile.userId;
           var fullName = parsedProfile.name;
 
-          axios.get(`http://localhost:3000/user/${authId}`).then(user => {
-    
-            console.log("the user inside axiospost for UserProfile.js is ", user);
+          axios
+            .get(`http://localhost:3000/user/${authId}`)
+            .then(user => {
+              console.log(
+                "the user inside axiospost for UserProfile.js is ",
+                user
+              );
 
-            context.setState({
-              fullName: fullName,
-              authId: authId,
-              userPic: userPic,
-              user: user.data[0],
-              chefReviews: user.data[0].chefReviews,
-              customerReviews: user.data[0].customerReviews,
-              status: user.data[0].status
+              context.setState({
+                fullName: fullName,
+                authId: authId,
+                userPic: userPic,
+                user: user.data[0],
+                chefReviews: user.data[0].chefReviews,
+                customerReviews: user.data[0].customerReviews,
+                status: user.data[0].status
+              });
+            })
+            .catch(error => {
+              console.log(
+                "Error inside axios get user for UserProfile.js is ",
+                error
+              );
             });
-
-          }).catch(error => {
-            console.log("Error inside axios get user for UserProfile.js is ", error);
-          });
-
         }
       } catch (err) {
         console.log("Error getting profile: ", err);
@@ -94,15 +100,21 @@ export default class Profile extends Component {
   }
 
   render() {
-    console.log("the state inside UserProfile is ", this.state)
+    console.log("the state inside UserProfile is ", this.state);
     return (
-    <Container style={{ marginTop: 60 }}>
+      <Container style={{ marginTop: 60 }}>
         <Content>
           <Card>
             <CardItem>
               <Body>
-                <Text>{!this.state.fullName ? "name unknown" : this.state.fullName}</Text>
-                <Text note>{!this.state.status ? "No status at this time." : this.state.status}</Text>
+                <Text>
+                  {!this.state.fullName ? "name unknown" : this.state.fullName}
+                </Text>
+                <Text note>
+                  {!this.state.status
+                    ? "No status at this time."
+                    : this.state.status}
+                </Text>
               </Body>
             </CardItem>
             <CardItem>
@@ -116,7 +128,9 @@ export default class Profile extends Component {
                       alignItems: "center",
                       borderRadius: 60
                     }}
-                    source={{ uri: !this.state.userPic ? "" : this.state.userPic }}
+                    source={{
+                      uri: !this.state.userPic ? "" : this.state.userPic
+                    }}
                   />
                 </Row>
               </Body>
@@ -125,13 +139,8 @@ export default class Profile extends Component {
 
           {this.handleReviews()}
 
-
-
-
-
         </Content>
       </Container>
-
     );
   }
 }
@@ -144,11 +153,6 @@ const styles = StyleSheet.create({
     alignItems: "center"
   }
 });
-
-
-
-
-
 
 /*
 gmail UserProfile
@@ -226,17 +230,3 @@ regular email profile
    "chefView":false,"isChef":false}
 
 */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
