@@ -150,7 +150,7 @@ export default class NavBar extends Component {
     }
     clearStorage();
     axios
-      .get("https://stzy.auth0.com/v2/logout?federated")
+      .get("http://stzy.auth0.com/v2/logout?federated")
       .then(res => console.log(res));
 
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);

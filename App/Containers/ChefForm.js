@@ -91,7 +91,7 @@ export default class ChefForm extends Component {
             return '';
           }}
           query={{
-            // https://developers.google.com/places/web-service/autocomplete 
+            // http://developers.google.com/places/web-service/autocomplete 
             key: 'AIzaSyDySPBT6q0rzspVjjJWZDnEGCaT3CJBMKQ',
             language: 'en',
             types: 'address'
@@ -108,10 +108,10 @@ export default class ChefForm extends Component {
           currentLocationLabel="Current location"
           nearbyPlacesAPI='GooglePlacesSearch' // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch 
           GoogleReverseGeocodingQuery={{
-            // available options for GoogleReverseGeocoding API : https://developers.google.com/maps/documentation/geocoding/intro 
+            // available options for GoogleReverseGeocoding API : http://developers.google.com/maps/documentation/geocoding/intro 
           }}
           GooglePlacesSearchQuery={{
-            // available options for GooglePlacesSearch API : https://developers.google.com/places/web-service/search 
+            // available options for GooglePlacesSearch API : http://developers.google.com/places/web-service/search 
             rankby: 'distance',
             types: 'food',
           }}
