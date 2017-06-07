@@ -4,6 +4,7 @@ import ActionButton from "react-native-circular-action-menu";
 import Icon from 'react-native-vector-icons/Foundation';
 import Icon2 from 'react-native-vector-icons/Entypo';
 import moment from "moment";
+
 import {
   View,
   StyleSheet,
@@ -69,17 +70,7 @@ export default class UserOrderPanel extends Component {
         axios
           .get("http://homemadeapp.org:3000/orders/" + authID)
           .then(orders => {
-            console.log("SORTED ORDERS SHOULD BE", orders.data);
-            // let order = orders.data[orders.data.length - 1];
-            var order = orders.data[orders.data.length - 1];
-            console.log("ORDER ID IS", order)
-            // orders.data.forEach(el => {
-            //   if(el._id > order) {
-            //     order = el;
-            //   }
-            // })
-
-
+            let order = orders.data[orders.data.length - 1];
             console.log("ORDER IS", order);
             axios
               .get("http://homemadeapp.org:3000/user/" + order.chefId)
@@ -144,7 +135,7 @@ export default class UserOrderPanel extends Component {
         >
           <Text>Pull Down to Refresh</Text>
 
-          <View style={{ alignItems: "center", marginTop: 150 }}>
+          <View style={{ alignItems: "center", marginTop: 100 }}>
             <Image
               style={{
                 width: 150,
@@ -174,7 +165,6 @@ export default class UserOrderPanel extends Component {
               ? <Text>Order Status: Canceled</Text>
               : null}
 
-            <Content>
               {this.state.order.status === 1
                 ? <View>
                     <Button
@@ -191,9 +181,9 @@ export default class UserOrderPanel extends Component {
                   </View>
                 : null}
 
-              <View style={{flexDirection: 'row'}}>
+              <View style={{flexDirection: 'row', alignItems: "center", justifyContent: "center"}}>
               {this.state.order.status === 1
-                ? <View style={{ flex: 1, marginTop: 70}}>
+                ? <View style={{ flex: 1, marginTop: 70, marginRight: -225}}>
                     <ActionButton
                       style={{}}
                       icon={<Icon name="telephone"  size={30} style={{alignItems: "center", color: "white"}} />}
@@ -206,14 +196,18 @@ export default class UserOrderPanel extends Component {
       
                   </View>
                 : null}
-                
+
                 {this.state.order.status === 1
                 ? <View style={{ flex: 1, marginTop: 70}}>
                     <ActionButton
-                      style={{justifyContent: "flex-end"}}
+                      style={{}}
                       icon={<Icon2 name="message"  size={30} style={{alignItems: "center", color: "white"}} />}
                       buttonColor="#02E550"
+                      onPress={() =>
+                        Communications.text(this.state.phone)
+                      }
                     />
+   
                   </View>
                 : null}
                 </View>
@@ -231,7 +225,6 @@ export default class UserOrderPanel extends Component {
                     </Button>
                   </View>
                 : <Text />}
-            </Content>
           </View>
 
         </ScrollView>
