@@ -95,7 +95,9 @@ export default class App extends Component {
       this.setLocation();
     } else {
       console.log("ABOUT TO CLEAR INTERVAL", this.state.phone);
-      axios.post("http://homemadeapp.org:3000/text/", { phone: this.state.phone });
+      axios.post("http://homemadeapp.org:3000/text/", {
+        phone: this.state.phone
+      });
       clearInterval(distanceInterval);
     }
   }
@@ -202,6 +204,7 @@ export default class App extends Component {
           style={styles.navbar}
           initial
         />
+        <Scene key="chefform" component={ChefForm} />
         <Scene
           key="drawer"
           type={ActionConst.RESET}
@@ -308,7 +311,6 @@ export default class App extends Component {
               setChefLocationAndPhoneNumber={this.setChefLocationAndPhoneNumber}
             />
             <Scene key="feedback" component={Feedback} title="Feedback" />
-            <Scene key="chefform" component={ChefForm} title="Chef Form" />
             <Scene
               key="signature"
               component={SignaturePage}

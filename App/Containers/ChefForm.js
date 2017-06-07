@@ -24,7 +24,8 @@ export default class ChefForm extends Component {
       authId: null,
       phone: null,
       firstName: null,
-      lastName: null
+      lastName: null,
+      email: null
     };
 
     this.submitForm = this.submitForm.bind(this);
@@ -59,7 +60,7 @@ export default class ChefForm extends Component {
         .then((res) => console.log(res.data))
         .catch((err) => console.log('Error updating user to chef status: ', err));
 
-      Actions.cuisines({ type: ActionConst.RESET });
+      Actions.drawer({ type: ActionConst.RESET });
     }
   }
 
@@ -93,6 +94,13 @@ export default class ChefForm extends Component {
               inputStyle={{ color: '#91627b' }}
               onChangeText={(e) => this.setState({ phone: e })}
             />
+            <Kaede
+              style={{ backgroundColor: '#f9f5ed', marginTop: 10 }}
+              label={'E-mail'}
+              labelStyle={{ color: '#EC6969' }}
+              inputStyle={{ color: '#91627b' }}
+              onChangeText={(e) => this.setState({ email: e })}
+            />
           </Content>
         </Container>
 
@@ -122,7 +130,7 @@ const styles = StyleSheet.create({
     marginTop: 90,
   },
   button: {
-    flex: .5,
+    flex: .2,
     justifyContent: "center",
     alignSelf: 'center'
   }

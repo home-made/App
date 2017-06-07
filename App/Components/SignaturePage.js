@@ -65,7 +65,7 @@ export default class SignaturePage extends Component {
 
     console.log(address);
     console.log(authId);
-    axios.put(`http://homemadeapp.org:3000/user/sig/${authId}`, { isChef: true, pathname: result.pathName, address: address })
+    axios.put(`http://homemadeapp.org:3000/sig/${authId}`, { isChef: true, pathname: result.pathName, address: address })
       .then((res) => console.log("SIGNATURE SAVED", res.data))
       .catch((err) => console.log('Error updating user to chef status: ', err));
   }
