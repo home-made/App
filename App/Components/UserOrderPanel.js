@@ -1,5 +1,10 @@
 import React, { Component } from "react";
 import SocketIO from "socket.io-client";
+import ActionButton from "react-native-circular-action-menu";
+import Icon from 'react-native-vector-icons/Foundation';
+import Icon2 from 'react-native-vector-icons/Entypo';
+import moment from "moment";
+
 import {
   View,
   StyleSheet,
@@ -14,8 +19,7 @@ import {
   Content,
   Header,
   Left,
-  Icon,
-  Right
+  Image
 } from "native-base";
 
 import { Actions } from "react-native-router-flux";
@@ -75,7 +79,8 @@ export default class UserOrderPanel extends Component {
                   {
                     order,
                     chefLocation: chefDetails.data[0].location,
-                    phone: chefDetails.data[0].phoneNumber
+                    phone: chefDetails.data[0].phoneNumber,
+                    chefDetails: chefDetails.data[0]
                   },
                   () => {
                     console.log(this.state.order);
@@ -118,8 +123,23 @@ export default class UserOrderPanel extends Component {
           }
         >
           <Text>Pull Down to Refresh</Text>
-          <View style={{ alignItems: "center", marginTop: 150 }}>
-            <Text>Order placed: {this.state.order.date}</Text>
+
+          <View style={{ alignItems: "center", marginTop: 100 }}>
+            <Image
+              style={{
+                width: 150,
+                height: 150,
+                marginTop: -50,
+                marginBottom: 50,
+                borderRadius: 75
+              }}
+              source={{
+                uri: this.state.chefDetails.profileUrl
+              }}
+            />
+            <Text>Your order with {this.state.chefDetails.firstName}</Text> 
+            <Text>was placed on:</Text>
+            <Text>{moment(this.state.order.date).format('LLLL')}</Text>
             {this.state.order.status === 0
               ? <Text>Order Status: Pending</Text>
               : null}
@@ -130,7 +150,10 @@ export default class UserOrderPanel extends Component {
             {this.state.order.status === 2
               ? <Text>Order Status: Complete</Text>
               : null}
-            <Content>
+              {this.state.order.status === 3
+              ? <Text>Order Status: Canceled</Text>
+              : null}
+
               {this.state.order.status === 1
                 ? <View>
                     <Button
@@ -147,6 +170,37 @@ export default class UserOrderPanel extends Component {
                   </View>
                 : null}
 
+              <View style={{flexDirection: 'row', alignItems: "center", justifyContent: "center"}}>
+              {this.state.order.status === 1
+                ? <View style={{ flex: 1, marginTop: 70, marginRight: -225}}>
+                    <ActionButton
+                      style={{}}
+                      icon={<Icon name="telephone"  size={30} style={{alignItems: "center", color: "white"}} />}
+                      buttonColor="#02E550"
+                      onPress={() =>
+                        Communications.phonecall(this.state.phone, true)
+                      }
+                    />
+
+      
+                  </View>
+                : null}
+
+                {this.state.order.status === 1
+                ? <View style={{ flex: 1, marginTop: 70}}>
+                    <ActionButton
+                      style={{}}
+                      icon={<Icon2 name="message"  size={30} style={{alignItems: "center", color: "white"}} />}
+                      buttonColor="#02E550"
+                      onPress={() =>
+                        Communications.text(this.state.phone)
+                      }
+                    />
+   
+                  </View>
+                : null}
+                </View>
+
               {this.state.order.status === 2
                 ? <View>
                     <Button
@@ -160,7 +214,6 @@ export default class UserOrderPanel extends Component {
                     </Button>
                   </View>
                 : <Text />}
-            </Content>
           </View>
 
         </ScrollView>

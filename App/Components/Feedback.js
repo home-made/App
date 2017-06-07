@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { Container, Content, Button, Text } from "native-base";
 import { Actions, ActionConst } from "react-native-router-flux";
+import StarRating from 'react-native-star-rating';
 import axios from "axios";
 
 export default class Feedback extends Component {
@@ -16,7 +17,7 @@ export default class Feedback extends Component {
     super(props);
     this.state = {
       text: "",
-      score: null
+      score: 0
     };
     this.submitFeedback = this.submitFeedback.bind(this);
   }
@@ -58,6 +59,13 @@ export default class Feedback extends Component {
     }
   }
 
+  onStarRatingPress(rating) {
+    console.log(rating);
+    this.setState({
+      score: rating
+    });
+  }
+
   render() {
     return (
       <Container>
@@ -76,27 +84,27 @@ export default class Feedback extends Component {
           multiline={true}
           maxLength={300}
         />
-        <View style={{ alignItems: "center" }}>
-          {this.state.score !== null
-            ? <Text>{this.state.score}/10</Text>
-            : <Text />}
+        
+        <View style={{flex: 1, justifyContent: 'center', marginLeft: 50, marginRight: 50}}>
+          <StarRating
+            disabled={false}
+            maxStars={5}
+            rating={this.state.score}
+            selectedStar={(rating) => this.onStarRatingPress(rating)}
+            starColor='#F5F548'
+            emptyStarColor='#ECECEC'
+          />
+          <View style={{ alignItems: "center" }}>
+            <Text>{this.state.score}/5</Text>
+          </View>
         </View>
 
-        <Slider
-          minimumValue={0}
-          maximumValue={10}
-          onValueChange={score =>
-            this.setState({ score: Math.floor(score) }, () =>
-              console.log(this.state.score)
-            )}
-        />
-        <View style={{ alignItems: "center" }}>
-          <Text>Rating</Text>
+        <View style={{ flex: 1, justifyContent: 'center', alignSelf: "center" }}>
+          <Button success onPress={this.submitFeedback}>
+            <Text>Submit Feedback</Text>
+          </Button>
         </View>
 
-        <Button success onPress={this.submitFeedback}>
-          <Text>Submit Feedback</Text>
-        </Button>
 
       </Container>
     );

@@ -127,7 +127,21 @@ export default class Checkout extends Component {
       status: 0,
       cashTotal: this.state.cashTotal
     };
+
     this.props.sendOrderSocket(newOrder)
+    console.log("NEW ORDER IS", newOrder)
+    socket = new SocketIO('http://homemadeapp.org:3000');
+    socket.connect();
+    socket.on("connect", () => {
+      socket.emit('newOrderRequest',newOrder);
+      socket.on("fresh", message => {
+        console.log(message);
+        console.log('send heem')
+      });
+      socket.on('disconnect', ()=>{
+        console.log('user disconnected')
+      })
+    });
     this.sendNotification();
     let context = this;
     axios

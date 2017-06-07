@@ -46,12 +46,10 @@ export default class NavBar extends Component {
   componentWillMount() {
     socket = new SocketIO('http://localhost:3000') 
     socket.connect()
-    socket.on('init', (splash)=>{
+    socket.on('message', (splash)=>{
       console.log(splash)
     })
-    socket.on('message',(message)=>{
-      this.addNotification()
-    })
+
     let authId;
     async function getUserAuthId() {
       try {
@@ -69,6 +67,9 @@ export default class NavBar extends Component {
         console.log(authId);
         axios.get(`http://localhost:3000/user/${authId}`)
           .then((res) => {
+            socket.on(res.data[0].authId,(message)=>{
+              this.addNotification()
+            })
             this.setState({user:res.data[0]},
             this.setState({
               chefStatus: res.data[0].isChef
@@ -137,8 +138,8 @@ export default class NavBar extends Component {
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
 
-  chefform() {
-    Actions.chefform({ type: ActionConst.RESET });
+  signature() {
+    Actions.signature({ type: ActionConst.RESET });
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
 
@@ -283,7 +284,7 @@ export default class NavBar extends Component {
             </Right>
           </ListItem>
           {!this.state.chefStatus
-            ? <ListItem icon onPress={this.chefform} style={styles.content}>
+            ? <ListItem icon onPress={this.signature} style={styles.content}>
                 <Left>
                   <Icon name="ios-star" />
                 </Left>

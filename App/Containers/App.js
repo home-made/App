@@ -63,14 +63,12 @@ export default class App extends Component {
     socket.on("chef", splash => {
       console.log("new", splash);
     });
-    socket.on("message", res => {
-      console.log(res);
-    });
+
   }
 
   sendOrderSocket(order) {
     console.log('getting to it - socket')
-    socket.emit("neworder", order.chefId);
+    socket.emit("newOrderRequest", order);
   }
   getLatAndLon() {
     return {lat: this.state.latitude, lon: this.state.longitude};
