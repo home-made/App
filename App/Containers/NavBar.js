@@ -134,6 +134,11 @@ export default class NavBar extends Component {
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
 
+  chefform() {
+    Actions.chefform({ type: ActionConst.RESET });
+    setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
+  }
+
   logout() {
     Actions.homepage({ type: ActionConst.RESET });
     async function clearStorage() {
@@ -297,6 +302,15 @@ export default class NavBar extends Component {
                 </Body>
               </ListItem>
             : null}
+
+          <ListItem icon onPress={this.chefform} style={styles.content}>
+            <Left>
+              <Icon name="ios-watch" />
+            </Left>
+            <Body>
+              <Text style={styles.entries}>Chef Form</Text>
+            </Body>
+          </ListItem>
 
           <ListItem icon onPress={this.logout} style={styles.content}>
             <Left>
