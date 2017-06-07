@@ -230,6 +230,29 @@ export default class Checkout extends Component {
                   success
                 >
                   <Text>Submit Order</Text>
+
+                  <Container>
+
+                  <TextInput
+                    style={{
+                      fontSize: 20,
+                      margin: 5,
+                      marginTop: 80,
+                      padding: 10,
+                      height: 200,
+                      borderColor: "gray",
+                      borderWidth: 2
+                    }}
+                    onChangeText={orderInstructions =>
+                      this.setState({ orderInstructions }, () => console.log(this.state.orderInstructions))}
+                    multiline={true}
+                    maxLength={300}
+                  />
+
+                  </Container>
+
+
+
                 </Button>
               </Content>
             </Container>
