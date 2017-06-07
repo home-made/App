@@ -161,6 +161,9 @@ export default class UserOrderPanel extends Component {
             {this.state.order.status === 2
               ? <Text>Order Status: Complete</Text>
               : null}
+              {this.state.order.status === 3
+              ? <Text>Order Status: Canceled</Text>
+              : null}
 
               {this.state.order.status === 1
                 ? <View>
