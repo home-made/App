@@ -27,7 +27,7 @@ export default class Profile extends Component {
     this.toggleMenu = this.toggleMenu.bind(this);
     this.handleAddToCart = this.handleAddToCart.bind(this);
     this.handleCheckout = this.handleCheckout.bind(this);
-    this.returnStars = this.returnStars.bind(this);
+    this.returnStar = this.returnStar.bind(this);
   }
 
   componentWillMount() {
@@ -59,7 +59,7 @@ export default class Profile extends Component {
 
 
       let avgScore = scoresArray.reduce((a,b) => a + b);
-      avgScore = Math.round(avgScore / numOfReviews);
+      avgScore = (avgScore / numOfReviews).toPrecision(2);
       this.setState({ reviewers: reviews, avgScore });
     });
   }
@@ -164,32 +164,23 @@ export default class Profile extends Component {
     ) 
   }
 
-  returnStars() {
-      var stars = []
-      for(var i = 0; i <= this.state.avgScore; i++) {
-        stars.push(<Icon name="star" style={{color: "gold", borderStyle: "solid", borderColor: "black"}} />)
-      } 
-      return stars;
+  returnStar() {
+      return (<Icon name="star"  />)
   }
 
   render() {
     {console.log("the state inside Profile.js is ", this.state)}
     let dishes = [];
-    let stars = this.returnStars();
     return (
       <Container style={{ marginTop: 60 }}>
         <Content>
           <Card>
             <CardItem>
-
               <Body>
                 <Text>{this.state.chef[0].firstName} {this.state.chef[0].lastName}</Text>
                 <Text note>{this.state.chef[0].status}</Text>
-                <Text note>Average Chef Score: {stars.map(star => {
-                  return star;
-                })}</Text>
+                <Text note>{this.returnStar()} {this.state.avgScore}</Text>
               </Body>
-
             </CardItem>
             <CardItem>
               <Body>
