@@ -3,7 +3,7 @@ import SocketIO from "socket.io-client";
 import ActionButton from "react-native-circular-action-menu";
 import Icon from 'react-native-vector-icons/Foundation';
 import Icon2 from 'react-native-vector-icons/Entypo';
-
+import moment from "moment";
 import {
   View,
   StyleSheet,
@@ -147,8 +147,9 @@ export default class UserOrderPanel extends Component {
                 uri: this.state.chefDetails.profileUrl
               }}
             />
-            <Text>Ordered from: {this.state.chefDetails.firstName}</Text>
-            <Text>Order placed: {this.state.order.date}</Text>
+            <Text>Your order with {this.state.chefDetails.firstName}</Text> 
+            <Text>was placed on:</Text>
+            <Text>{moment(this.state.order.date).format('LLLL')}</Text>
             {this.state.order.status === 0
               ? <Text>Order Status: Pending</Text>
               : null}

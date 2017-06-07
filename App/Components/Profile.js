@@ -10,13 +10,12 @@ import {
   Body,
   Button,
   ListItem,
-
 } from "native-base";
 import { Actions, ActionConst } from "react-native-router-flux";
 import { Grid, Row, Col } from "react-native-easy-grid";
 import DishViewCard from "./DishViewCard";
 import Review from "./Review";
-
+import Icon from "react-native-vector-icons/Entypo";
 export default class Profile extends Component {
   constructor(props) {
     super(props);
@@ -28,6 +27,7 @@ export default class Profile extends Component {
     this.toggleMenu = this.toggleMenu.bind(this);
     this.handleAddToCart = this.handleAddToCart.bind(this);
     this.handleCheckout = this.handleCheckout.bind(this);
+    this.returnStar = this.returnStar.bind(this);
   }
 
   componentWillMount() {
@@ -59,8 +59,7 @@ export default class Profile extends Component {
 
 
       let avgScore = scoresArray.reduce((a,b) => a + b);
-      avgScore = Math.floor(avgScore / numOfReviews);
-
+      avgScore = (avgScore / numOfReviews).toPrecision(2);
       this.setState({ reviewers: reviews, avgScore });
     });
   }
@@ -165,6 +164,10 @@ export default class Profile extends Component {
     ) 
   }
 
+  returnStar() {
+      return (<Icon name="star"  />)
+  }
+
   render() {
     {console.log("the state inside Profile.js is ", this.state)}
     let dishes = [];
@@ -173,13 +176,11 @@ export default class Profile extends Component {
         <Content>
           <Card>
             <CardItem>
-
               <Body>
                 <Text>{this.state.chef[0].firstName} {this.state.chef[0].lastName}</Text>
                 <Text note>{this.state.chef[0].status}</Text>
-                <Text note>Average Chef Score: {this.state.avgScore}</Text>
+                <Text note>{this.returnStar()} {this.state.avgScore}</Text>
               </Body>
-
             </CardItem>
             <CardItem>
               <Body>
