@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, AsyncStorage, Alert } from "react-native";
+import { View, AsyncStorage, Alert, TextInput } from "react-native";
 import axios from "axios";
 import { Container, Content, List, Header, Text, Button } from "native-base";
 import CheckOutItem from "./CheckOutItem.js";
@@ -194,7 +194,7 @@ export default class Checkout extends Component {
     console.log("the state inside the checkout is ", this.state);
     if (!this.state.data) {
       return (
-        <Container>
+        <Container style={{marginTop: 55}}>
           <Header><Text>Checkout</Text></Header>
           <Content>
             <Text>Your shopping cart is empty!</Text>
@@ -203,7 +203,7 @@ export default class Checkout extends Component {
       );
     } else {
       return (
-        <Container>
+        <Container style={{marginTop: 55}}>
           <Header><Text>Checkout</Text></Header>
           <Content>
             <List>
