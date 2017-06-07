@@ -44,7 +44,7 @@ export default class DishView extends Component {
     //   name: this.state.name,
     //   description: this.state.dishDescriptionText,
     //   dishImages: [
-    //     "https://media-cdn.tripadvisor.com/media/photo-s/02/39/2d/21/chinese-dumplings-with.jpg"
+    //     "http://media-cdn.tripadvisor.com/media/photo-s/02/39/2d/21/chinese-dumplings-with.jpg"
     //   ],
     //   chefId: "7564fjasdif",
     //   allergies: ["none"],

@@ -10,13 +10,12 @@ import {
   Body,
   Button,
   ListItem,
-
 } from "native-base";
 import { Actions, ActionConst } from "react-native-router-flux";
 import { Grid, Row, Col } from "react-native-easy-grid";
 import DishViewCard from "./DishViewCard";
 import Review from "./Review";
-
+import Icon from "react-native-vector-icons/Entypo";
 export default class Profile extends Component {
   constructor(props) {
     super(props);
@@ -28,6 +27,7 @@ export default class Profile extends Component {
     this.toggleMenu = this.toggleMenu.bind(this);
     this.handleAddToCart = this.handleAddToCart.bind(this);
     this.handleCheckout = this.handleCheckout.bind(this);
+    this.returnStars = this.returnStars.bind(this);
   }
 
   componentWillMount() {
@@ -164,9 +164,18 @@ export default class Profile extends Component {
     ) 
   }
 
+  returnStars() {
+      var stars = []
+      for(var i = 0; i <= this.state.avgScore; i++) {
+        stars.push(<Icon name="star" style={{color: "gold", borderStyle: "solid", borderColor: "black"}} />)
+      } 
+      return stars;
+  }
+
   render() {
     {console.log("the state inside Profile.js is ", this.state)}
     let dishes = [];
+    let stars = this.returnStars();
     return (
       <Container style={{ marginTop: 60 }}>
         <Content>
@@ -176,7 +185,9 @@ export default class Profile extends Component {
               <Body>
                 <Text>{this.state.chef[0].firstName} {this.state.chef[0].lastName}</Text>
                 <Text note>{this.state.chef[0].status}</Text>
-                <Text note>Average Chef Score: {this.state.avgScore}</Text>
+                <Text note>Average Chef Score: {stars.map(star => {
+                  return star;
+                })}</Text>
               </Body>
 
             </CardItem>
