@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Drawer from "react-native-drawer";
 import NavBar from "./NavBar";
 import { Actions, DefaultRenderer } from "react-native-router-flux";
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export default class NavigationDrawer extends Component {
   
@@ -21,6 +22,7 @@ export default class NavigationDrawer extends Component {
         panCloseMask={.3}
         negotiatePan={true}
         styles={drawerStyles}
+        renderLeftButton={<Icon name='ios-pizza' />}
         tweenHandler={ratio => {
           return {
             mainOverlay: {
