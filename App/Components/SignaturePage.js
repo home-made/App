@@ -118,11 +118,17 @@ export default class SignaturePage extends Component {
             alignSelf: 'center',
           }}
         >
-          <ActionButton buttonColor="rgba(231,76,60,1)" position={'center'} radius={80} outRangeScale={0.8} degrees={360} icon={<Text style={{color: 'white', fontSize: 37}}>🖕🏻</Text>}>
+          <ActionButton buttonColor="rgba(231,76,60,1)" position={'center'} radius={80} outRangeScale={0.8} degrees={360}>
             <ActionButton.Item buttonColor='#F0B073' title="Confirm" onPress={() => {Actions.homepage({ type: ActionConst.RESET })}}>
               <Icon name='md-checkmark' style={styles.actionButtonIcon} />
             </ActionButton.Item>
             <ActionButton.Item buttonColor='#52F26A' title="Back" onPress={() => {Actions.chefform({ type: ActionConst.RESET })}}>
+              <Icon name='md-arrow-back' style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+            <ActionButton.Item buttonColor='#52F26A' title="Save" onPress={() => { this.saveSign()} }>
+              <Icon name='md-arrow-back' style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+            <ActionButton.Item buttonColor='#52F26A' title="Reset" onPress={() => { this.resetSign()} }>
               <Icon name='md-arrow-back' style={styles.actionButtonIcon} />
             </ActionButton.Item>
           </ActionButton>

@@ -128,7 +128,7 @@ export default class Checkout extends Component {
       status: 0,
       cashTotal: this.state.cashTotal
     };
-
+    console.log("NEW ORDER IS", newOrder)
     socket = new SocketIO('http://homemadeapp.org:3000');
     socket.connect();
     socket.on("connect", () => {

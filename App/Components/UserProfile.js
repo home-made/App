@@ -67,20 +67,30 @@ export default class Profile extends Component {
           var authId = parsedProfile.userId;
           var fullName = parsedProfile.name;
 
-          axios.get(`http://homemadeapp.org:3000/user/${authId}`).then(user => {
-    
-            console.log("the user inside axiospost for UserProfile.js is ", user);
+          axios
+            .get(`http://homemadeapp.org:3000/user/${authId}`)
+            .then(user => {
+              console.log(
+                "the user inside axiospost for UserProfile.js is ",
+                user
+              );
 
-            context.setState({
-              fullName: fullName,
-              authId: authId,
-              userPic: userPic,
-              user: user.data[0],
-              chefReviews: user.data[0].chefReviews,
-              customerReviews: user.data[0].customerReviews,
-              status: user.data[0].status
+              context.setState({
+                fullName: fullName,
+                authId: authId,
+                userPic: userPic,
+                user: user.data[0],
+                chefReviews: user.data[0].chefReviews,
+                customerReviews: user.data[0].customerReviews,
+                status: user.data[0].status
+              });
+            })
+            .catch(error => {
+              console.log(
+                "Error inside axios get user for UserProfile.js is ",
+                error
+              );
             });
-          })
         }
       } catch (err) {
         console.log("Error getting profile: ", err);
