@@ -40,6 +40,7 @@
     "react-native-mauron85-background-geolocation": "^0.2.0-alpha.7",
     "react-native-router-flux": "^3.39.1",
     "react-native-signature-capture": "^0.4.5",
+    "react-native-star-rating": "^1.0.7",
     "react-native-switch": "^1.1.0",
     "react-native-vector-icons": "^4.2.0",
     "react-redux": "^5.0.5",
