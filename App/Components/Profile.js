@@ -167,7 +167,7 @@ export default class Profile extends Component {
   returnStars() {
       var stars = []
       for(var i = 0; i <= this.state.avgScore; i++) {
-        stars.push(<Icon name="star" />)
+        stars.push(<Icon name="star" style={{color: "gold", borderStyle: "solid", borderColor: "black"}} />)
       } 
       return stars;
   }
