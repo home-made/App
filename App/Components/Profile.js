@@ -57,9 +57,11 @@ export default class Profile extends Component {
         };
       });
 
-
-      let avgScore = scoresArray.reduce((a,b) => a + b);
-      avgScore = (avgScore / numOfReviews).toPrecision(2);
+      let avgScore = 0;
+      if (scoresArray.length > 0) {
+        avgScore = scoresArray.reduce((a,b) => a + b);
+        avgScore = (avgScore / numOfReviews).toPrecision(2);
+      }
       this.setState({ reviewers: reviews, avgScore });
     });
   }
@@ -179,7 +181,7 @@ export default class Profile extends Component {
               <Body>
                 <Text>{this.state.chef[0].firstName} {this.state.chef[0].lastName}</Text>
                 <Text note>{this.state.chef[0].status}</Text>
-                <Text note>{this.returnStar()} {this.state.avgScore}</Text>
+                {this.state.avgScore > 0 ? (<Text note>{this.returnStar()} {this.state.avgScore}</Text>): <Text note>No Reviews Available</Text>}
               </Body>
             </CardItem>
             <CardItem>

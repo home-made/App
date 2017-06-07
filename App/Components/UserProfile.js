@@ -68,7 +68,7 @@ export default class Profile extends Component {
           var fullName = parsedProfile.name;
 
           axios
-            .get(`http://localhost:3000/user/${authId}`)
+            .get(`http://homemadeapp.org:3000/user/${authId}`)
             .then(user => {
               console.log(
                 "the user inside axiospost for UserProfile.js is ",

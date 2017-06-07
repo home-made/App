@@ -69,7 +69,17 @@ export default class UserOrderPanel extends Component {
         axios
           .get("http://homemadeapp.org:3000/orders/" + authID)
           .then(orders => {
-            let order = orders.data[orders.data.length - 1];
+            console.log("SORTED ORDERS SHOULD BE", orders.data);
+            // let order = orders.data[orders.data.length - 1];
+            var order = orders.data[orders.data.length - 1];
+            console.log("ORDER ID IS", order)
+            // orders.data.forEach(el => {
+            //   if(el._id > order) {
+            //     order = el;
+            //   }
+            // })
+
+
             console.log("ORDER IS", order);
             axios
               .get("http://homemadeapp.org:3000/user/" + order.chefId)
@@ -159,6 +169,9 @@ export default class UserOrderPanel extends Component {
               : null}
             {this.state.order.status === 2
               ? <Text>Order Status: Complete</Text>
+              : null}
+              {this.state.order.status === 3
+              ? <Text>Order Status: Canceled</Text>
               : null}
 
             <Content>
