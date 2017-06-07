@@ -22,7 +22,6 @@ import DishConfirm from "../Components/DishConfirm";
 import Feedback from "../Components/Feedback";
 import SignaturePage from "../Components/SignaturePage";
 import ChefForm from "./ChefForm";
-import Statistics from "../Components/Statistics";
 
 import GeoPoint from "geopoint";
 import axios from "axios";
@@ -317,7 +316,6 @@ export default class App extends Component {
               title="Signature Page"
               showAlert={this.showAlert}
             />
-            <Scene key="statistics" component={Statistics} title="Statistics" />
           </Scene>
         </Scene>
       </Scene>

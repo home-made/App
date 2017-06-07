@@ -93,11 +93,6 @@ export default class NavBar extends Component {
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
 
-  statistics() {
-    Actions.statistics({ type: ActionConst.RESET });
-    setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
-  }
-
   chefMap() {
     Actions.chefMap({ type: ActionConst.RESET });
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
@@ -220,17 +215,6 @@ export default class NavBar extends Component {
               <Text style={styles.entries}>Profile</Text>
             </Body>
           </ListItem>
-
-          {this.state.chefView
-            ? <ListItem icon onPress={this.statistics} style={styles.content}>
-                <Left>
-                  <Icon name="ios-stats" />
-                </Left>
-                <Body>
-                  <Text style={styles.entries}>Statistics</Text>
-                </Body>
-              </ListItem>
-            : null}
 
           <ListItem icon onPress={this.chefMap} style={styles.content}>
             <Left>
