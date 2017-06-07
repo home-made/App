@@ -66,7 +66,6 @@ export default class ManageDish extends Component {
   handleSubmit() {
     let dish = this.state.dish;
     console.log("SEND: ", dish);
-
     axios.put("http://localhost:3000/dish", dish).then(Actions.chefPanel({type: ActionConst.RESET}));
   }
   onValueChange(value) {

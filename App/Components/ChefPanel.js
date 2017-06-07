@@ -54,7 +54,7 @@ export default class ChefPanel extends Component {
       <ListItem
         onPress={() => {
           this.props.setDish(data);
-          Actions.dishedit();
+          Actions.dishedit({type: ActionConst.RESET});
         }}
       >
         <Thumbnail square size={80} source={{ uri: data.dishImages[0] }} />

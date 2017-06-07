@@ -10,7 +10,6 @@ import {
 import MapView from "react-native-maps";
 import { Actions, Router, Scene, Modal } from "react-native-router-flux";
 import GetGeoLocation from "../utils/GetGeoLocation";
-
 import axios from "axios";
 const { width, height } = Dimensions.get("window");
 export default class ChefMap extends Component {

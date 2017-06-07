@@ -39,7 +39,7 @@ export default class DishView extends Component {
   }
   handleSubmit() {
     console.log(this.state.dish);
-    // axios.post("http://ec2-52-91-163-176.compute-1.amazonaws.com:3000/dish/add", {
+    // axios.post("http://localhost:3000/dish/add", {
     //   cuisineType: "Chinese",
     //   name: this.state.name,
     //   description: this.state.dishDescriptionText,

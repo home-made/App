@@ -5,7 +5,7 @@ import { Container, Content, List, Header, Text, Button } from "native-base";
 import CheckOutItem from "./CheckOutItem.js";
 import SocketIO from "socket.io-client";
 import { Actions, ActionConst } from "react-native-router-flux";
-var socket;
+
 export default class Checkout extends Component {
   /*
       State inside Checkout.js is 
@@ -16,8 +16,6 @@ export default class Checkout extends Component {
       dishCounter: {obj}
 
       where cashTotal is the total dollar amt calculated in the checkout
-
-
 
       dishCounter obj has:
       {dishKey: {
@@ -37,11 +35,12 @@ export default class Checkout extends Component {
     this.deleteDish = this.deleteDish.bind(this);
     this.calculateTotal = this.calculateTotal.bind(this);
     this.submitOrder = this.submitOrder.bind(this);
+    this.checkAgain = this.checkAgain.bind(this);
+    
   }
 
   componentWillMount() {
     this.calculateTotal();
-
   }
 
   incrementDishCount(key) {
@@ -119,15 +118,6 @@ export default class Checkout extends Component {
   }
 
   submitOrder() {
-    //will need the customerId && chefId to submit order to DB
-    //hardcoded info for demo purposes
-
-    /*
-      Note: I think we should set the state.dishCounter obj as
-      the cart property on an Order because that dishCounter obj
-      has the quantity per dish that was placed in an order. just 
-      not sure what the ID for a dish is in the DB.
-      */
 
     //where status: 0 means the order is pending approval
     var newOrder = {
@@ -137,32 +127,34 @@ export default class Checkout extends Component {
       status: 0,
       cashTotal: this.state.cashTotal
     };
-
-    socket = new SocketIO('http://localhost:3000');
-    socket.connect();
-    socket.on("connect", () => {
-      socket.emit('user',newOrder);
-      socket.on("fresh", message => {
-        console.log(message);
-        console.log('send heem')
-      });
-      socket.on('disconnect', ()=>{
-        console.log('user disconnected')
-      })
-    });
+    this.props.sendOrderSocket(newOrder)
     this.sendNotification();
-
+    let context = this;
     axios
       .post("http://localhost:3000/orders", newOrder)
       .then(function(response) {
-        console.log("New order was submitted to the database, response is: ", response);
+        console.log("New order inside Checkout.js was submitted to the database, response is: ", response);
+        
+        // setTimeout( ()=> { context.checkAgain.call(null, response.data.customerId) }, 10000);
+        
         Actions.userOrders({ type: ActionConst.RESET });
       })
       .catch(function(error) {
         console.log("The error message inside checkout post is ", error);
       });
   }
+  checkAgain(customer) {
+    let customerId = customer;
+    axios.get("http://localhost:3000/orders/" + customerId).then((orders) => {
+      console.log("Orders inside Checkout.js checkAgain() are ", orders);
 
+      if(orders.data[orders.data.length - 1].status === 0){
+        axios.put("http://localhost:3000/orders/", { _id: orders.data[orders.data.length - 1]._id, status: 3 } ).then((res) => {
+          console.log("SUCCESSFULLY CANCELED", res.data);
+        })
+      }
+    })
+  }
   componentDidMount() {
     console.log("compont did mont start");
     let cart = this.props.fetchCart();

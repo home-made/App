@@ -44,7 +44,7 @@ export default class UserOrderPanel extends Component {
       console.log("new", splash);
     });
     socket.on("message", res => {
-      console.log(res);
+      console.log('messenger',res);
     });
     async function getAuthID() {
       try {
@@ -79,7 +79,6 @@ export default class UserOrderPanel extends Component {
                   },
                   () => {
                     console.log(this.state.order);
-                    this.sendOrderSocket(this.state.order);
                   }
                 );
               });
@@ -92,16 +91,7 @@ export default class UserOrderPanel extends Component {
   _onRefresh = () => {
     this.componentWillMount();
   };
-  sendOrderSocket(order) {
-    console.log(socket.id);
-    // var orders = setInterval(() =>{
-    //   getChefOrder = (tweet) =>{
-    //     socket.volatile.emit('chef',this.state.order)
-    //   }
-    // },100)
-    // let orders = this.state.order
-    socket.emit("neworder", order.chefId);
-  }
+ 
   render() {
     console.log(this.state.order);
     if (!this.state.order) return <ScrollView />;

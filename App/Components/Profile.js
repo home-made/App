@@ -10,13 +10,12 @@ import {
   Body,
   Button,
   ListItem,
-
 } from "native-base";
 import { Actions, ActionConst } from "react-native-router-flux";
 import { Grid, Row, Col } from "react-native-easy-grid";
 import DishViewCard from "./DishViewCard";
 import Review from "./Review";
-
+import Icon from "react-native-vector-icons/Entypo";
 export default class Profile extends Component {
   constructor(props) {
     super(props);
@@ -28,12 +27,23 @@ export default class Profile extends Component {
     this.toggleMenu = this.toggleMenu.bind(this);
     this.handleAddToCart = this.handleAddToCart.bind(this);
     this.handleCheckout = this.handleCheckout.bind(this);
+    this.returnStars = this.returnStars.bind(this);
   }
 
   componentWillMount() {
     let chef = this.props.getChef();
+
+    console.log("the chef inside Profile.js of componentWillMount is ", chef)
     this.setState({ chef: this.props.getChef(), cart: [] }, () => {
+      
+      let scoresArray = [];
+      let numOfReviews = this.state.chef[0].chefReviews.length;
+
+      
       let reviews = this.state.chef[0].chefReviews.map(curr => {
+
+        scoresArray.push(curr.score);
+
         return {
           userText: curr.reviewText,
           user: this.state.chef[2][
@@ -42,10 +52,15 @@ export default class Profile extends Component {
                 return o.authId;
               })
               .indexOf(curr.reviewerId)
-          ]
+          ],
+          score: curr.score
         };
       });
-      this.setState({ reviewers: reviews });
+
+
+      let avgScore = scoresArray.reduce((a,b) => a + b);
+      avgScore = Math.round(avgScore / numOfReviews);
+      this.setState({ reviewers: reviews, avgScore });
     });
   }
 
@@ -76,7 +91,7 @@ export default class Profile extends Component {
 
   toggleReviews(){
     console.log("Reviews inside Profile.js are ", this.state.reviewers);
-    if (this.state.reviews.length>0) {
+    if (this.state.reviewers.length > 0) {
      return this.state.reviewers.map(review => {
         return <Review review={review} />;
       });
@@ -149,9 +164,18 @@ export default class Profile extends Component {
     ) 
   }
 
+  returnStars() {
+      var stars = []
+      for(var i = 0; i <= this.state.avgScore; i++) {
+        stars.push(<Icon name="star" style={{color: "gold", borderStyle: "solid", borderColor: "black"}} />)
+      } 
+      return stars;
+  }
+
   render() {
     {console.log("the state inside Profile.js is ", this.state)}
     let dishes = [];
+    let stars = this.returnStars();
     return (
       <Container style={{ marginTop: 60 }}>
         <Content>
@@ -161,6 +185,9 @@ export default class Profile extends Component {
               <Body>
                 <Text>{this.state.chef[0].firstName} {this.state.chef[0].lastName}</Text>
                 <Text note>{this.state.chef[0].status}</Text>
+                <Text note>Average Chef Score: {stars.map(star => {
+                  return star;
+                })}</Text>
               </Body>
 
             </CardItem>
