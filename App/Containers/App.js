@@ -203,7 +203,6 @@ export default class App extends Component {
           style={styles.navbar}
           initial
         />
-        <Scene key="chefform" component={ChefForm} />
         <Scene
           key="drawer"
           type={ActionConst.RESET}
@@ -316,6 +315,7 @@ export default class App extends Component {
               title="Signature Page"
               showAlert={this.showAlert}
             />
+            <Scene key="chefform" component={ChefForm} />
           </Scene>
         </Scene>
       </Scene>

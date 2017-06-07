@@ -15,7 +15,9 @@ import {
 import axios from "axios";
 import { Actions } from "react-native-router-flux";
 import SocketIO from "socket.io-client";
+import moment from "moment";
 var socket = new SocketIO("homemadeapp.org:3000");
+
 export default class OrderPanel extends Component {
   constructor() {
     super();
@@ -24,19 +26,7 @@ export default class OrderPanel extends Component {
   }
 
   returnRow(data) {
-    var year = data.date.slice(0, 4);
-    var month = data.date.slice(5, 7);
-    var day = data.date.slice(8, 10);
-    var hour = parseInt(data.date.slice(11, 16));
-    var minute = data.date.slice(17, 19);
-    var time;
-    if (hour > 12) {
-      hour = hour - 12;
-      time = hour + ":" + minute + "pm";
-    } else {
-      time = hour + ":" + minute + "am";
-    }
-    var dateAndTime = month + "/" + day + " " + time;
+    var dateAndTime = moment(data.date).format('LLLL');
     return (
       <ListItem
         onPress={() => {
@@ -73,26 +63,30 @@ export default class OrderPanel extends Component {
     }
 
     getAuthID().then(() => {
-      axios.get("http://homemadeapp.org:3000/orders/0/" + authID).then(pending => {
-        this.setState({ pendingCustomers: pending.data[1] }, () =>
-          this.setState({ pending: pending.data[0] }, () => {
-            if (this.state.pending) {
-            }
-          })
-        );
-        axios.get("http://homemadeapp.org:3000/orders/1/" + authID).then(accepted => {
-          this.setState({ acceptedCustomers: accepted.data[1] }, () =>
-            this.setState({ accepted: accepted.data[0] }, () => {})
+      axios
+        .get("http://homemadeapp.org:3000/orders/0/" + authID)
+        .then(pending => {
+          this.setState({ pendingCustomers: pending.data[1] }, () =>
+            this.setState({ pending: pending.data[0] }, () => {
+              if (this.state.pending) {
+              }
+            })
           );
           axios
-            .get("http://homemadeapp.org:3000/orders/2/" + authID)
-            .then(complete => {
-              this.setState({ completedCustomers: complete.data[1] }, () =>
-                this.setState({ complete: complete.data[0] }, () => {})
+            .get("http://homemadeapp.org:3000/orders/1/" + authID)
+            .then(accepted => {
+              this.setState({ acceptedCustomers: accepted.data[1] }, () =>
+                this.setState({ accepted: accepted.data[0] }, () => {})
               );
+              axios
+                .get("http://homemadeapp.org:3000/orders/2/" + authID)
+                .then(complete => {
+                  this.setState({ completedCustomers: complete.data[1] }, () =>
+                    this.setState({ complete: complete.data[0] }, () => {})
+                  );
+                });
             });
         });
-      });
     });
   }
 

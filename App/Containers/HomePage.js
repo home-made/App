@@ -128,7 +128,7 @@ export default class HomePage extends Component {
               profile = JSON.parse(profile);
               console.log("RIGHT BEFORE ACTIONS PROFILE IS", profile)
               // App.render();
-              Actions.chefform();
+              Actions.drawer();
             } catch (err) {
               console.log(
                 "Set storage function on Homepage.js, Error setting data: ",
