@@ -27,11 +27,12 @@ export default class OrderPanel extends Component {
 
   returnRow(data) {
     var dateAndTime = moment(data.date).format('LLLL');
+    // console.log("DATA IS", data);
     return (
       <ListItem
         onPress={() => {
           Actions.orderView(data);
-          setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
+          {/*setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);*/}
         }}
       >
         <Text style={{ marginLeft: 10 }}>
@@ -67,10 +68,7 @@ export default class OrderPanel extends Component {
         .get("http://homemadeapp.org:3000/orders/0/" + authID)
         .then(pending => {
           this.setState({ pendingCustomers: pending.data[1] }, () =>
-            this.setState({ pending: pending.data[0] }, () => {
-              if (this.state.pending) {
-              }
-            })
+            this.setState({ pending: pending.data[0] })
           );
           axios
             .get("http://homemadeapp.org:3000/orders/1/" + authID)
@@ -81,9 +79,13 @@ export default class OrderPanel extends Component {
               axios
                 .get("http://homemadeapp.org:3000/orders/2/" + authID)
                 .then(complete => {
-                  this.setState({ completedCustomers: complete.data[1] }, () =>
+                  console.log("COMPLETE DATA IS", complete.data)
+                  this.setState({ completeCustomers: complete.data[1] }, () =>{
+
+                  
+                    // console.log(this.state.completedCustomers)
                     this.setState({ complete: complete.data[0] }, () => {})
-                  );
+                  });
                 });
             });
         });
@@ -94,7 +96,7 @@ export default class OrderPanel extends Component {
     var pendingOrders = [];
     var acceptedOrders = [];
     var completeOrders = [];
-    console.log(this.state.pending, this.state.accepted, this.state.complete);
+    console.log("STATE AND PROPS IN ORDERPANEL", this.state, this.props)
     return (
       <ScrollView>
         <Header hasTabs />
@@ -105,7 +107,7 @@ export default class OrderPanel extends Component {
           >
             {!this.state.pending
               ? <Text />
-              : this.state.pending.forEach(item => {
+              : this.state.pending.forEach(item, idx => {
                   for (var customer in this.state.pendingCustomers) {
                     if (
                       this.state.pendingCustomers[customer].authId ===
@@ -142,12 +144,15 @@ export default class OrderPanel extends Component {
             {!this.state.complete
               ? <Text />
               : this.state.complete.forEach(item => {
+                  console.log("COMPLETE CUSTOMERS ARE", this.state.completeCustomers)
                   for (var customer in this.state.completeCustomers) {
+                    console.log("IN FOR LOOP", this.state.completeCustomers[customer] )
                     if (
                       this.state.completeCustomers[customer].authId ===
                       item.customerId
                     )
                       item.customer = this.state.completeCustomers[customer];
+                      console.log("CUSTOMER IS", item.customer);
                   }
                   completeOrders.push(this.returnRow(item));
                 })}
