@@ -107,7 +107,7 @@ export default class OrderPanel extends Component {
           >
             {!this.state.pending
               ? <Text />
-              : this.state.pending.forEach(item, idx => {
+              : this.state.pending.forEach(item => {
                   for (var customer in this.state.pendingCustomers) {
                     if (
                       this.state.pendingCustomers[customer].authId ===
