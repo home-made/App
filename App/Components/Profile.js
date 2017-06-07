@@ -217,7 +217,7 @@ export default class Profile extends Component {
           </Card>
           <Row style={{  alignItems: 'center', justifyContent: 'center'}}>
             <Button style={{marginRight: 10}} onPress={this.handleReviewsPress}><Text>Reviews</Text></Button>
-            {this.state.chef.isChef ? <Button style={{marginRight: 10}} onPress={this.handleMenuPress}><Text>Menu</Text></Button>: null}
+            {this.state.chef[0].isChef || this.state.chef.isChef ? <Button style={{marginRight: 10}} onPress={this.handleMenuPress}><Text>Menu</Text></Button>: null}
             {this.displayCheckout()}
           </Row>
 
