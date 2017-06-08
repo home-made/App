@@ -40,7 +40,7 @@ export default class Profile extends Component {
     } else {
       return (
         <Container style={{ marginRight: 10, marginLeft: 10, marginTop: 10 }}>
-          <H3>Your Reviews</H3>
+          <H3 style={{ color: '#E05050' }}>Your Reviews</H3>
           {allReviews.map(review => {
             return <Review review={review} />;
           })}
@@ -71,7 +71,7 @@ export default class Profile extends Component {
             var fullName = parsedProfile.name;
 
             axios
-              .get(`http://homemadeapp.org:3000/user/${authId}`)
+              .get(`http://localhost:3000/user/${authId}`)
               .then(user => {
                 console.log(
                   "the user inside axiospost for UserProfile.js is ",
@@ -114,6 +114,12 @@ export default class Profile extends Component {
   }
 
   render() {
+    const styles = {
+      text: {
+        color: '#E05050'
+      }
+    }
+
     console.log("the state inside UserProfile is ", this.state);
     return (
       <Container style={{ marginTop: 60 }}>
@@ -121,10 +127,10 @@ export default class Profile extends Component {
           <Card>
             <CardItem>
               <Body>
-                <Text>
+                <Text style={styles.text}>
                   {!this.state.fullName ? "name unknown" : this.state.fullName}
                 </Text>
-                <Text note>
+                <Text style={styles.text} note>
                   {!this.state.status
                     ? "No status at this time."
                     : this.state.status}
@@ -158,15 +164,6 @@ export default class Profile extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 60,
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
-  }
-});
 
 /*
 gmail UserProfile

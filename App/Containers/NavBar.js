@@ -14,6 +14,9 @@ import {
 } from "native-base";
 import { Actions, ActionConst } from "react-native-router-flux";
 import socket from '../Socket/Socket'
+
+import AnimatedLinearGradient, {presetColors} from 'react-native-animated-linear-gradient';
+// import { Switch } from "react-native-switch";
 import axios from "axios";
 
 export default class NavBar extends Component {
@@ -185,34 +188,56 @@ export default class NavBar extends Component {
         resizeMode: "cover"
       },
       entries: {
-        fontSize: 18
+        fontSize: 18,
+        color: '#E05050',
+        fontFamily: 'Noteworthy-Bold'
+      },
+      icons: {
+        color: '#E05050'
       }
     };
 
+    const colorScheme = {
+      homemade: [
+        '#9EECF0',
+        '#9EF0EA',
+        '#9EF0DA',
+        '#9EF0CE',
+        '#9EF0B6',
+        '#9EF0A0',
+        '#B2F09E',
+        '#D6F09E'
+      ]
+    }
+
     return (
       <Container>
-
-        <Image
-          source={require("./img/turquoise-top-gradient-background.jpg")}
-          style={styles.backgroundImage}
-        />
+        <AnimatedLinearGradient customColors={colorScheme.homemade} speed={1000}/>
 
         <View
           style={{
             marginTop: 25,
             flex: 0.08,
             justifyContent: "center",
-            flexDirection: "column"
+            flexDirection: "column",
+            backgroundColor: 'rgba(0,0,0,0)'
           }}
         >
-          <Text style={{ textAlign: "center", fontSize: 25 }}>homemade</Text>
+          <Text
+            style={{
+              textAlign: "center",
+              color: '#E05050',
+              fontFamily: 'MarkerFelt-Wide',
+              fontSize: 40
+            }}>
+              Homemade
+          </Text>
         </View>
 
         <Content>
-
           <ListItem icon onPress={this.cuisines} style={styles.content}>
             <Left>
-              <Icon name="ios-pizza" />
+              <Icon style={styles.icons} name="ios-pizza" />
             </Left>
             <Body>
               <Text style={styles.entries}>Cuisines</Text>
@@ -221,7 +246,7 @@ export default class NavBar extends Component {
 
           <ListItem icon onPress={this.profile} style={styles.content}>
             <Left>
-              <Icon name="ios-contact" />
+              <Icon style={styles.icons} name="ios-contact" />
             </Left>
             <Body>
               <Text style={styles.entries}>Profile</Text>
@@ -230,7 +255,7 @@ export default class NavBar extends Component {
 
           <ListItem icon onPress={this.chefMap} style={styles.content}>
             <Left>
-              <Icon name="ios-map" />
+              <Icon style={styles.icons} name="ios-map" />
             </Left>
             <Body>
               <Text style={styles.entries}>Map</Text>
@@ -240,7 +265,7 @@ export default class NavBar extends Component {
           {this.state.chefView
             ? <ListItem icon onPress={this.dishcreate} style={styles.content}>
                 <Left>
-                  <Icon name="ios-camera" />
+                  <Icon style={styles.icons} name="ios-camera" />
                 </Left>
                 <Body>
                   <Text style={styles.entries}>Create Dish</Text>
@@ -251,7 +276,7 @@ export default class NavBar extends Component {
           {this.state.chefView
             ? <ListItem icon onPress={this.chefPanel} style={styles.content}>
                 <Left>
-                  <Icon name="ios-clipboard" />
+                  <Icon style={styles.icons} name="ios-clipboard" />
                 </Left>
                 <Body>
                   <Text style={styles.entries}>Manage Dishes</Text>
@@ -261,7 +286,7 @@ export default class NavBar extends Component {
 
           <ListItem icon onPress={this.edit} style={styles.content}>
             <Left>
-              <Icon name="ios-create" />
+              <Icon style={styles.icons} name="ios-create" />
             </Left>
             <Body>
               <Text style={styles.entries}>Edit Profile</Text>
@@ -280,7 +305,7 @@ export default class NavBar extends Component {
             style={styles.content}
           >
             <Left>
-              <Icon name="ios-filing" />
+              <Icon style={styles.icons} name="ios-filing" />
             </Left>
             <Body>
               <Text style={styles.entries}>Orders</Text>
@@ -293,7 +318,7 @@ export default class NavBar extends Component {
           {!this.state.chefStatus
             ? <ListItem icon onPress={this.signature} style={styles.content}>
                 <Left>
-                  <Icon name="ios-star" />
+                  <Icon style={styles.icons} name="ios-star" />
                 </Left>
                 <Body>
                   <Text style={styles.entries}>Be A Chef!</Text>
@@ -303,7 +328,7 @@ export default class NavBar extends Component {
 
           <ListItem icon onPress={this.chefform} style={styles.content}>
             <Left>
-              <Icon name="ios-watch" />
+              <Icon style={styles.icons} name="ios-watch" />
             </Left>
             <Body>
               <Text style={styles.entries}>Chef Form</Text>
@@ -312,7 +337,7 @@ export default class NavBar extends Component {
 
           <ListItem icon onPress={this.logout} style={styles.content}>
             <Left>
-              <Icon name="ios-exit" />
+              <Icon style={styles.icons} name="ios-exit" />
             </Left>
             <Body>
               <Text style={styles.entries}>Log Out</Text>
@@ -329,7 +354,7 @@ export default class NavBar extends Component {
                   style={{ marginRight: 10 }}
                 />
 
-                <Text>Chef Mode</Text>
+                <Text style={styles.entries}>Chef Mode</Text>
               </ListItem>
             : null}
         </Content>

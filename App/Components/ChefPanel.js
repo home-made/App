@@ -36,11 +36,11 @@ export default class ChefPanel extends Component {
     }
 
     getAuthID().then(() => {
-      axios.get("http://homemadeapp.org:3000/dish/0/" + authID).then(inactive => {
+      axios.get("http://localhost:3000/dish/0/" + authID).then(inactive => {
         this.setState({ inactive: inactive.data }, () =>
           console.log("INACTIVE DISHES ARE ", this.state.inactive)
         );
-        axios.get("http://homemadeapp.org:3000/dish/1/" + authID).then(active => {
+        axios.get("http://localhost:3000/dish/1/" + authID).then(active => {
           this.setState({ active: active.data }, () =>
             console.log("ACTIVE DISHES ARE ", this.state.active)
           );

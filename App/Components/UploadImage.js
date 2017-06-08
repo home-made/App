@@ -55,7 +55,7 @@ class Upload extends Component {
     console.log("upload status is", this.state.cameraMode);
     // console.log(mode)
     axios
-      .get("http://homemadeapp.org:3000/api/")
+      .get("http://localhost:3000/api/")
       .then(res => {
         this.camera.capture(opt).then(data => {
           console.log(data);
@@ -99,9 +99,9 @@ class Upload extends Component {
               if (response.status !== 201)
                 throw new Error("Failed to upload image to S3");
               console.log(response.body.postResponse.location);
-              // console.log('http://homemadeapp.org:3000/user' + this.state.userId)
+              // console.log('http://localhost:3000/user' + this.state.userId)
               axios
-                .put("http://homemadeapp.org:3000/user/" + this.state.userId, {
+                .put("http://localhost:3000/user/" + this.state.userId, {
                   profileUrl: response.body.postResponse.location
                 })
                 .then(res => {

@@ -56,7 +56,7 @@ export default class ChefForm extends Component {
     console.log('first name: ', this.state.firstName);
     console.log('last name: ', this.state.lastName);
     if (this.state.phone !== null && this.state.firstName !== null && this.state.lastName !== null) {
-      axios.put(`http://homemadeapp.org:3000/user/${this.state.authId}`, { phoneNumber: this.state.phone, firstName: this.state.firstName, lastName: this.state.lastName })
+      axios.put(`http://localhost:3000/user/${this.state.authId}`, { phoneNumber: this.state.phone, firstName: this.state.firstName, lastName: this.state.lastName })
         .then((res) => console.log(res.data))
         .catch((err) => console.log('Error updating user to chef status: ', err));
 
@@ -65,40 +65,74 @@ export default class ChefForm extends Component {
   }
 
   render() {
+    const styles = {
+      container: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: "center",
+        margin: 10,
+        marginTop: 90,
+      },
+      inputContainer: {
+        flex:0.4,
+        justifyContent: 'center'
+      },
+      title: {
+        fontFamily: 'MarkerFelt-Thin',
+        fontSize: 50,
+        alignSelf: 'center',
+        color: '#E05050'
+      },
+      button: {
+        flex: .2,
+        justifyContent: "center",
+        alignSelf: 'center'
+      },
+      label: {
+        color: '#E05050'
+      },
+      input: {
+        color: '#9DDDE0'
+      },
+      kaede: {
+        backgroundColor: '#f9f5ed',
+        marginTop: 10
+      }
+    }
     return (
       <View style={styles.container}>
         <View style={{ alignItems: 'center' }}>
-          <Text style={{ fontFamily: 'MarkerFelt-Thin', fontSize: 50, alignSelf: 'center', color: '#EC6969'}}>Tell us about</Text>
-          <Text style={{ fontFamily: 'MarkerFelt-Thin', fontSize: 50, alignSelf: 'center', color: '#EC6969'}}>yourself</Text>
+          <Text style={styles.title}>Tell us about</Text>
+          <Text style={styles.title}>yourself</Text>
         </View>
-        <Container style={{flex:0.4, justifyContent: 'center' }}>
+        <Container style={styles.inputContainer}>
           <Content>
             <Kaede
-              style={{ backgroundColor: '#f9f5ed', marginTop: 10 }}
+              style={styles.kaede}
               label={'First Name'}
-              labelStyle={{ color: '#EC6969' }}
-              inputStyle={{ color: '#91627b' }}
+              labelStyle={styles.label}
+              inputStyle={styles.input}
               onChangeText={(e) => this.setState({ firstName: e })}
             />
             <Kaede
-              style={{ backgroundColor: '#f9f5ed', marginTop: 10 }}
+              style={styles.kaede}
               label={'Last Name'}
-              labelStyle={{ color: '#EC6969' }}
-              inputStyle={{ color: '#91627b' }}
+              labelStyle={styles.label}
+              inputStyle={styles.input}
               onChangeText={(e) => this.setState({ lastName: e })}
             />
             <Kaede
-              style={{ backgroundColor: '#f9f5ed', marginTop: 10 }}
+              style={styles.kaede}
               label={'Phone Number'}
-              labelStyle={{ color: '#EC6969' }}
-              inputStyle={{ color: '#91627b' }}
+              labelStyle={styles.label}
+              inputStyle={styles.input}
               onChangeText={(e) => this.setState({ phone: e })}
             />
             <Kaede
-              style={{ backgroundColor: '#f9f5ed', marginTop: 10 }}
+              style={styles.kaede}
               label={'E-mail'}
-              labelStyle={{ color: '#EC6969' }}
-              inputStyle={{ color: '#91627b' }}
+              labelStyle={styles.label}
+              inputStyle={styles.input}
               onChangeText={(e) => this.setState({ email: e })}
             />
           </Content>
@@ -120,18 +154,3 @@ export default class ChefForm extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: "center",
-    margin: 10,
-    marginTop: 90,
-  },
-  button: {
-    flex: .2,
-    justifyContent: "center",
-    alignSelf: 'center'
-  }
-});

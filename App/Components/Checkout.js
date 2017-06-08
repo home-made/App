@@ -130,22 +130,11 @@ export default class Checkout extends Component {
       orderInstructions: this.state.orderInstructions
     };
     console.log("NEW ORDER IS", newOrder)
-    socket = new SocketIO('http://homemadeapp.org:3000');
-    socket.connect();
-    socket.on("connect", () => {
-      socket.emit('user',newOrder);
-      socket.on("fresh", message => {
-        console.log(message);
-        console.log('send heem')
-      });
-      socket.on('disconnect', ()=>{
-        console.log('user disconnected')
-      })
-    });
+    this.props.sendOrderSocket(newOrder)
     this.sendNotification();
     let context = this;
     axios
-      .post("http://homemadeapp.org:3000/orders", newOrder)
+      .post("http://localhost:3000/orders", newOrder)
       .then(function(response) {
         console.log("New order inside Checkout.js was submitted to the database, response is: ", response);
         
@@ -159,11 +148,11 @@ export default class Checkout extends Component {
   }
   checkAgain(customer) {
     let customerId = customer;
-    axios.get("http://homemadeapp.org:3000/orders/" + customerId).then((orders) => {
+    axios.get("http://localhost:3000/orders/" + customerId).then((orders) => {
       console.log("Orders inside Checkout.js checkAgain() are ", orders);
 
       if(orders.data[orders.data.length - 1].status === 0){
-        axios.put("http://homemadeapp.org:3000/orders/", { _id: orders.data[orders.data.length - 1]._id, status: 3 } ).then((res) => {
+        axios.put("http://localhost:3000/orders/", { _id: orders.data[orders.data.length - 1]._id, status: 3 } ).then((res) => {
           console.log("SUCCESSFULLY CANCELED", res.data);
         })
       }
@@ -191,6 +180,21 @@ export default class Checkout extends Component {
   }
 
   render() {
+    const styles = {
+      container: {
+        marginTop: 64
+      },
+      total: {
+        fontFamily: 'Noteworthy-Bold',
+        fontSize: 20,
+        marginBottom: 10
+      },
+      submitButton: {
+        fontFamily: 'Noteworthy-Bold',
+        fontSize: 15
+      }
+    }
+
     console.log("render start");
     console.log("the state inside the checkout is ", this.state);
     if (!this.state.data) {
@@ -204,9 +208,8 @@ export default class Checkout extends Component {
       );
     } else {
       return (
-        <Container style={{marginTop: 65}}>
-          <Header><Text style={{marginBottom: 10}}>Checkout</Text></Header>
-          <Content style={{ marginTop: 40 }}>
+        <Container style={styles.container}>
+          <Content>
             <Text style={{textAlign: "center"}}>Special Requests/Notes for Chef</Text>
             <TextInput
             style={{
@@ -239,7 +242,9 @@ export default class Checkout extends Component {
                 );
               })}
             </List>
-            <Header><Text style={{marginBottom: 10}}>Total: ${this.state.cashTotal}</Text></Header>
+            <Header>
+              <Text style={styles.total}>Total: ${this.state.cashTotal}</Text>
+            </Header>
             <Container style={{ alignItems: "center" }}>
               <Content>
                 <Button
@@ -247,7 +252,7 @@ export default class Checkout extends Component {
                   onPress={this.submitOrder}
                   success
                 >
-                  <Text>Submit Order</Text>
+                  <Text style={styles.submitButton}>Submit Order</Text>
                 </Button>
 
                 
