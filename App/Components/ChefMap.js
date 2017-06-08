@@ -47,6 +47,32 @@ export default class ChefMap extends Component {
   }
 
   render() {
+    if (this.props.singleChef) {
+      let latlng = {
+        latitude: this.props.singleChef.latitude,
+        longitude: this.props.singleChef.longitude
+      }
+
+      return ( 
+        <View style={{ flex: 1, marginTop: -40 }}>
+          <View style={styles.container}>
+            <MapView 
+              showsUserLocation={true}
+              style={styles.map}
+              region={this.props.singleChef}
+            >
+            <MapView.Marker
+              coordinate={latlng}
+
+            />
+            </MapView>
+          </View>
+        </View>
+      )
+    
+    } else {
+
+    
     return (
       <View style={{ flex: 1, marginTop: -40 }}>
         <View style={styles.container}>
@@ -88,6 +114,7 @@ export default class ChefMap extends Component {
         </View>
       </View>
     );
+    }
   }
 }
 
