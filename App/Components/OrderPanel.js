@@ -112,7 +112,7 @@ export default class OrderPanel extends Component {
                     )
                       item.customer = this.state.pendingCustomers[customer];
                   }
-                  pendingOrders.push(this.returnRow(item));
+                  pendingOrders.unshift(this.returnRow(item));
                 })}
             <List style={{ marginTop: 10 }} dataArray={this.state.pending}>
               {pendingOrders}
@@ -130,7 +130,7 @@ export default class OrderPanel extends Component {
                     )
                       item.customer = this.state.acceptedCustomers[customer];
                   }
-                  acceptedOrders.push(this.returnRow(item));
+                  acceptedOrders.unshift(this.returnRow(item));
                 })}
             <List style={{ marginTop: 10 }} dataArray={this.state.accepted}>
               {acceptedOrders}
@@ -148,7 +148,7 @@ export default class OrderPanel extends Component {
                     )
                       item.customer = this.state.completeCustomers[customer];
                   }
-                  completeOrders.push(this.returnRow(item));
+                  completeOrders.unshift(this.returnRow(item));
                 })}
             <List style={{ marginTop: 10 }} dataArray={this.state.complete}>
               {completeOrders}
