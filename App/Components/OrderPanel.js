@@ -65,19 +65,19 @@ export default class OrderPanel extends Component {
 
     getAuthID().then(() => {
       axios
-        .get("http://localhost:3000/orders/0/" + authID)
+        .get("http://homemadeapp.org:3000/orders/0/" + authID)
         .then(pending => {
           this.setState({ pendingCustomers: pending.data[1] }, () =>
             this.setState({ pending: pending.data[0] })
           );
           axios
-            .get("http://localhost:3000/orders/1/" + authID)
+            .get("http://homemadeapp.org:3000/orders/1/" + authID)
             .then(accepted => {
               this.setState({ acceptedCustomers: accepted.data[1] }, () =>
                 this.setState({ accepted: accepted.data[0] }, () => {})
               );
               axios
-                .get("http://localhost:3000/orders/2/" + authID)
+                .get("http://homemadeapp.org:3000/orders/2/" + authID)
                 .then(complete => {
                   console.log("COMPLETE DATA IS", complete.data)
                   this.setState({ completeCustomers: complete.data[1] }, () =>{
