@@ -102,7 +102,7 @@ export default class UserOrderPanel extends Component {
         borderRadius: 100
       },
       refreshText: {
-        color: '#E05050',
+        color: '#505050',
         fontFamily: 'Noteworthy-Bold',
         fontSize: 17
       },

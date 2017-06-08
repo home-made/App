@@ -227,7 +227,7 @@ export default class Profile extends Component {
       cardName: {
         alignSelf: 'center',
         fontSize: 18,
-        color: '#E05050',
+        color: '#505050',
         fontFamily: 'Noteworthy-Bold'
       },
       cardDesc: {

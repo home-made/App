@@ -81,7 +81,7 @@ export default class ChefForm extends Component {
         fontFamily: 'MarkerFelt-Thin',
         fontSize: 50,
         alignSelf: 'center',
-        color: '#E05050'
+        color: '#505050'
       },
       button: {
         flex: .2,
@@ -89,7 +89,7 @@ export default class ChefForm extends Component {
         alignSelf: 'center'
       },
       label: {
-        color: '#E05050'
+        color: '#505050'
       },
       input: {
         color: '#9DDDE0'
