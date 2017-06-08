@@ -22,7 +22,6 @@ export default class NavigationDrawer extends Component {
         panCloseMask={.3}
         negotiatePan={true}
         styles={drawerStyles}
-        renderLeftButton={<Icon name='ios-pizza' />}
         tweenHandler={ratio => {
           return {
             mainOverlay: {
