@@ -32,6 +32,8 @@ export default class ChefForm extends Component {
   }
 
   componentWillMount() {
+        console.log("IN CHEF FORM WILL MOUNT")
+
     let userId;
     async function grabAuthId() {
       try {

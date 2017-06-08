@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   ActivityIndicator
 } from "react-native";
-import { Actions } from "react-native-router-flux";
+import { Actions, ActionConst } from "react-native-router-flux";
 
 import Promise from "bluebird";
 import Auth0Lock from "react-native-lock";
@@ -26,9 +26,9 @@ export default class HomePage extends Component {
     this.options = {
       closeable: true,
       languageDictionary: {
-        title: 'Homemade'
+        title: "Homemade"
       }
-    }
+    };
 
     this.lock = new Auth0Lock({
       clientId: "Rp7ThYPPRNHrSGUaLOv_Ub307zwDb_VR",
@@ -44,7 +44,6 @@ export default class HomePage extends Component {
   componentDidMount() {
     console.log("HOME PAGE MOUNTED");
     this.checkStorage();
-  
   }
 
   componentWillUnmount() {}
@@ -62,11 +61,11 @@ export default class HomePage extends Component {
           data
         );
         if (data[2][1] === "true") {
-          console.log('last stepppppppp')
+          console.log("last stepppppppp");
           Actions.drawer();
         }
       } else {
-        console.log('WHAT IS ', data);
+        console.log("WHAT IS ", data);
       }
     } catch (err) {
       console.log(
@@ -77,6 +76,7 @@ export default class HomePage extends Component {
   }
 
   onLogin() {
+    let saveUser;
     this.lock.show(
       {
         // connections: ["touchid"]
@@ -92,27 +92,30 @@ export default class HomePage extends Component {
              that either finds or creates a user. we find out 
              if user is a chef or not */
 
-          axios.post(`http://homemadeapp.org:3000/user/${profile.userId}`, profile).then((user) => {
+          axios
+            .post(`http://homemadeapp.org:3000/user/${profile.userId}`, profile)
+            .then(user => {
+              saveUser = user.data;
+              console.log("The user data inside HomePage is ", user);
+              if (user.data.profileUrl) {
+                profile.extraInfo.picture_large = user.data.profileUrl;
+                profile.picture = user.data.profileUrl;
+              }
 
-            console.log("The user data inside HomePage is ", user)
-            if (user.data.profileUrl) {
-              profile.extraInfo.picture_large = user.data.profileUrl
-              profile.picture = user.data.profileUrl
-            }
-            if (user.data.isChef) {
+              if (user.data.isChef) {
                 profile.isChef = true;
                 profile.chefView = true;
                 profile = JSON.stringify(profile);
                 setStorage();
-            } else {
-              profile.chefView = false;
-              profile.isChef = false;
-              profile = JSON.stringify(profile);
-              setStorage();
-            }
-          }).catch((err) => console.log(err));
-            
-        
+              } else {
+                profile.chefView = false;
+                profile.isChef = false;
+                profile = JSON.stringify(profile);
+                setStorage();
+              }
+            })
+            .catch(err => console.log(err));
+
           async function setStorage() {
             try {
               await AsyncStorage.multiSet(
@@ -124,11 +127,17 @@ export default class HomePage extends Component {
                 err =>
                   (err ? console.log("ERROR: ", err) : console.log("Info set!"))
               );
-              
+
               profile = JSON.parse(profile);
-              console.log("RIGHT BEFORE ACTIONS PROFILE IS", profile)
-              // App.render();
-              Actions.drawer();
+              console.log("RIGHT BEFORE ACTIONS PROFILE IS", profile);
+              console.log("RIGHT BEFORE IF STATEMENT", saveUser);
+              if (saveUser.phoneNumber) {
+                console.log("HI")
+                Actions.drawer();
+              } else {
+                console.log("INSIDE ELSE BLOCK");
+                Actions.drawer({saveUser});
+              }
             } catch (err) {
               console.log(
                 "Set storage function on Homepage.js, Error setting data: ",
