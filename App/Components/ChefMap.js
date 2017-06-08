@@ -10,6 +10,7 @@ import {
 import MapView from "react-native-maps";
 import { Actions, Router, Scene, Modal } from "react-native-router-flux";
 import GetGeoLocation from "../utils/GetGeoLocation";
+import Icon from "react-native-vector-icons/Entypo"
 import axios from "axios";
 const { width, height } = Dimensions.get("window");
 export default class ChefMap extends Component {
@@ -22,20 +23,6 @@ export default class ChefMap extends Component {
     };
   }
 
-  // watchID: ?number = null;
-
-  // giveDirections(chef) {
-  //   const rla = this.state.region.latitude;
-  //   const rlo = this.state.region.longitude;
-
-  //   const la = chef.location.geo_lat;
-  //   const lo = chef.location.geo_lng;
-
-  //   const url = `http://maps.apple.com/?saddr=${rla},${rlo}&daddr=${la},${lo}&dirflg=d`;
-  //   // const url = `http://maps.apple.com/?saddr=${rla},${rlo}&daddr=106+Austin+Dr+Folsom+CA&dirflg=d`;
-  //   console.log(Linking.openURL(url));
-  //   return Linking.openURL(url);
-  // }
   componentWillMount() {
     let location = this.props.getLocation();
     console.log("LOCATION IN WILL MOUNT")
@@ -47,7 +34,7 @@ export default class ChefMap extends Component {
     }
     this.setState({region}, () => {
       axios
-      .post("http://localhost:3000/chefTest", {
+      .post("http://homemadeapp.org:3000/chefTest", {
         lat: this.state.region.latitude,
         lon: this.state.region.longitude
       })
@@ -57,18 +44,6 @@ export default class ChefMap extends Component {
       })
       .catch(err => console.log(err));
     })
-  }
-
-  componentDidMount() {
-    var context = this;
-    //NEED TO CHANGE TEST ROUTE TO GET CHEF DATA
-    //MUST AMEND BACKEND ROUTES
-
-    // GetGeoLocation(context);
-  }
-
-  componentWillUnmount() {
-    // navigator.geolocation.clearWatch(this.watchId);
   }
 
   render() {
@@ -119,11 +94,20 @@ export default class ChefMap extends Component {
 
               return (
                 <MapView.Marker
-                  onPress={() => this.props.setChef(chef)}
-                  key={name}
+
                   coordinate={coords.latlng}
-                  title={name}
-                />
+                 
+                >
+                  <MapView.Callout
+                    style={{width: 'auto'}}
+              
+                  >
+                    <View style={{flexDirection: "row", alignItems: "center"}}>
+                    <Text>{name}</Text>
+                    <Icon size={18} onPress={() => this.props.setChef(chef) } style={{marginLeft: 5, height: 18}} name="chevron-with-circle-right" />
+                    </View>
+                  </MapView.Callout>
+                </MapView.Marker>
               );
             })}
           </MapView>
