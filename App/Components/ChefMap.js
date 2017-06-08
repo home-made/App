@@ -68,17 +68,14 @@ export default class ChefMap extends Component {
 
               return (
                 <MapView.Marker
-
                   coordinate={coords.latlng}
-                 
                 >
                   <MapView.Callout
                     style={{width: 'auto'}}
-              
                   >
-                    <View style={{flexDirection: "row", alignItems: "center"}}>
-                    <Text>{name}</Text>
-                    <Icon size={18} onPress={() => this.props.setChef(chef) } style={{marginLeft: 5, height: 18}} name="chevron-with-circle-right" />
+                    <View style={{flexDirection: "row", alignItems: "center" }}>
+                      <Text style={styles.text}>{name}</Text>
+                    <Icon size={18} onPress={() => this.props.setChef(chef) } style={{marginLeft: 5, height: 18, color: '#E05050' }} name="chevron-with-circle-right" />
                     </View>
                   </MapView.Callout>
                 </MapView.Marker>
@@ -100,5 +97,9 @@ const styles = StyleSheet.create({
   },
   map: {
     ...StyleSheet.absoluteFillObject
+  },
+  text: {
+    color: '#E05050',
+    fontFamily: 'Noteworthy-Bold'
   }
 });

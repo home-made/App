@@ -15,16 +15,29 @@ export default class Cuisines extends Component {
   }
 
   render() {
+    const styles = {
+      scrollView: {
+        alignSelf: "stretch"
+      },
+      list: {
+        marginTop: 60
+      },
+      text: {
+        color: '#E05050',
+        fontFamily: 'Noteworthy-Bold'
+      }
+    }
+
     return (
-      <ScrollView style={{ alignSelf: "stretch" }}>
-        <List style={{ marginTop: 60 }}>
+      <ScrollView style={styles.scrollView}>
+        <List style={styles.list}>
           {this.state.genres.map((genre, index) => {
             return (
               <ListItem
                 onPress={() => this.props.setCuisineType(genre)}
                 key={index}
               >
-                <Text>
+                <Text style={styles.text}>
                   {genre}
                 </Text>
               </ListItem>

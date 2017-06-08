@@ -200,10 +200,12 @@ export default class App extends Component {
           key="homepage"
           component={HomePage}
           direction="vertical"
-          style={styles.navbar}
           initial
         />
-        <Scene key="chefform" component={ChefForm} />
+        <Scene
+          key="chefform"
+          component={ChefForm}
+        />
         <Scene
           key="drawer"
           type={ActionConst.RESET}
@@ -213,12 +215,8 @@ export default class App extends Component {
           <Scene key="main" initial>
 
             <Scene
-              navigationBarStyle={{ backgroundColor: "white" }}
-              titleStyle={{
-                fontFamily: "helvetica",
-                fontWeight: "bold",
-                color: "white"
-              }}
+              navigationBarStyle={styles.navbar}
+              titleStyle={styles.title}
               key="cuisines"
               component={Cuisines}
               title="Cuisines"
@@ -226,6 +224,8 @@ export default class App extends Component {
               getStyles={this.getCuisineStyles}
             />
             <Scene
+              navigationBarStyle={styles.navbar}
+              titleStyle={styles.title}
               key="dishedit"
               title="Manage Dish"
               component={ManageDish}
@@ -233,12 +233,16 @@ export default class App extends Component {
               getStyles={this.getCuisineStyles}
             />
             <Scene
+              navigationBarStyle={styles.navbar}
+              titleStyle={styles.title}
               key="chefPanel"
               component={ChefPanel}
               title="Chef Panel"
               setDish={this.setDishDetails}
             />
             <Scene
+              navigationBarStyle={styles.navbar}
+              titleStyle={styles.title}
               key="chefList"
               component={ChefList}
               title="Chefs"
@@ -247,13 +251,19 @@ export default class App extends Component {
             />
 
             <Scene
+              navigationBarStyle={styles.navbar}
+              titleStyle={styles.title}
+              title="Profile"
               key="userProfile"
               setCart={this.setCart}
               component={UserProfile}
             />
 
             <Scene
+              navigationBarStyle={styles.navbar}
+              titleStyle={styles.title}
               key="profile"
+              title="Chef Profile"
               setCart={this.setCart}
               chef={this.state.user}
               component={Profile}
@@ -261,6 +271,9 @@ export default class App extends Component {
             />
 
             <Scene
+              navigationBarStyle={styles.navbar}
+              titleStyle={styles.title}
+              title="Map"
               key="chefMap"
               component={ChefMap}
               setChef={this.setChef}
@@ -268,11 +281,16 @@ export default class App extends Component {
             />
 
             <Scene
+              navigationBarStyle={styles.navbar}
+              titleStyle={styles.title}
+              title="Checkout"
               key="checkout"
               component={Checkout}
               fetchCart={this.fetchCart}
             />
             <Scene
+              navigationBarStyle={styles.navbar}
+              titleStyle={styles.title}
               key="dishcreate"
               component={DishCreate}
               setCameraMode={this.setUploadStatus}
@@ -281,12 +299,17 @@ export default class App extends Component {
               title="Create Dish"
             />
             <Scene
+              navigationBarStyle={styles.navbar}
+              titleStyle={styles.title}
+              title="Confirm"
               key="dishconfirm"
               component={DishConfirm}
               setDish={this.setDishDetails}
               fetchDish={this.fetchDishDetails}
             />
             <Scene
+              navigationBarStyle={styles.navbar}
+              titleStyle={styles.title}
               key="uploadimage"
               component={UploadImage}
               title="Upload Dish"
@@ -295,25 +318,50 @@ export default class App extends Component {
               fetchCameraMode={this.fetchUploadStatus}
             />
             <Scene
+              navigationBarStyle={styles.navbar}
+              titleStyle={styles.title}
+              title="Edit Profile"
               key="edit"
               component={EditProfile}
               setCameraMode={this.setUploadStatus}
             />
 
-            <Scene key="orders" component={OrderPanel} />
-            <Scene key="orderView" component={OrderView} title="Order" />
             <Scene
+              navigationBarStyle={styles.navbar}
+              titleStyle={styles.title}
+              title="Orders"
+              key="orders"
+              component={OrderPanel}
+            />
+            <Scene
+              navigationBarStyle={styles.navbar}
+              titleStyle={styles.title}
+              key="orderView"
+              component={OrderView}
+              title="Order"
+            />
+            <Scene
+              navigationBarStyle={styles.navbar}
+              titleStyle={styles.title}
               key="userOrders"
               component={UserOrderPanel}
               title="Orders"
               getChef={this.getChef}
               setChefLocationAndPhoneNumber={this.setChefLocationAndPhoneNumber}
             />
-            <Scene key="feedback" component={Feedback} title="Feedback" />
             <Scene
+              navigationBarStyle={styles.navbar}
+              titleStyle={styles.title}
+              key="feedback"
+              component={Feedback}
+              title="Feedback"
+            />
+            <Scene
+              navigationBarStyle={styles.navbar}
+              titleStyle={styles.title}
               key="signature"
               component={SignaturePage}
-              title="Signature Page"
+              title="Signature"
               showAlert={this.showAlert}
             />
           </Scene>
@@ -330,6 +378,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#2c3e50"
+  },
+  navbar: {
+    backgroundColor: '#9DDDE0',
+    opacity: 0.8
+  },
+  title: {
+    fontFamily: 'MarkerFelt-Thin',
+    fontSize: 23,
+    fontWeight: "bold",
+    color: "#E05050"
   },
   welcome: {
     fontSize: 20,

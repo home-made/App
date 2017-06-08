@@ -190,6 +190,20 @@ export default class Checkout extends Component {
   }
 
   render() {
+    const styles = {
+      container: {
+        marginTop: 60
+      },
+      total: {
+        fontFamily: 'Noteworthy-Bold',
+        fontSize: 20
+      },
+      submitButton: {
+        fontFamily: 'Noteworthy-Bold',
+        fontSize: 15
+      }
+    }
+
     console.log("render start");
     console.log("the state inside the checkout is ", this.state);
     if (!this.state.data) {
@@ -203,8 +217,7 @@ export default class Checkout extends Component {
       );
     } else {
       return (
-        <Container>
-          <Header><Text>Checkout</Text></Header>
+        <Container style={styles.container}>
           <Content>
             <List>
               {this.state.data.map(orderItem => {
@@ -221,7 +234,9 @@ export default class Checkout extends Component {
                 );
               })}
             </List>
-            <Header><Text>Total: ${this.state.cashTotal}</Text></Header>
+            <Header>
+              <Text style={styles.total}>Total: ${this.state.cashTotal}</Text>
+            </Header>
             <Container style={{ alignItems: "center" }}>
               <Content>
                 <Button
@@ -229,7 +244,7 @@ export default class Checkout extends Component {
                   onPress={this.submitOrder}
                   success
                 >
-                  <Text>Submit Order</Text>
+                  <Text style={styles.submitButton}>Submit Order</Text>
                 </Button>
               </Content>
             </Container>

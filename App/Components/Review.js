@@ -9,23 +9,29 @@ export default class Review extends Component {
   }
 
   render() {
+    const styles = {
+      reviewScore: {
+        color: '#E05050',
+        fontFamily: 'Noteworthy-Bold',
+        fontSize: 18,
+        alignSelf: 'center',
+        marginBottom: 15
+      },
+      review: {
+        fontFamily: 'Noteworthy-Bold',
+        fontSize: 15,
+        marginBottom: 15,
+      }
+    }
+
     console.log("props inside Review.js are ", this.props)
     return (
       <ListItem avatar>
         <Body>
-          <Text>Review Score: {this.props.review.score}</Text>
-          <Text note>{this.props.review.userText}</Text>
+          <Text style={styles.reviewScore}>Review Score: {this.props.review.score}</Text>
+          <Text style={styles.review} note>{this.props.review.userText}</Text>
         </Body>
       </ListItem>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F5FCFF"
-  }
-});
