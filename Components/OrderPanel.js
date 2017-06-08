@@ -81,6 +81,9 @@ export default class OrderPanel extends Component {
                 .then(complete => {
                   console.log("COMPLETE DATA IS", complete.data)
                   this.setState({ completeCustomers: complete.data[1] }, () =>{
+
+                  
+                    // console.log(this.state.completedCustomers)
                     this.setState({ complete: complete.data[0] }, () => {})
                   });
                 });

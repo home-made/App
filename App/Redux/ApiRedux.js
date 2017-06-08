@@ -1,7 +1,7 @@
 // require('dotenv').load();
 import { Platform } from 'react-native';
 
-const API = 'http://homemadeapp.org:3000';
+const API = 'http://localhost:3000';
 
 // MIDDLEWARE
 

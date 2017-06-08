@@ -130,7 +130,7 @@ export default class Checkout extends Component {
       orderInstructions: this.state.orderInstructions
     };
     console.log("NEW ORDER IS", newOrder)
-    this.props.sendOrderSocket(newOrder);
+    this.props.sendOrderSocket(newOrder)
     this.sendNotification();
     let context = this;
     axios

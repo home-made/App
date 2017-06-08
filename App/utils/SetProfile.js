@@ -5,7 +5,7 @@ export default SetProfile = (context, userId) => {
   console.log("The userId inside SetProfile.js is ", userId);
   
   //get the user's info by Id
-  axios.get(`http://homemadeapp.org:3000/user/${userId}`).then(user => {
+  axios.get(`http://localhost:3000/user/${userId}`).then(user => {
     
     console.log("the user inside axiospost for SetProfile.js is ", user);
 
@@ -24,7 +24,7 @@ export default SetProfile = (context, userId) => {
     });
 
   //Get the dishes by userId
-  axios.get(`http://homemadeapp.org:3000/dish/1/${userId}`).then(dishes => {
+  axios.get(`http://localhost:3000/dish/1/${userId}`).then(dishes => {
     console.log("Dishes by userId inside Axios get in SetProfile.js are ", dishes)    
     var activeDishes = dishes.data; //array of objs
     
