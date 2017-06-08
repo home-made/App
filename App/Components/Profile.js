@@ -31,10 +31,22 @@ export default class Profile extends Component {
   }
 
   componentWillMount() {
-    let chef = this.props.getChef();
+    console.log("PROPS IN PROFILE", this.props)
+    let chef;
+    if(this.props.chef) {
+      chef = [this.props.chef, this.props.chef.customerReviews,this.props.chef.customerReviews];
+            console.log("IN IF BLOCK CHEF IS,", chef)
+
+    } else {
+      
+      chef = this.props.getChef();
+      console.log("IN ELSE BLOCK CHEF IS,", chef)
+
+    }
+    
 
     console.log("the chef inside Profile.js of componentWillMount is ", chef)
-    this.setState({ chef: this.props.getChef(), cart: [] }, () => {
+    this.setState({ chef: chef, cart: [] }, () => {
       
       let scoresArray = [];
       let numOfReviews = this.state.chef[0].chefReviews.length;
@@ -43,7 +55,7 @@ export default class Profile extends Component {
       let reviews = this.state.chef[0].chefReviews.map(curr => {
 
         scoresArray.push(curr.score);
-
+        console.log("CURR IS", curr)
         return {
           userText: curr.reviewText,
           user: this.state.chef[2][
@@ -205,7 +217,7 @@ export default class Profile extends Component {
           </Card>
           <Row style={{  alignItems: 'center', justifyContent: 'center'}}>
             <Button style={{marginRight: 10}} onPress={this.handleReviewsPress}><Text>Reviews</Text></Button>
-            <Button style={{marginRight: 10}} onPress={this.handleMenuPress}><Text>Menu</Text></Button>
+            {this.state.chef[0].isChef ? <Button style={{marginRight: 10}} onPress={this.handleMenuPress}><Text>Menu</Text></Button>: null}
             {this.displayCheckout()}
           </Row>
 

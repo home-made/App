@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, AsyncStorage, Alert } from "react-native";
+import { View, AsyncStorage, Alert, TextInput } from "react-native";
 import axios from "axios";
 import { Container, Content, List, Header, Text, Button } from "native-base";
 import CheckOutItem from "./CheckOutItem.js";
@@ -125,7 +125,8 @@ export default class Checkout extends Component {
       customerId: this.state.customerId,
       cart: this.state.dishCounter,
       status: 0,
-      cashTotal: this.state.cashTotal
+      cashTotal: this.state.cashTotal,
+      orderInstructions: this.state.orderInstructions
     };
 
     this.props.sendOrderSocket(newOrder)
@@ -144,6 +145,7 @@ export default class Checkout extends Component {
     });
     this.sendNotification();
     let context = this;
+    //http://homemadeapp.org:3000/orders
     axios
       .post("http://localhost:3000/orders", newOrder)
       .then(function(response) {
@@ -195,7 +197,7 @@ export default class Checkout extends Component {
     console.log("the state inside the checkout is ", this.state);
     if (!this.state.data) {
       return (
-        <Container>
+        <Container style={{marginTop: 63}}>
           <Header><Text>Checkout</Text></Header>
           <Content>
             <Text>Your shopping cart is empty!</Text>
@@ -204,10 +206,27 @@ export default class Checkout extends Component {
       );
     } else {
       return (
-        <Container>
-          <Header><Text>Checkout</Text></Header>
-          <Content>
-            <List>
+        <Container style={{marginTop: 65}}>
+          <Header><Text style={{marginBottom: 10}}>Checkout</Text></Header>
+          <Content style={{ marginTop: 40 }}>
+            <Text style={{textAlign: "center"}}>Special Requests/Notes for Chef</Text>
+            <TextInput
+            style={{
+              fontSize: 18,
+              marginLeft: "auto",
+              marginRight: "auto",
+              padding: 20,
+              height: 150,
+              borderColor: "gray",
+              borderWidth: 2,
+              width: 340
+            }}
+            onChangeText={orderInstructions => this.setState({ orderInstructions }, 
+            () => console.log(this.state.orderInstructions))}
+            multiline={true}
+            maxLength={300}
+          />
+            <List style={{marginTop: 40}}>
               {this.state.data.map(orderItem => {
                 return (
                   <CheckOutItem
@@ -222,21 +241,44 @@ export default class Checkout extends Component {
                 );
               })}
             </List>
-            <Header><Text>Total: ${this.state.cashTotal}</Text></Header>
+            <Header><Text style={{marginBottom: 10}}>Total: ${this.state.cashTotal}</Text></Header>
             <Container style={{ alignItems: "center" }}>
               <Content>
                 <Button
-                  style={{ marginTop: 10 }}
+                  style={{ marginTop: 30, marginLeft: "auto", marginRight: "auto" }}
                   onPress={this.submitOrder}
                   success
                 >
                   <Text>Submit Order</Text>
                 </Button>
+
+                
               </Content>
             </Container>
           </Content>
+
+       
         </Container>
       );
     }
   }
 }
+
+/*
+
+<TextInput
+  style={{
+      fontSize: 20,
+      padding: 10,
+      height: 200,
+      borderColor: "gray",
+    borderWidth: 2,
+    width: 200
+  }}
+  onChangeText={orderInstructions =>
+      this.setState({ orderInstructions }, () => console.log(this.state.orderInstructions))}
+  multiline={true}
+  maxLength={300}
+/>
+
+*/

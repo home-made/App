@@ -11,8 +11,9 @@ import {
   Label,
   Item
 } from "native-base";
-import { Actions } from "react-native-router-flux";
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { Actions, ActionConst } from "react-native-router-flux";
+import MaterialsIcon from 'react-native-vector-icons/MaterialIcons';
+import { Kaede } from 'react-native-textinput-effects';
 import axios from 'axios';
 
 export default class ChefForm extends Component {
@@ -21,8 +22,10 @@ export default class ChefForm extends Component {
 
     this.state = {
       authId: null,
-      address: null,
-      phone: null
+      phone: null,
+      firstName: null,
+      lastName: null,
+      email: null
     };
 
     this.submitForm = this.submitForm.bind(this);
@@ -49,79 +52,58 @@ export default class ChefForm extends Component {
   }
 
   submitForm() {
-    console.log('address: ', this.state.address);
     console.log('phone number: ', this.state.phone);
-    if (this.state.address !== null && this.state.phone !== null) {
-      axios.put(`http://localhost:3000/user/${this.state.authId}`, { address: this.state.address, phoneNumber: this.state.phone })
+    console.log('first name: ', this.state.firstName);
+    console.log('last name: ', this.state.lastName);
+    if (this.state.phone !== null && this.state.firstName !== null && this.state.lastName !== null) {
+      axios.put(`http://homemadeapp.org:3000/user/${this.state.authId}`, { phoneNumber: this.state.phone, firstName: this.state.firstName, lastName: this.state.lastName })
+
         .then((res) => console.log(res.data))
         .catch((err) => console.log('Error updating user to chef status: ', err));
+
+      Actions.cuisines({ type: ActionConst.RESET });
     }
-    Actions.signature();
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <Container style={{flex:0.4}}>
+        <View style={{ alignItems: 'center' }}>
+          <Text style={{ fontFamily: 'MarkerFelt-Thin', fontSize: 50, alignSelf: 'center', color: '#EC6969'}}>Tell us about</Text>
+          <Text style={{ fontFamily: 'MarkerFelt-Thin', fontSize: 50, alignSelf: 'center', color: '#EC6969'}}>yourself</Text>
+        </View>
+        <Container style={{flex:0.4, justifyContent: 'center' }}>
           <Content>
-            <Form>
-              <Item stackedLabel>
-                <Label>Phone Number</Label>
-                <Input placeholder={'eg: 000-000-0000'} onChangeText={(e) => this.setState({ phone: e })}/>
-              </Item>
-            </Form>
-            </Content>
-        </Container>
-
-            <GooglePlacesAutocomplete
-              placeholder='Address'
-              minLength={2}
-              autoFocus={false}
-              listViewDisplayed='auto'
-              fetchDetails={true}
-              renderDescription={(row) => row.description}
-              onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true 
-                console.log(data);
-                console.log(details);
-                this.setState({
-                  address: data.description
-                })
-              }}
-              getDefaultValue={() => {
-                return '';
-              }}
-              query={{
-                // https://developers.google.com/places/web-service/autocomplete 
-                key: 'AIzaSyDySPBT6q0rzspVjjJWZDnEGCaT3CJBMKQ',
-                language: 'en',
-                types: 'address'
-              }}
-              styles={{
-                description: {
-                  fontWeight: 'bold'
-                },
-                predefinedPlacesDescription: {
-                  color: '#1faadb'
-                },
-              }}
-              currentLocation={true}
-              currentLocationLabel="Current location"
-              nearbyPlacesAPI='GooglePlacesSearch' // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch 
-              GoogleReverseGeocodingQuery={{
-                // available options for GoogleReverseGeocoding API : https://developers.google.com/maps/documentation/geocoding/intro 
-              }}
-              GooglePlacesSearchQuery={{
-                // available options for GooglePlacesSearch API : https://developers.google.com/places/web-service/search 
-                rankby: 'distance',
-                types: 'food',
-              }}
-      
-      
-              filterReverseGeocodingByTypes={['locality', 'administrative_area_level_3']} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3'] if you want to display only cities 
-      
-              debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
+            <Kaede
+              style={{ backgroundColor: '#f9f5ed', marginTop: 10 }}
+              label={'First Name'}
+              labelStyle={{ color: '#EC6969' }}
+              inputStyle={{ color: '#91627b' }}
+              onChangeText={(e) => this.setState({ firstName: e })}
             />
-
+            <Kaede
+              style={{ backgroundColor: '#f9f5ed', marginTop: 10 }}
+              label={'Last Name'}
+              labelStyle={{ color: '#EC6969' }}
+              inputStyle={{ color: '#91627b' }}
+              onChangeText={(e) => this.setState({ lastName: e })}
+            />
+            <Kaede
+              style={{ backgroundColor: '#f9f5ed', marginTop: 10 }}
+              label={'Phone Number'}
+              labelStyle={{ color: '#EC6969' }}
+              inputStyle={{ color: '#91627b' }}
+              onChangeText={(e) => this.setState({ phone: e })}
+            />
+            <Kaede
+              style={{ backgroundColor: '#f9f5ed', marginTop: 10 }}
+              label={'E-mail'}
+              labelStyle={{ color: '#EC6969' }}
+              inputStyle={{ color: '#91627b' }}
+              onChangeText={(e) => this.setState({ email: e })}
+            />
+          </Content>
+        </Container>
         <View style={styles.button}>
           <Button
             large
@@ -131,8 +113,7 @@ export default class ChefForm extends Component {
               this.submitForm();
             }}
           >
-            <Icon name="beer" />
-            <Text>Become a Chef!</Text>
+            <Text>Submit</Text>
           </Button>
         </View>
       </View>
@@ -145,11 +126,12 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: "center",
+    margin: 10,
     marginTop: 90,
   },
   button: {
-    flex: .5,
-    justifyContent: "space-around",
+    flex: .2,
+    justifyContent: "center",
     alignSelf: 'center'
   }
 });

@@ -16,6 +16,8 @@ import axios from "axios";
 import { Actions } from "react-native-router-flux";
 import SocketIO from "socket.io-client";
 var socket = new SocketIO("localhost:3000");
+import moment from "moment";
+
 export default class OrderPanel extends Component {
   constructor() {
     super();
@@ -24,24 +26,15 @@ export default class OrderPanel extends Component {
   }
 
   returnRow(data) {
-    var year = data.date.slice(0,4)
-    var month =data.date.slice(5,7)
-    var day = data.date.slice(8,10)
-    var hour = parseInt(data.date.slice(11,16))
-    var minute = data.date.slice(17,19)
-    var time;
-    if( hour >12) {
-      hour = hour-12 
-      time = hour+':'+minute+ 'pm'
-    } else{
-      time = hour + ':'+minute+ 'am'
-    }
-    var dateAndTime = month+'/'+day+' '+time;
+    var dateAndTime = moment(data.date).format('LLLL');
+    // console.log("DATA IS", data);
     return (
-      <ListItem onPress={() => {
-            Actions.orderView(data)
-            setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
-        }}>
+      <ListItem
+        onPress={() => {
+          Actions.orderView(data);
+          {/*setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);*/}
+        }}
+      >
         <Text style={{ marginLeft: 10 }}>
           Placed at: {dateAndTime}{"\n"}
           Cash total: ${data.cashTotal}
@@ -71,31 +64,31 @@ export default class OrderPanel extends Component {
     }
 
     getAuthID().then(() => {
-      axios.get("http://localhost:3000/orders/0/" + authID).then(pending => {
-        this.setState({pendingCustomers: pending.data[1]},()=>  this.setState({ pending: pending.data[0] }, () => {
-          console.log("PENDING ORDERS ARE ", this.state.pending)
-          console.log("PENDING CUSTOMERS ARE ", this.state.pendingCustomers)
-          if(this.state.pending){
-          }
-        }
-        ));
-        axios.get("http://localhost:3000/orders/1/" + authID).then(accepted => {
-          this.setState({acceptedCustomers: accepted.data[1]},()=> this.setState({ accepted: accepted.data[0] }, () => {
-            console.log("ACCEPTED ORDERS ARE ", this.state.accepted)
-            console.log("ACCEPTED CUSTOMERS ARE ", this.state.acceptedCustomers)
-            }
-          ));
+      axios
+        .get("http://homemadeapp.org:3000/orders/0/" + authID)
+        .then(pending => {
+          this.setState({ pendingCustomers: pending.data[1] }, () =>
+            this.setState({ pending: pending.data[0] })
+          );
           axios
-            .get("http://localhost:3000/orders/2/" + authID)
-            .then(complete => {
-              this.setState({completedCustomers: complete.data[1]},()=> this.setState({ complete: complete.data[0] }, () => {
-                console.log("COMPLETE ORDERS ARE ", this.state.complete)
-                console.log("COMPLETE CUSTOMERS ARE ", this.state.completeCustomers)                
-              }
-              ));
+            .get("http://homemadeapp.org:3000/orders/1/" + authID)
+            .then(accepted => {
+              this.setState({ acceptedCustomers: accepted.data[1] }, () =>
+                this.setState({ accepted: accepted.data[0] }, () => {})
+              );
+              axios
+                .get("http://homemadeapp.org:3000/orders/2/" + authID)
+                .then(complete => {
+                  console.log("COMPLETE DATA IS", complete.data)
+                  this.setState({ completeCustomers: complete.data[1] }, () =>{
+
+                  
+                    // console.log(this.state.completedCustomers)
+                    this.setState({ complete: complete.data[0] }, () => {})
+                  });
+                });
             });
         });
-      });
     });
   }
 
@@ -103,7 +96,7 @@ export default class OrderPanel extends Component {
     var pendingOrders = [];
     var acceptedOrders = [];
     var completeOrders = [];
-    console.log(this.state.pending, this.state.accepted, this.state.complete);
+    console.log("STATE AND PROPS IN ORDERPANEL", this.state, this.props)
     return (
 
       <ScrollView>
@@ -112,10 +105,13 @@ export default class OrderPanel extends Component {
           <Tab onPress={this.render} heading={<TabHeading><Text>Pending</Text></TabHeading>}>
             {!this.state.pending
               ? <Text />
-              : this.state.pending.forEach(item => {
-                  for (var customer in this.state.pendingCustomers){
-                    if(this.state.pendingCustomers[customer].authId === item.customerId) 
-                      item.customer = this.state.pendingCustomers[customer]
+              : this.state.pending.forEach(item, idx => {
+                  for (var customer in this.state.pendingCustomers) {
+                    if (
+                      this.state.pendingCustomers[customer].authId ===
+                      item.customerId
+                    )
+                      item.customer = this.state.pendingCustomers[customer];
                   }
                   pendingOrders.push(this.returnRow(item))
             })}
@@ -143,12 +139,18 @@ export default class OrderPanel extends Component {
             {!this.state.complete
               ? <Text />
               : this.state.complete.forEach(item => {
-                  for (var customer in this.state.completeCustomers){
-                      if(this.state.completeCustomers[customer].authId === item.customerId) 
-                        item.customer = this.state.completeCustomers[customer]
-                    }
-                  completeOrders.push(this.returnRow(item))
-              })}
+                  console.log("COMPLETE CUSTOMERS ARE", this.state.completeCustomers)
+                  for (var customer in this.state.completeCustomers) {
+                    console.log("IN FOR LOOP", this.state.completeCustomers[customer] )
+                    if (
+                      this.state.completeCustomers[customer].authId ===
+                      item.customerId
+                    )
+                      item.customer = this.state.completeCustomers[customer];
+                      console.log("CUSTOMER IS", item.customer);
+                  }
+                  completeOrders.push(this.returnRow(item));
+                })}
             <List style={{ marginTop: 10 }} dataArray={this.state.complete}>
               {completeOrders}
             </List>

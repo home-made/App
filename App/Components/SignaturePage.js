@@ -1,11 +1,16 @@
 import React, { Component } from "react";
 import { View, StyleSheet, Text, TouchableHighlight, AsyncStorage } from "react-native";
 import SignatureCapture from "react-native-signature-capture";
-import { Icons } from "react-native-vector-icons/Ionicons";
-import { Actions, ActionConst } from 'react-native-router-flux';
-import axios from 'axios';
+
+import Icon from "react-native-vector-icons/Ionicons";
+import { Actions, ActionConst } from "react-native-router-flux";
+import DropdownAlert from 'react-native-dropdownalert';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import Button from 'apsl-react-native-button'
+import axios from "axios";
 
 let authId;
+let address;
 export default class SignaturePage extends Component {
   constructor(props) {
     super(props);
@@ -50,8 +55,9 @@ export default class SignaturePage extends Component {
     //result.pathName - for the file path name
     console.log(result);
 
+    console.log(address);
     console.log(authId);
-    axios.put(`http://homemadeapp.org:3000/user/sig/${authId}`, { isChef: true, pathname: result.pathName })
+    axios.put(`http://homemadeapp.org:3000/sig/${authId}`, { isChef: true, pathname: result.pathName, address: address })
       .then((res) => console.log("SIGNATURE SAVED", res.data))
       .catch((err) => console.log('Error updating user to chef status: ', err));
 
@@ -64,9 +70,26 @@ export default class SignaturePage extends Component {
     console.log("dragged");
   }
 
+  showAlert() {
+    this.dropdown.alertWithType(
+      "success",
+      "Signature saved successfully!",
+      `If your signature is correct, press confirm or press reset to redo!`,
+    );
+  }
+
+  dismissAlert = () => {
+    this.dropdown.onClose();
+  };
+
+  onClose(data) {
+    console.log(data);
+  }
+
   render() {
     return (
       <View style={{ flex: 1, flexDirection: "column", marginTop: 63 }}>
+        <Text>Sign Below</Text>
         <SignatureCapture
           style={ styles.signature}
           ref="sign"
@@ -78,7 +101,52 @@ export default class SignaturePage extends Component {
           viewMode={"landscape"}
         />
         
-        <View style={{flex: .5, flexDirection: 'row'}}>
+        <View style={{flex: .6, flexDirection: 'row', marginTop: 10}}>
+          <GooglePlacesAutocomplete
+          placeholder='Address'
+          minLength={2}
+          autoFocus={false}
+          listViewDisplayed='auto'
+          fetchDetails={true}
+          renderDescription={(row) => row.description}
+          onPress={(data, details = null) => {
+            console.log(data);
+            console.log(details);
+            address = data.description;
+          }}
+          getDefaultValue={() => {
+            return '';
+          }}
+          query={{
+            key: 'AIzaSyDySPBT6q0rzspVjjJWZDnEGCaT3CJBMKQ',
+            language: 'en',
+            types: 'address'
+          }}
+          styles={{
+            description: {
+              fontWeight: 'bold'
+            },
+            predefinedPlacesDescription: {
+              color: '#1faadb'
+            },
+          }}
+          currentLocation={true}
+          currentLocationLabel="Current location"
+          nearbyPlacesAPI='GooglePlacesSearch'
+          GoogleReverseGeocodingQuery={{
+          }}
+          GooglePlacesSearchQuery={{
+            rankby: 'distance',
+            types: 'food',
+          }}
+  
+  
+          filterReverseGeocodingByTypes={['locality', 'administrative_area_level_3']}
+  
+          debounce={200}
+        />
+        </View>
+        <View style={{flex: .2, flexDirection: 'row'}}>
           <Button style={styles.buttonStyle1} textStyle={{fontSize: 18}} onPress={() => { this.saveSign()} }>
             Save
           </Button>
@@ -89,28 +157,17 @@ export default class SignaturePage extends Component {
 
         <View
           style={{
-            flex: .5,
-            justifyContent: 'center',
-            alignSelf: 'center',
+            flex: .3,
+            flexDirection: 'row'
           }}
         >
-          <ActionButton buttonColor="rgba(231,76,60,1)" position={'center'} radius={80} outRangeScale={0.8} degrees={360}>
-            <ActionButton.Item buttonColor='#F0B073' title="Confirm" onPress={() => {Actions.homepage({ type: ActionConst.RESET })}}>
-              <Icon name='md-checkmark' style={styles.actionButtonIcon} />
-            </ActionButton.Item>
-            <ActionButton.Item buttonColor='#52F26A' title="Back" onPress={() => {Actions.chefform({ type: ActionConst.RESET })}}>
-              <Icon name='md-arrow-back' style={styles.actionButtonIcon} />
-            </ActionButton.Item>
-            <ActionButton.Item buttonColor='#52F26A' title="Save" onPress={() => { this.saveSign()} }>
-              <Icon name='md-arrow-back' style={styles.actionButtonIcon} />
-            </ActionButton.Item>
-            <ActionButton.Item buttonColor='#52F26A' title="Reset" onPress={() => { this.resetSign()} }>
-              <Icon name='md-arrow-back' style={styles.actionButtonIcon} />
-            </ActionButton.Item>
-          </ActionButton>
+          <Button style={styles.buttonStyle3} textStyle={{fontSize: 18}} onPress={() => {Actions.homepage({ type: ActionConst.RESET })}}>
+            Confirm
+          </Button>
+          
         </View>
 
-        <View style={{ flex: 0.25, alignItems: "center" }}>
+        <View style={{ alignItems: "center" }}>
           <Text style={{ alignItems: "center", justifyContent: "center" }}>
             By signing this form, I agree to these
           </Text>
@@ -143,12 +200,29 @@ const styles = StyleSheet.create({
     borderColor: "#000033",
     borderWidth: 1
   },
-  buttonStyle: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    height: 50,
-    backgroundColor: "#eeeeee",
-    margin: 10
-  }
-});
+  actionButtonIcon: {
+    fontSize: 25,
+    height: 26,
+    color: 'white',
+  },
+  buttonStyle1: {
+    flex: 1, justifyContent: "center", alignItems: "center", height: 50,
+    margin: 10,
+    backgroundColor: '#30C82E'
+  },
+  buttonStyle2: {
+    flex: 1, justifyContent: "center", alignItems: "center", height: 50,
+    margin: 10,
+    backgroundColor: '#CF6151'
+  },
+  buttonStyle3: {
+    flex: 1, justifyContent: "center", alignItems: "center", height: 50,
+    margin: 10,
+    backgroundColor: '#F0B073'
+  },
+  buttonStyle4: {
+    flex: 1, justifyContent: "center", alignItems: "center", height: 50,
+    margin: 10,
+    backgroundColor: '#F26CC6'
+  },
+  });

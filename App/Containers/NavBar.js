@@ -14,7 +14,7 @@ import {
   Icon
 } from "native-base";
 import { Actions, ActionConst } from "react-native-router-flux";
-// import { Switch } from "react-native-switch";
+import socket from '../Socket/Socket'
 import axios from "axios";
 
 export default class NavBar extends Component {
@@ -44,12 +44,10 @@ export default class NavBar extends Component {
     this.setState({orderNotification:0})
   }
   componentWillMount() {
-    socket = new SocketIO('http://localhost:3000') 
-    socket.connect()
-    socket.on('message', (splash)=>{
-      console.log(splash)
-    })
-
+    socket.on("chefMessage", splash => {
+      console.log('message was',splash);
+      this.addNotification()
+    });
     let authId;
     async function getUserAuthId() {
       try {
@@ -102,11 +100,6 @@ export default class NavBar extends Component {
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
 
-  statistics() {
-    Actions.statistics({ type: ActionConst.RESET });
-    setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
-  }
-
   chefMap() {
     Actions.chefMap({ type: ActionConst.RESET });
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
@@ -140,6 +133,11 @@ export default class NavBar extends Component {
 
   signature() {
     Actions.signature({ type: ActionConst.RESET });
+    setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
+  }
+
+  chefform() {
+    Actions.chefform({ type: ActionConst.RESET });
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
 
@@ -187,7 +185,7 @@ export default class NavBar extends Component {
     };
 
     return (
-      <Container>
+       <Container>
 
         <Image
           source={require("./img/turquoise-top-gradient-background.jpg")}
@@ -202,7 +200,7 @@ export default class NavBar extends Component {
             flexDirection: "column"
           }}
         >
-          <Text style={{ textAlign: "center", fontSize: 25 }}>HOMEMADE</Text>
+          <Text style={{ textAlign: "center", fontSize: 25 }}>homemade</Text>
         </View>
 
         <Content>
@@ -225,15 +223,6 @@ export default class NavBar extends Component {
             </Body>
           </ListItem>
 
-          <ListItem icon onPress={this.statistics} style={styles.content}>
-            <Left>
-              <Icon name="ios-stats" />
-            </Left>
-            <Body>
-              <Text style={styles.entries}>Statistics</Text>
-            </Body>
-          </ListItem>
-
           <ListItem icon onPress={this.chefMap} style={styles.content}>
             <Left>
               <Icon name="ios-map" />
@@ -243,23 +232,28 @@ export default class NavBar extends Component {
             </Body>
           </ListItem>
 
-          <ListItem icon onPress={this.dishcreate} style={styles.content}>
-            <Left>
-              <Icon name="ios-camera" />
-            </Left>
-            <Body>
-              <Text style={styles.entries}>Create Dish</Text>
-            </Body>
-          </ListItem>
+          {this.state.chefView
+            ? <ListItem icon onPress={this.dishcreate} style={styles.content}>
+                <Left>
+                  <Icon name="ios-camera" />
+                </Left>
+                <Body>
+                  <Text style={styles.entries}>Create Dish</Text>
+                </Body>
+              </ListItem>
+            : null}
 
-          <ListItem icon onPress={this.chefPanel} style={styles.content}>
-            <Left>
-              <Icon name="ios-clipboard" />
-            </Left>
-            <Body>
-              <Text style={styles.entries}>Manage Dishes</Text>
-            </Body>
-          </ListItem>
+          {this.state.chefView
+            ? <ListItem icon onPress={this.chefPanel} style={styles.content}>
+                <Left>
+                  <Icon name="ios-clipboard" />
+                </Left>
+                <Body>
+                  <Text style={styles.entries}>Manage Dishes</Text>
+                </Body>
+              </ListItem>
+            : null}
+
           <ListItem icon onPress={this.edit} style={styles.content}>
             <Left>
               <Icon name="ios-create" />
@@ -268,11 +262,15 @@ export default class NavBar extends Component {
               <Text style={styles.entries}>Edit Profile</Text>
             </Body>
           </ListItem>
-          <ListItem icon onPress={()=>{
-                this.clearNotification()
-                this.orders();
-              }
-              } style={styles.content}>
+
+          <ListItem
+            icon
+            onPress={() => {
+              this.orders();
+              this.setState({ orderNotification: 0 });
+            }}
+            style={styles.content}
+          >
             <Left>
               <Icon name="ios-filing" />
             </Left>
@@ -280,7 +278,9 @@ export default class NavBar extends Component {
               <Text style={styles.entries}>Orders</Text>
             </Body>
             <Right>
-              {this.state.orderNotification>0? <Text note> {this.state.orderNotification}</Text> :null}
+              {this.state.orderNotification > 0
+                ? <Text note> {this.state.orderNotification}</Text>
+                : null}
             </Right>
           </ListItem>
           {!this.state.chefStatus
@@ -294,6 +294,14 @@ export default class NavBar extends Component {
               </ListItem>
             : null}
 
+          <ListItem icon onPress={this.chefform} style={styles.content}>
+            <Left>
+              <Icon name="ios-watch" />
+            </Left>
+            <Body>
+              <Text style={styles.entries}>Chef Form</Text>
+            </Body>
+          </ListItem>
 
           <ListItem icon onPress={this.logout} style={styles.content}>
             <Left>
@@ -308,14 +316,7 @@ export default class NavBar extends Component {
             ? <ListItem avatar style={{ marginTop: 10 }}>
                 <Switch
                   onValueChange={value => {
-                    this.setState({ chefView: value }, () => {
-                      if (this.state.chefView) {
-                        this.toggleChefMode()
-                        this.joinChefSocket(this.state.user.authId)
-                      }
-                      else
-                        this.joinCustomerSocket(this.state.user.authId)
-                    });
+                    this.setState({ chefView: value });
                   }}
                   value={this.state.chefView}
                   style={{ marginRight: 10 }}

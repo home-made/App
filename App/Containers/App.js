@@ -26,10 +26,9 @@ import Statistics from '../Components/Statistics';
 import SocketIO from "socket.io-client";
 import GeoPoint from "geopoint";
 import axios from "axios";
-
+import socket from '../Socket/Socket'
 // const cstore = store();
 let distanceInterval;
-var socket;
 
 export default class App extends Component {
   constructor() {
@@ -55,15 +54,6 @@ export default class App extends Component {
   componentWillMount() {
     console.log("APP MOUNTED");
     this.setLocation();
-    socket = new SocketIO("http://localhost:3000");
-    socket.connect();
-    socket.on("init", splash => {
-      console.log(splash);
-    });
-    socket.on("chef", splash => {
-      console.log("new", splash);
-    });
-
   }
 
   sendOrderSocket(order) {
