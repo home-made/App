@@ -61,6 +61,11 @@ export default class DishConfirm extends Component {
     });
   }
   onSubmit() {
+    if(Number(this.state.dish.quantity) <= 0) {
+      let dishy = this.state.dish;
+      dishy.isActive = false;
+      this.setState({dish: dishy})
+    }
     axios.post("http://homemadeapp.org:3000/dish/add", this.state.dish).then(res => {
       console.log(res);
       Actions.chefPanel({ type: ActionConst.RESET });
