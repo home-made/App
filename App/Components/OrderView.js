@@ -1,5 +1,9 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Image } from "react-native";
+import { StyleSheet, View, Image, ScrollView } from "react-native";
+import ActionButton from "react-native-circular-action-menu";
+import Icon from "react-native-vector-icons/Foundation";
+import Icon2 from "react-native-vector-icons/Entypo";
+import Communications from "react-native-communications";
 import {
   Button,
   Container,
@@ -7,7 +11,8 @@ import {
   Content,
   Card,
   Body,
-  CardItem
+  CardItem,
+
 } from "native-base";
 import { Grid, Row, Col } from "react-native-easy-grid";
 import { Actions, ActionConst } from "react-native-router-flux";
@@ -24,7 +29,6 @@ export default class OrderView extends Component {
 
   componentWillMount() {
     let dishes = [];
-    console.log("proganda", this.props);
 
     for (var key in this.props.cart) {
       dishes.push(this.props.cart[key]);
@@ -77,19 +81,18 @@ export default class OrderView extends Component {
   render() {
     console.log("STATE AND PROPS IN ORDER VIEW", this.state, this.props);
     return (
-      <Container>
+      <ScrollView>
         <View
           style={{
             justifyContent: "center",
-            alignItems: "center"
+            alignItems: "center",
+      
           }}
         >
           <Image
             style={{
               width: 150,
               height: 150,
-              justifyContent: "center",
-              alignItems: "center",
               marginTop: 100,
               marginBottom: 10,
               borderRadius: 75
@@ -98,12 +101,13 @@ export default class OrderView extends Component {
               uri: this.props.customer.profileUrl
             }}
           />
+
         </View>
         {this.props.status === 0
           ? <Row
               style={{
                 justifyContent: "center",
-                alignItems: "center",
+                alignItems: "center"
               }}
             >
 
@@ -124,23 +128,11 @@ export default class OrderView extends Component {
 
             </Row>
           : null}
-        <View
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
 
-          }}
-        >
 
-          <View
-            style={{
-              marginTop: 10,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
             {this.props.status === 1
               ? <Button
+                  style={{ alignSelf: 'center'}}
                   onPress={() => {
                     this.handleComplete();
                   }}
@@ -150,7 +142,7 @@ export default class OrderView extends Component {
               : null}
             {this.props.status === 2
               ? <Button
-          
+                  style={{ alignSelf: 'center'}}
                   onPress={() =>
                     Actions.feedback({
                       chefId: this.props.chefId,
@@ -163,38 +155,98 @@ export default class OrderView extends Component {
                 </Button>
               : null}
             <Button
-              style={{ marginVertical: 10 }}
+              style={{ marginVertical: 10, alignSelf: 'center' }}
               onPress={() => {
-                Actions.profile({ chef: this.props.customer });
+                Actions.userProfile({ profile: this.props.customer });
               }}
             >
               <Text>Customer Profile</Text>
             </Button>
 
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
+              {this.props.status === 1
+                ? <View
+                    style={{
+                      flex: 1,
+                      marginTop: 50,
+                      marginRight: -225,
+                      marginBottom: 15
+                    }}
+                  >
+                    <ActionButton
+                      style={{}}
+                      icon={
+                        <Icon
+                          name="telephone"
+                          size={30}
+                          style={{ alignItems: "center", color: "white" }}
+                        />
+                      }
+                      buttonColor="#02E550"
+                      onPress={() =>
+                        Communications.phonecall(this.props.customer.phoneNumber, true)
+                      }
+                    />
+
+                  </View>
+                : null}
+
+              {this.props.status === 1
+                ? <View style={{ flex: 1, marginTop: 50, marginBottom: 15 }}>
+                    <ActionButton
+                      style={{}}
+                      icon={
+                        <Icon2
+                          name="message"
+                          size={30}
+                          style={{ alignItems: "center", color: "white" }}
+                        />
+                        }
+                      onPress={() =>
+                        Communications.text(this.props.customer.phoneNumber)
+                      }
+                      buttonColor="#02E550"
+                    />
+                  </View>
+                : null}
+            </View>
+
+          <View style={{alignItems: "center"}}>
+            <Text>Your order from: {this.props.customer.firstName} </Text>
+            <Text>Placed at: {moment(this.props.date).format("LLLL")}</Text>
           </View>
-          <Text>Your order from: {this.props.customer.firstName} </Text>
-          <Text>Placed at: {moment(this.props.date).format("LLLL")}</Text>
-        </View>
-        {this.props.status !== 2 ? this.state.dishes.map(dish => {
-          return (
-            <Card style={{ marginTop: 40 }}>
-              <CardItem>
-                <Body>
-                  <Text>
-                    {dish.dish.name}
-                  </Text>
-                  <Text>
-                    {dish.dish.description}
-                  </Text>
-                  <Text>
-                    Amount: {dish.amount}
-                  </Text>
-                </Body>
-              </CardItem>
-            </Card>
-          );
-        }): null } 
-      </Container>
+        {this.props.status !== 2
+          ? this.state.dishes.map(dish => {
+              return (
+                <Card style={{ marginTop: 40 }}>
+                  <CardItem>
+                    <Body>
+                      <Text>
+                        {dish.dish.name}
+                      </Text>
+                      <Text>
+                        {dish.dish.description}
+                      </Text>
+                      <Text>
+                        Amount: {dish.amount}
+                      </Text>
+                      <Text>
+                        Special Requests: {this.props.orderInstructions}
+                      </Text>
+                    </Body>
+                  </CardItem>
+                </Card>
+              );
+            })
+          : null}
+
+      </ScrollView>
     );
   }
 }

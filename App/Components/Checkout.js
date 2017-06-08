@@ -145,7 +145,7 @@ export default class Checkout extends Component {
     this.sendNotification();
     let context = this;
     axios
-      .post("http://localhost:3000/orders", newOrder)
+      .post("http://homemadeapp.org:3000/orders", newOrder)
       .then(function(response) {
         console.log("New order inside Checkout.js was submitted to the database, response is: ", response);
         
@@ -240,3 +240,4 @@ export default class Checkout extends Component {
     }
   }
 }
+

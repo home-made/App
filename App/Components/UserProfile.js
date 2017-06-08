@@ -51,52 +51,66 @@ export default class Profile extends Component {
 
   componentWillMount() {
     let context = this;
+    if (!this.props.profile) {
+      async function grabAuthId() {
+        try {
+          const profile = await AsyncStorage.getItem("profile");
+          if (profile !== null && profile !== undefined) {
+            console.log(
+              "profile inside UserProfile.js is ",
+              JSON.parse(profile)
+            );
+            userId = JSON.parse(profile).userId;
 
-    async function grabAuthId() {
-      try {
-        const profile = await AsyncStorage.getItem("profile");
-        if (profile !== null && profile !== undefined) {
-          console.log("profile inside UserProfile.js is ", JSON.parse(profile));
-          userId = JSON.parse(profile).userId;
+            parsedProfile = JSON.parse(profile);
 
-          parsedProfile = JSON.parse(profile);
+            var userPic = parsedProfile.picture_large
+              ? parsedProfile.picture_large
+              : parsedProfile.picture;
+            var authId = parsedProfile.userId;
+            var fullName = parsedProfile.name;
 
-          var userPic = parsedProfile.picture_large
-            ? parsedProfile.picture_large
-            : parsedProfile.picture;
-          var authId = parsedProfile.userId;
-          var fullName = parsedProfile.name;
+            axios
+              .get(`http://homemadeapp.org:3000/user/${authId}`)
+              .then(user => {
+                console.log(
+                  "the user inside axiospost for UserProfile.js is ",
+                  user
+                );
 
-          axios
-            .get(`http://localhost:3000/user/${authId}`)
-            .then(user => {
-              console.log(
-                "the user inside axiospost for UserProfile.js is ",
-                user
-              );
-
-              context.setState({
-                fullName: fullName,
-                authId: authId,
-                userPic: userPic,
-                user: user.data[0],
-                chefReviews: user.data[0].chefReviews,
-                customerReviews: user.data[0].customerReviews,
-                status: user.data[0].status
+                context.setState({
+                  fullName,
+                  authId: authId,
+                  userPic: userPic,
+                  user: user.data[0],
+                  chefReviews: user.data[0].chefReviews,
+                  customerReviews: user.data[0].customerReviews,
+                  status: user.data[0].status
+                });
+              })
+              .catch(error => {
+                console.log(
+                  "Error inside axios get user for UserProfile.js is ",
+                  error
+                );
               });
-            })
-            .catch(error => {
-              console.log(
-                "Error inside axios get user for UserProfile.js is ",
-                error
-              );
-            });
+          }
+        } catch (err) {
+          console.log("Error getting profile: ", err);
         }
-      } catch (err) {
-        console.log("Error getting profile: ", err);
       }
+      grabAuthId();
+    } else {
+      this.setState({
+        fullName: this.props.profile.firstName,
+        authId: this.props.profile.authId,
+        userPic: this.props.profile.profileUrl,
+        user: this.props.profile,
+        chefReviews: this.props.profile.chefReviews,
+        customerReviews: this.props.profile.customerReviews,
+        status: this.props.profile.status
+      });
     }
-    grabAuthId();
   }
 
   render() {

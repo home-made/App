@@ -31,15 +31,15 @@ export default class DishView extends Component {
   }
   componentWillMount() {
     let genres = this.props.getStyles();
-    genres[0]= "Select a Cuisine Style"
+    genres[0] = "Select a Cuisine Style";
     this.setState({
       genres
     });
     this.props.setCameraMode("dish");
   }
   handleSubmit() {
-    console.log(this.state.dish);
-    // axios.post("http://localhost:3000/dish/add", {
+    console.log("QUANTITY IS", Number(this.state.dish.quantity));
+    // axios.post("http://ec2-52-91-163-176.compute-1.amazonaws.com:3000/dish/add", {
     //   cuisineType: "Chinese",
     //   name: this.state.name,
     //   description: this.state.dishDescriptionText,
@@ -52,7 +52,8 @@ export default class DishView extends Component {
     //   isActive: true,
     //   quantity: 1
     // });
-    this.props.setDish(this.state.dish);
+
+      this.props.setDish(this.state.dish);
     // this.props.setCameraMode()
     Actions.uploadimage();
   }
