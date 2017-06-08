@@ -18,7 +18,10 @@ export default class CheckOutItem extends Component {
   }
 
   handleIncrement() {
-    this.props.incrementDishCount(this.id);
+    if(this.props.dishCounter[this.id].amount < this.props.orderItem.quantity) {
+      this.props.incrementDishCount(this.id);
+    }
+    
   }
 
   handleDecrement() {

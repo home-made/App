@@ -60,7 +60,7 @@ export default class ChefForm extends Component {
         .then((res) => console.log(res.data))
         .catch((err) => console.log('Error updating user to chef status: ', err));
 
-      Actions.drawer({ type: ActionConst.RESET });
+      Actions.cuisines({ type: ActionConst.RESET });
     }
   }
 

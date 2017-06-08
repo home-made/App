@@ -364,6 +364,7 @@ export default class App extends Component {
               title="Signature"
               showAlert={this.showAlert}
             />
+            <Scene key="chefform" component={ChefForm} />
           </Scene>
         </Scene>
       </Scene>

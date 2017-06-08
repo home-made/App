@@ -9,13 +9,24 @@ import {
   Left,
   Body,
   Button,
-  ListItem,
+  ListItem
 } from "native-base";
 import { Actions, ActionConst } from "react-native-router-flux";
 import { Grid, Row, Col } from "react-native-easy-grid";
 import DishViewCard from "./DishViewCard";
 import Review from "./Review";
 import Icon from "react-native-vector-icons/Entypo";
+
+import { Dimensions } from 'react-native';
+const { width, height } = Dimensions.get('window');
+const ASPECT_RATIO = width / height;
+const LATITUDE_DELTA = 0.0922;
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+
+
+
+
+
 export default class Profile extends Component {
   constructor(props) {
     super(props);
@@ -23,18 +34,37 @@ export default class Profile extends Component {
     this.displayCheckout = this.displayCheckout.bind(this);
     this.handleReviewsPress = this.handleReviewsPress.bind(this);
     this.handleMenuPress = this.handleMenuPress.bind(this);
+
     this.toggleReviews = this.toggleReviews.bind(this);
     this.toggleMenu = this.toggleMenu.bind(this);
+    this.toggleMap = this.toggleMap.bind(this);
+    
     this.handleAddToCart = this.handleAddToCart.bind(this);
     this.handleCheckout = this.handleCheckout.bind(this);
     this.returnStar = this.returnStar.bind(this);
+    
   }
 
   componentWillMount() {
-    let chef = this.props.getChef();
+    console.log("PROPS IN PROFILE", this.props)
+    let chef;
+    if(this.props.chef) {
+      chef = [this.props.chef, this.props.chef.customerReviews,this.props.chef.customerReviews];
+            console.log("IN IF BLOCK CHEF IS,", chef)
+
+    } else {
+      
+      chef = this.props.getChef();
+      console.log("IN ELSE BLOCK CHEF IS,", chef)
+
+    }
+    
 
     console.log("the chef inside Profile.js of componentWillMount is ", chef)
-    this.setState({ chef: this.props.getChef(), cart: [] }, () => {
+
+    let chefLocation = chef[0].location;
+
+    this.setState({ chef: chef, cart: [], chefLocation }, () => {
       
       let scoresArray = [];
       let numOfReviews = this.state.chef[0].chefReviews.length;
@@ -43,7 +73,7 @@ export default class Profile extends Component {
       let reviews = this.state.chef[0].chefReviews.map(curr => {
 
         scoresArray.push(curr.score);
-
+        console.log("CURR IS", curr)
         return {
           userText: curr.reviewText,
           user: this.state.chef[2][
@@ -91,6 +121,7 @@ export default class Profile extends Component {
     this.setState({ reviews: false, menu: true }, console.log(this.state));
   }
 
+
   toggleReviews(){
     console.log("Reviews inside Profile.js are ", this.state.reviewers);
     if (this.state.reviewers.length > 0) {
@@ -120,6 +151,20 @@ export default class Profile extends Component {
     } else {
       return <Text />
     }
+  }
+
+  toggleMap(){
+
+    var region = {
+      latitude: this.state.chefLocation.geo_lat,
+      longitude: this.state.chefLocation.geo_lng,
+      latitudeDelta: LATITUDE_DELTA,
+      longitudeDelta: LATITUDE_DELTA * ASPECT_RATIO,
+    };
+
+    
+    Actions.chefMap({singleChef: region});
+    
   }
 
   handleAddToCart(e) {
@@ -169,6 +214,7 @@ export default class Profile extends Component {
   returnStar() {
       return (<Icon style={{ color: '#EFEF54', fontSize: 18 }} name="star"  />)
   }
+  
 
   render() {
     {console.log("the state inside Profile.js is ", this.state)}
@@ -232,8 +278,9 @@ export default class Profile extends Component {
             </CardItem>
           </Card>
           <Row style={{  alignItems: 'center', justifyContent: 'center'}}>
+            <Button style={{marginRight: 10}} onPress={this.toggleMap}><Text>Chef Location</Text></Button>
             <Button style={{marginRight: 10}} onPress={this.handleReviewsPress}><Text>Reviews</Text></Button>
-            <Button style={{marginRight: 10}} onPress={this.handleMenuPress}><Text>Menu</Text></Button>
+            {this.state.chef[0] ? <Button style={{marginRight: 10}} onPress={this.handleMenuPress}><Text>Menu</Text></Button>: null}
             {this.displayCheckout()}
           </Row>
 
@@ -245,3 +292,15 @@ export default class Profile extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    ...StyleSheet.absoluteFillObject,
+    top: 100,
+    justifyContent: "flex-end",
+    alignItems: "center"
+  },
+  map: {
+    ...StyleSheet.absoluteFillObject
+  }
+});
