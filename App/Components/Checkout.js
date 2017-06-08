@@ -144,9 +144,8 @@ export default class Checkout extends Component {
     });
     this.sendNotification();
     let context = this;
-    //http://homemadeapp.org:3000/orders
     axios
-      .post("http://localhost:3000/orders", newOrder)
+      .post("http://homemadeapp.org:3000/orders", newOrder)
       .then(function(response) {
         console.log("New order inside Checkout.js was submitted to the database, response is: ", response);
         
@@ -262,22 +261,3 @@ export default class Checkout extends Component {
     }
   }
 }
-
-/*
-
-<TextInput
-  style={{
-      fontSize: 20,
-      padding: 10,
-      height: 200,
-      borderColor: "gray",
-    borderWidth: 2,
-    width: 200
-  }}
-  onChangeText={orderInstructions =>
-      this.setState({ orderInstructions }, () => console.log(this.state.orderInstructions))}
-  multiline={true}
-  maxLength={300}
-/>
-
-*/
