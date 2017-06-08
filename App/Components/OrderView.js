@@ -24,7 +24,6 @@ export default class OrderView extends Component {
 
   componentWillMount() {
     let dishes = [];
-    console.log("proganda", this.props);
 
     for (var key in this.props.cart) {
       dishes.push(this.props.cart[key]);
@@ -165,7 +164,7 @@ export default class OrderView extends Component {
             <Button
               style={{ marginVertical: 10 }}
               onPress={() => {
-                Actions.profile({ chef: this.props.customer });
+                Actions.userProfile({ profile: this.props.customer });
               }}
             >
               <Text>Customer Profile</Text>
@@ -188,6 +187,9 @@ export default class OrderView extends Component {
                   </Text>
                   <Text>
                     Amount: {dish.amount}
+                  </Text>
+                  <Text>
+                    Special Requests: {this.props.orderInstructions}
                   </Text>
                 </Body>
               </CardItem>

@@ -144,15 +144,12 @@ export default class OrderPanel extends Component {
             {!this.state.complete
               ? <Text />
               : this.state.complete.forEach(item => {
-                  console.log("COMPLETE CUSTOMERS ARE", this.state.completeCustomers)
                   for (var customer in this.state.completeCustomers) {
-                    console.log("IN FOR LOOP", this.state.completeCustomers[customer] )
                     if (
                       this.state.completeCustomers[customer].authId ===
                       item.customerId
                     )
                       item.customer = this.state.completeCustomers[customer];
-                      console.log("CUSTOMER IS", item.customer);
                   }
                   completeOrders.push(this.returnRow(item));
                 })}
