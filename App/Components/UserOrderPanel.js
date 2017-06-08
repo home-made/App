@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import SocketIO from "socket.io-client";
 import ActionButton from "react-native-circular-action-menu";
 import Icon from 'react-native-vector-icons/Foundation';
 import Icon2 from 'react-native-vector-icons/Entypo';
@@ -25,7 +24,6 @@ import {
 import Communications from "react-native-communications";
 import { Actions } from "react-native-router-flux";
 import axios from "axios";
-var socket;
 
 export default class UserOrderPanel extends Component {
   constructor() {
@@ -40,17 +38,7 @@ export default class UserOrderPanel extends Component {
   componentWillMount() {
     console.log("IN USER ORDER PANEL WILL MOUNT");
     let authID;
-    socket = new SocketIO("http://localhost:3000");
-    socket.connect();
-    socket.on("init", splash => {
-      console.log(splash);
-    });
-    socket.on("chef", splash => {
-      console.log("new", splash);
-    });
-    socket.on("message", res => {
-      console.log(res);
-    });
+
     async function getAuthID() {
       try {
         const data = await AsyncStorage.getItem("profile");
@@ -85,7 +73,6 @@ export default class UserOrderPanel extends Component {
                   },
                   () => {
                     console.log(this.state.order);
-                    this.sendOrderSocket(this.state.order);
                   }
                 );
               });
@@ -98,29 +85,58 @@ export default class UserOrderPanel extends Component {
   _onRefresh = () => {
     this.componentWillMount();
   };
-  sendOrderSocket(order) {
-    console.log(socket.id);
-    // var orders = setInterval(() =>{
-    //   getChefOrder = (tweet) =>{
-    //     socket.volatile.emit('chef',this.state.order)
-    //   }
-    // },100)
-    // let orders = this.state.order
-    socket.emit("neworder", order.chefId);
-  }
+
   render() {
+    const styles = {
+      container: {
+        flex: 1,
+        flexDirection: "column",
+        alignItems: "center",
+        marginTop: 70
+      },
+      userPic: {
+        width: 200,
+        height: 200,
+        marginTop: -50,
+        marginBottom: 50,
+        borderRadius: 100
+      },
+      refreshText: {
+        color: '#E05050',
+        fontFamily: 'Noteworthy-Bold',
+        fontSize: 17
+      },
+      infoText: {
+        fontFamily: 'Noteworthy-Bold',
+        fontSize: 17
+      },
+      date: {
+        color: '#9DDDE0',
+        fontFamily: 'MarkerFelt-Thin',
+        fontSize: 24
+      },
+      orderStatus: {
+        flexDirection: 'row'
+      },
+      statusRed: {
+        color: '#E05050',
+        fontFamily: 'Noteworthy-Bold',
+        fontSize: 18
+      },
+      statusGreen: {
+        color: '#6EE96E',
+        fontFamily: 'Noteworthy-Bold',
+        fontSize: 18
+      }
+    }
+
     console.log(this.state, this.props);
     if (!this.state.order) return <ScrollView />;
     else {
       console.log("THERE IS AN ORDER");
       return (
         <ScrollView
-          contentContainerStyle={{
-            flex: 1,
-            flexDirection: "column",
-            alignItems: "center",
-            marginTop: 70
-          }}
+          contentContainerStyle={styles.container}
           refreshControl={
             <RefreshControl
               refreshing={this.state.refreshing}
@@ -133,37 +149,33 @@ export default class UserOrderPanel extends Component {
             />
           }
         >
-          <Text>Pull Down to Refresh</Text>
+          <Text style={styles.refreshText}><Icon name='arrow-down' style={styles.refreshText} />  Pull Down to Refresh</Text>
 
           <View style={{ alignItems: "center", marginTop: 100 }}>
             <Image
-              style={{
-                width: 150,
-                height: 150,
-                marginTop: -50,
-                marginBottom: 50,
-                borderRadius: 75
-              }}
+              style={styles.userPic}
               source={{
                 uri: this.state.chefDetails.profileUrl
               }}
             />
-            <Text>Your order with {this.state.chefDetails.firstName}</Text> 
-            <Text>was placed on:</Text>
-            <Text>{moment(this.state.order.date).format('LLLL')}</Text>
-            {this.state.order.status === 0
-              ? <Text>Order Status: Pending</Text>
-              : null}
-
-            {this.state.order.status === 1
-              ? <View><Text>Order Status: Accepted</Text></View>
-              : null}
-            {this.state.order.status === 2
-              ? <Text>Order Status: Complete</Text>
-              : null}
+            <Text style={styles.infoText}>Your order with {this.state.chefDetails.firstName}</Text> 
+            <Text style={styles.infoText}>was placed on:</Text>
+            <Text style={styles.date}>{moment(this.state.order.date).format('LLLL')}</Text>
+            <View style={styles.orderStatus}>
+              <Text style={styles.infoText}>Order Status: </Text>
+              {this.state.order.status === 0
+                ? <Text style={styles.statusRed}>Pending</Text>
+                : null}
+              {this.state.order.status === 1
+                ? <Text style={styles.statusGreen}>Accepted</Text>
+                : null}
+              {this.state.order.status === 2
+                ? <Text style={styles.statusGreen}>Complete</Text>
+                : null}
               {this.state.order.status === 3
-              ? <Text>Order Status: Canceled</Text>
-              : null}
+                ? <Text style={styles.statusRed}>Canceled</Text>
+                : null}
+            </View>
 
               {this.state.order.status === 1
                 ? <View>
@@ -182,35 +194,33 @@ export default class UserOrderPanel extends Component {
                 : null}
 
               <View style={{flexDirection: 'row', alignItems: "center", justifyContent: "center"}}>
-              {this.state.order.status === 1
-                ? <View style={{ flex: 1, marginTop: 70, marginRight: -225}}>
-                    <ActionButton
-                      style={{}}
-                      icon={<Icon name="telephone"  size={30} style={{alignItems: "center", color: "white"}} />}
-                      buttonColor="#02E550"
-                      onPress={() =>
-                        Communications.phonecall(this.state.phone, true)
-                      }
-                    />
-
-      
-                  </View>
+                {this.state.order.status === 1
+                  ? <View style={{ flex: 1, marginTop: 70, marginRight: -225}}>
+                      <ActionButton
+                        style={{}}
+                        icon={<Icon name="telephone"  size={30} style={{alignItems: "center", color: "white"}} />}
+                        buttonColor="#02E550"
+                        onPress={() =>
+                          Communications.phonecall(this.state.phone, true)
+                        }
+                      />
+                    </View>
                 : null}
 
                 {this.state.order.status === 1
-                ? <View style={{ flex: 1, marginTop: 70}}>
-                    <ActionButton
-                      style={{}}
-                      icon={<Icon2 name="message"  size={30} style={{alignItems: "center", color: "white"}} />}
-                      buttonColor="#02E550"
-                      onPress={() =>
-                        Communications.text(this.state.phone)
-                      }
-                    />
-   
-                  </View>
+                  ? <View style={{ flex: 1, marginTop: 70}}>
+                      <ActionButton
+                        style={{}}
+                        icon={<Icon2 name="message"  size={30} style={{alignItems: "center", color: "white"}} />}
+                        buttonColor="#02E550"
+                        onPress={() =>
+                          Communications.text(this.state.phone)
+                        }
+                      />
+    
+                    </View>
                 : null}
-                </View>
+              </View>
 
               {this.state.order.status === 2
                 ? <View>
@@ -232,12 +242,3 @@ export default class UserOrderPanel extends Component {
     }
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F5FCFF"
-  }
-});

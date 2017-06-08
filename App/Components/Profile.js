@@ -212,35 +212,63 @@ export default class Profile extends Component {
   }
 
   returnStar() {
-    return (<Icon name="star"  />)
+      return (<Icon style={{ color: '#EFEF54', fontSize: 18 }} name="star"  />)
   }
   
 
   render() {
     {console.log("the state inside Profile.js is ", this.state)}
     let dishes = [];
+
+    const styles = {
+      container: {
+        marginTop: 60
+      },
+      cardName: {
+        alignSelf: 'center',
+        fontSize: 18,
+        color: '#E05050',
+        fontFamily: 'Noteworthy-Bold'
+      },
+      cardDesc: {
+        alignSelf: 'center',
+        fontSize: 14,
+        fontFamily: 'Noteworthy-light'
+      },
+      cardRating: {
+        alignSelf: 'center',
+        fontSize: 14,
+        fontFamily: 'Noteworthy-light'
+      },
+      cardRow: {
+        justifyContent: "center",
+        alignSelf: "center"
+      },
+      cardImage: {
+        width: 120,
+        height: 120,
+        justifyContent: "center",
+        borderRadius: 60
+      },
+
+    };
+
     return (
-      <Container style={{ marginTop: 60 }}>
+      <Container style={styles.container}>
         <Content>
           <Card>
             <CardItem>
               <Body>
-                <Text>{this.state.chef[0].firstName} {this.state.chef[0].lastName}</Text>
-                <Text note>{this.state.chef[0].status}</Text>
-                {this.state.avgScore > 0 ? (<Text note>{this.returnStar()} {this.state.avgScore}</Text>): <Text note>No Reviews Available</Text>}
+                <Text style={styles.cardName}>{this.state.chef[0].firstName} {this.state.chef[0].lastName}</Text>
+                <Text style={styles.cardDesc} note>{this.state.chef[0].status}</Text>
+                {this.state.avgScore > 0 ? (<Text style={styles.cardRating} note>{this.returnStar()} {this.state.avgScore}</Text>): <Text note>No Reviews Available</Text>}
               </Body>
             </CardItem>
             <CardItem>
               <Body>
-                <Row style={{ justifyContent: "center", alignItems: "center" }}>
+                <Row style={styles.cardRow}>
                   <Image
-                    style={{
-                      width: 120,
-                      height: 120,
-                      justifyContent: "center",
-                      alignItems: "center",
-                      borderRadius: 60
-                    }}
+                    style={styles.cardImage}
                     source={{
                       uri: this.state.chef[0].profileUrl
                     }}

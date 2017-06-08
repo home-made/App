@@ -131,6 +131,7 @@ export default class Checkout extends Component {
     };
     console.log("NEW ORDER IS", newOrder)
     this.props.sendOrderSocket(newOrder);
+
     this.sendNotification();
     let context = this;
     axios
@@ -180,6 +181,21 @@ export default class Checkout extends Component {
   }
 
   render() {
+    const styles = {
+      container: {
+        marginTop: 64
+      },
+      total: {
+        fontFamily: 'Noteworthy-Bold',
+        fontSize: 20,
+        marginBottom: 10
+      },
+      submitButton: {
+        fontFamily: 'Noteworthy-Bold',
+        fontSize: 15
+      }
+    }
+
     console.log("render start");
     console.log("the state inside the checkout is ", this.state);
     if (!this.state.data) {
@@ -193,9 +209,8 @@ export default class Checkout extends Component {
       );
     } else {
       return (
-        <Container style={{marginTop: 65}}>
-          <Header><Text style={{marginBottom: 10}}>Checkout</Text></Header>
-          <Content style={{ marginTop: 40 }}>
+        <Container style={styles.container}>
+          <Content>
             <Text style={{textAlign: "center"}}>Special Requests/Notes for Chef</Text>
             <TextInput
             style={{
@@ -228,7 +243,9 @@ export default class Checkout extends Component {
                 );
               })}
             </List>
-            <Header><Text style={{marginBottom: 10}}>Total: ${this.state.cashTotal}</Text></Header>
+            <Header>
+              <Text style={styles.total}>Total: ${this.state.cashTotal}</Text>
+            </Header>
             <Container style={{ alignItems: "center" }}>
               <Content>
                 <Button
@@ -236,7 +253,7 @@ export default class Checkout extends Component {
                   onPress={this.submitOrder}
                   success
                 >
-                  <Text>Submit Order</Text>
+                  <Text style={styles.submitButton}>Submit Order</Text>
                 </Button>
 
                 

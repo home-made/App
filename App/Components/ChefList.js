@@ -14,26 +14,70 @@ export default class ChefList extends Component {
   }
 
   render() {
+    const styles = {
+      noChefContainer: {
+        marginTop: 70,
+        justifyContent: "center",
+        flex: 1,
+        alignItems: "center"
+      },
+      noChefText1: {
+        fontSize: 60,
+        color: '#E05050',
+        fontFamily: 'Noteworthy-Bold',
+        textAlign: 'center'
+      },
+      noChefText2: {
+        marginTop: 25,
+        fontSize: 20,
+        color: '#E05050',
+        fontFamily: 'Noteworthy-Bold',
+        textAlign: 'center'
+      },
+      container: {
+        marginTop: 60,
+        justifyContent: "center",
+        flex: 1,
+      },
+      image: {
+        borderRadius: 38,
+        width: 80,
+        height: 80
+      },
+      chefText1: {
+        fontSize: 25,
+        color: '#E05050',
+        fontFamily: 'Noteworthy-Bold'
+      },
+      chefText2: {
+        fontSize: 15,
+        fontFamily: 'Noteworthy-Bold'
+      },
+    };
+
     let chefs = this.state.chefs;
 
     if (chefs.length === 0) {
       console.log("inside the if block for ChefList and chefs is ", chefs);
       return (
-        <Container style={{ marginTop: 70, justifyContent: "center", flex: 1, alignItems: "center"}}>
+        <Container style={styles.noChefContainer}>
           <Content>
-            <Text note>
-              Whoops! There are currently no chefs available for this cuisine!
+            <Text style={styles.noChefText1} note>
+              Whoops!
+            </Text>
+            <Text style={styles.noChefText2} note>
+              There are currently no chefs available for this cuisine!
             </Text>
           </Content>
         </Container>
       );
     } else {
       return (
-        <Container>
+
+        <Container style={styles.container}>
           {console.log("The chefs inside ChefList.js are ", chefs)}
           <Content>
             <List
-              style={{ marginTop: 60 }}
               dataArray={chefs}
               renderRow={chef => (
                 <ListItem
@@ -43,14 +87,14 @@ export default class ChefList extends Component {
                   }}
                 >
                   <Image
-                    style={{ width: 70, height: 70 }}
+                    style={styles.image}
                     source={{
                       uri: chef.profileUrl
                     }}
                   />
                   <Body>
-                    <Text>{chef.firstName} {chef.lastName}</Text>
-                    <Text note>{chef.status || ""}</Text>
+                    <Text style={styles.chefText1}>{chef.firstName} {chef.lastName}</Text>
+                    <Text style={styles.chefText2} note>{chef.status || ""}</Text>
                   </Body>
                 </ListItem>
               )}
@@ -61,12 +105,3 @@ export default class ChefList extends Component {
     }
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F5FCFF"
-  }
-});
