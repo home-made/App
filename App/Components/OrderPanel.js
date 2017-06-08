@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, AsyncStorage, ScrollView } from "react-native";
+import { StyleSheet, Text, View, AsyncStorage, ScrollView} from "react-native";
 import {
   Container,
   Header,
@@ -14,9 +14,8 @@ import {
 } from "native-base";
 import axios from "axios";
 import { Actions } from "react-native-router-flux";
-import SocketIO from "socket.io-client";
+import socket from '../Socket/Socket'
 import moment from "moment";
-var socket = new SocketIO("homemadeapp.org:3000");
 
 export default class OrderPanel extends Component {
   constructor() {
@@ -31,6 +30,7 @@ export default class OrderPanel extends Component {
     return (
       <ListItem
         onPress={() => {
+          this.props.updateOrderSocket(data)
           Actions.orderView(data);
           {/*setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);*/}
         }}
@@ -42,7 +42,7 @@ export default class OrderPanel extends Component {
       </ListItem>
     );
   }
-
+  
   componentWillReceiveProps() {
     console.log("IN ORDER PANEL COMPONENT WILL RECEIVE PROPS");
     this.componentWillMount();
@@ -65,19 +65,19 @@ export default class OrderPanel extends Component {
 
     getAuthID().then(() => {
       axios
-        .get("http://homemadeapp.org:3000/orders/0/" + authID)
+        .get("http://localhost:3000/orders/0/" + authID)
         .then(pending => {
           this.setState({ pendingCustomers: pending.data[1] }, () =>
             this.setState({ pending: pending.data[0] })
           );
           axios
-            .get("http://homemadeapp.org:3000/orders/1/" + authID)
+            .get("http://localhost:3000/orders/1/" + authID)
             .then(accepted => {
               this.setState({ acceptedCustomers: accepted.data[1] }, () =>
                 this.setState({ accepted: accepted.data[0] }, () => {})
               );
               axios
-                .get("http://homemadeapp.org:3000/orders/2/" + authID)
+                .get("http://localhost:3000/orders/2/" + authID)
                 .then(complete => {
                   console.log("COMPLETE DATA IS", complete.data)
                   this.setState({ completeCustomers: complete.data[1] }, () =>{
@@ -98,13 +98,11 @@ export default class OrderPanel extends Component {
     var completeOrders = [];
     console.log("STATE AND PROPS IN ORDERPANEL", this.state, this.props)
     return (
+
       <ScrollView>
         <Header hasTabs />
-        <Tabs>
-          <Tab
-            onPress={this.render}
-            heading={<TabHeading><Text>Pending</Text></TabHeading>}
-          >
+        <Tabs >
+          <Tab onPress={this.render} heading={<TabHeading><Text>Pending</Text></TabHeading>}>
             {!this.state.pending
               ? <Text />
               : this.state.pending.forEach(item => {
@@ -115,8 +113,8 @@ export default class OrderPanel extends Component {
                     )
                       item.customer = this.state.pendingCustomers[customer];
                   }
-                  pendingOrders.push(this.returnRow(item));
-                })}
+                  pendingOrders.push(this.returnRow(item))
+            })}
             <List style={{ marginTop: 10 }} dataArray={this.state.pending}>
               {pendingOrders}
             </List>
@@ -126,15 +124,12 @@ export default class OrderPanel extends Component {
             {!this.state.accepted
               ? <Text />
               : this.state.accepted.forEach(item => {
-                  for (var customer in this.state.acceptedCustomers) {
-                    if (
-                      this.state.acceptedCustomers[customer].authId ===
-                      item.customerId
-                    )
-                      item.customer = this.state.acceptedCustomers[customer];
+                  for (var customer in this.state.acceptedCustomers){
+                    if(this.state.acceptedCustomers[customer].authId === item.customerId) 
+                      item.customer = this.state.acceptedCustomers[customer]
                   }
-                  acceptedOrders.push(this.returnRow(item));
-                })}
+                  acceptedOrders.push(this.returnRow(item))
+              })}
             <List style={{ marginTop: 10 }} dataArray={this.state.accepted}>
               {acceptedOrders}
             </List>

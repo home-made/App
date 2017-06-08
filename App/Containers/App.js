@@ -22,10 +22,11 @@ import DishConfirm from "../Components/DishConfirm";
 import Feedback from "../Components/Feedback";
 import SignaturePage from "../Components/SignaturePage";
 import ChefForm from "./ChefForm";
-
+import Statistics from '../Components/Statistics';
+import SocketIO from "socket.io-client";
 import GeoPoint from "geopoint";
 import axios from "axios";
-
+import socket from '../Socket/Socket'
 // const cstore = store();
 let distanceInterval;
 
@@ -44,19 +45,29 @@ export default class App extends Component {
     this.getCuisineStyles = this.getCuisineStyles.bind(this);
     this.fetchUploadStatus = this.fetchUploadStatus.bind(this);
     this.setUploadStatus = this.setUploadStatus.bind(this);
-    this.setChefLocationAndPhoneNumber = this.setChefLocationAndPhoneNumber.bind(
-      this
-    );
+    this.setChefLocationAndPhoneNumber = this.setChefLocationAndPhoneNumber.bind(this);
     this.updateLocation = this.updateLocation.bind(this);
     this.getLatAndLon = this.getLatAndLon.bind(this);
+    this.sendOrderSocket = this.sendOrderSocket.bind(this);
+    this.updateOrderSocket = this.updateOrderSocket.bind(this);
   }
+
 
   componentWillMount() {
     console.log("APP MOUNTED");
     this.setLocation();
   }
+
+  sendOrderSocket(order) {
+    console.log('getting to it - socket')
+    socket.emit("newOrderRequest", order);
+  }
+  updateOrderSocket(order) {
+    console.log('getting to it - socket')
+    socket.emit("newOrderUpdate", order);
+  }
   getLatAndLon() {
-    return { lat: this.state.latitude, lon: this.state.longitude };
+    return {lat: this.state.latitude, lon: this.state.longitude};
   }
   setLocation() {
     navigator.geolocation.getCurrentPosition(
@@ -82,7 +93,7 @@ export default class App extends Component {
     console.log("CHEF IS", chef);
     const url = `http://maps.apple.com/?saddr=${this.state.latitude},${this.state.longitude}&daddr=${chef.geo_lat},${chef.geo_lng}&dirflg=d`;
     chefLocation = new GeoPoint(chef.geo_lat, chef.geo_lng);
-    console.log("CHEF LOCATION IS", chefLocation);
+    console.log("CHEF LOCATION IS", chefLocation)
     this.setState({ chefLocation, phone: phone });
     distanceInterval = setInterval(this.updateLocation, 5000);
     Linking.openURL(url);
@@ -94,15 +105,13 @@ export default class App extends Component {
       this.setLocation();
     } else {
       console.log("ABOUT TO CLEAR INTERVAL", this.state.phone);
-      axios.post("http://homemadeapp.org:3000/text/", {
-        phone: this.state.phone
-      });
+      axios.post("http://localhost:3000/text/", { phone: this.state.phone });
       clearInterval(distanceInterval);
     }
   }
 
   getCuisineStyles() {
-    return "American,Barbecue,Burgers,Chinese,Indian,Italian,Japanese,Korean,Mediterranean,Mexican,Pizza,Sandwiches,Sushi,Thai,Vegetarian,Vietnamese,Ethiopian,Other".split(
+    return "All Cuisines,American,Barbecue,Burgers,Chinese,Indian,Italian,Japanese,Korean,Mediterranean,Mexican,Pizza,Sandwiches,Sushi,Thai,Vegetarian,Vietnamese,American,Ethiopian,Other".split(
       ","
     );
   }
@@ -110,7 +119,7 @@ export default class App extends Component {
   setChef(chef) {
     console.log("INSIDE SET CHEF", chef);
     axios
-      .get(`http://homemadeapp.org:3000/chef/${chef.authId}`)
+      .get(`http://localhost:3000/chef/${chef.authId}`)
       .then(res => {
         console.log(res);
         this.setState({ user: res.data }, () => {
@@ -129,11 +138,11 @@ export default class App extends Component {
     console.log("IN SET CUISINE TYPE", this.state.geo);
     this.setState({ cuisineType: genre }, () => {
       console.log("CUISINETYPE: ", this.state.cuisineType);
-      let url = `http://homemadeapp.org:3000/chef/style/${this.state.cuisineType}`;
+      let url = `http://localhost:3000/chef/style/${this.state.cuisineType}`;
 
       let config = {
-        headers: { lat: this.state.latitude, lon: this.state.longitude }
-      };
+        headers: {lat: this.state.latitude, lon: this.state.longitude}
+      }
       axios
         .get(url, config)
         .then(res => {
@@ -189,7 +198,7 @@ export default class App extends Component {
     });
 */
   }
-
+  
   render() {
     {
       console.log("the state inside App.js is ", this.state);
@@ -207,12 +216,14 @@ export default class App extends Component {
           key="drawer"
           type={ActionConst.RESET}
           component={NavigationDrawer}
+          joinChefSocket={this.joinChefSocket}
+          joinCustomerSocket={this.joinCustomerSocket}
           open={false}
         >
           <Scene key="main" initial>
 
             <Scene
-              navigationBarStyle={{ backgroundColor: "white" }}
+              navigationBarStyle={{ backgroundColor: "black" }}
               titleStyle={{
                 fontFamily: "helvetica",
                 fontWeight: "bold",
@@ -259,17 +270,13 @@ export default class App extends Component {
               getChef={this.getChef}
             />
 
-            <Scene
-              key="chefMap"
-              component={ChefMap}
-              setChef={this.setChef}
-              getLocation={this.getLatAndLon}
-            />
+            <Scene key="chefMap" component={ChefMap} setChef={this.setChef} getLocation={this.getLatAndLon} />
 
             <Scene
               key="checkout"
               component={Checkout}
               fetchCart={this.fetchCart}
+              sendOrderSocket={this.sendOrderSocket}
             />
             <Scene
               key="dishcreate"
@@ -297,25 +304,25 @@ export default class App extends Component {
               key="edit"
               component={EditProfile}
               setCameraMode={this.setUploadStatus}
+              
             />
 
-            <Scene key="orders" component={OrderPanel} />
+            <Scene key="orders" component={OrderPanel} updateOrderSocket={this.updateOrderSocket} />
             <Scene key="orderView" component={OrderView} title="Order" />
             <Scene
               key="userOrders"
               component={UserOrderPanel}
               title="Orders"
-              getChef={this.getChef}
               setChefLocationAndPhoneNumber={this.setChefLocationAndPhoneNumber}
             />
             <Scene key="feedback" component={Feedback} title="Feedback" />
-            <Scene
-              key="signature"
+            <Scene key="chefform" component={ChefForm} title="Chef Form" />
+            <Scene key="signature"
               component={SignaturePage}
               title="Signature Page"
               showAlert={this.showAlert}
             />
-            <Scene key="chefform" component={ChefForm} />
+            <Scene key="statistics" component={Statistics} title="Statistics" />
           </Scene>
         </Scene>
       </Scene>
@@ -336,4 +343,4 @@ const styles = StyleSheet.create({
     textAlign: "center",
     margin: 10
   }
-});
+})

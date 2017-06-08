@@ -13,7 +13,7 @@ import {
   Container,
   Form
 } from "native-base";
-import { Actions } from "react-native-router-flux";
+import { Actions, ActionConst } from "react-native-router-flux";
 import axios from "axios";
 
 export default class ManageDish extends Component {
@@ -66,8 +66,7 @@ export default class ManageDish extends Component {
   handleSubmit() {
     let dish = this.state.dish;
     console.log("SEND: ", dish);
-
-    axios.put("http://homemadeapp.org:3000/dish", dish).then(Actions.chefPanel());
+    axios.put("http://localhost:3000/dish", dish).then(Actions.chefPanel({type: ActionConst.RESET}));
   }
   onValueChange(value) {
     console.log(this.state.genres[value]);

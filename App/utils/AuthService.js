@@ -6,7 +6,9 @@
 // const clientId,
 //       domain;
 
+
 // export const lock = new Auth0Lock(clientId, domain);
+
 
 // export const getProfile = (lockInstance, accessToken) => {
 //   return newPromise((resolve, reject) => {

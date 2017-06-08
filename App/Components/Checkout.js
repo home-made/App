@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import { View, AsyncStorage, Alert, TextInput } from "react-native";
+import { View, AsyncStorage, Alert } from "react-native";
 import axios from "axios";
 import { Container, Content, List, Header, Text, Button } from "native-base";
 import CheckOutItem from "./CheckOutItem.js";
 import SocketIO from "socket.io-client";
 import { Actions, ActionConst } from "react-native-router-flux";
-var socket;
+
 export default class Checkout extends Component {
   /*
       State inside Checkout.js is 
@@ -41,7 +41,6 @@ export default class Checkout extends Component {
 
   componentWillMount() {
     this.calculateTotal();
-
   }
 
   incrementDishCount(key) {
@@ -126,14 +125,15 @@ export default class Checkout extends Component {
       customerId: this.state.customerId,
       cart: this.state.dishCounter,
       status: 0,
-      cashTotal: this.state.cashTotal,
-      orderInstructions: this.state.orderInstructions
+      cashTotal: this.state.cashTotal
     };
+
+    this.props.sendOrderSocket(newOrder)
     console.log("NEW ORDER IS", newOrder)
-    socket = new SocketIO('http://homemadeapp.org:3000');
+    socket = new SocketIO('http://localhost:3000');
     socket.connect();
     socket.on("connect", () => {
-      socket.emit('user',newOrder);
+      // socket.emit('newOrderRequest',newOrder);
       socket.on("fresh", message => {
         console.log(message);
         console.log('send heem')
@@ -149,7 +149,7 @@ export default class Checkout extends Component {
       .then(function(response) {
         console.log("New order inside Checkout.js was submitted to the database, response is: ", response);
         
-        setTimeout( ()=> { context.checkAgain.call(null, response.data.customerId) }, 10000);
+        // setTimeout( ()=> { context.checkAgain.call(null, response.data.customerId) }, 10000);
         
         Actions.userOrders({ type: ActionConst.RESET });
       })
@@ -159,11 +159,11 @@ export default class Checkout extends Component {
   }
   checkAgain(customer) {
     let customerId = customer;
-    axios.get("http://homemadeapp.org:3000/orders/" + customerId).then((orders) => {
+    axios.get("http://localhost:3000/orders/" + customerId).then((orders) => {
       console.log("Orders inside Checkout.js checkAgain() are ", orders);
 
       if(orders.data[orders.data.length - 1].status === 0){
-        axios.put("http://homemadeapp.org:3000/orders/", { _id: orders.data[orders.data.length - 1]._id, status: 3 } ).then((res) => {
+        axios.put("http://localhost:3000/orders/", { _id: orders.data[orders.data.length - 1]._id, status: 3 } ).then((res) => {
           console.log("SUCCESSFULLY CANCELED", res.data);
         })
       }
@@ -261,3 +261,4 @@ export default class Checkout extends Component {
     }
   }
 }
+

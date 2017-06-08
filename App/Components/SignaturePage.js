@@ -1,11 +1,7 @@
 import React, { Component } from "react";
-import {
-  View,
-  StyleSheet,
-  Text,
-  AsyncStorage
-} from "react-native";
+import { View, StyleSheet, Text, TouchableHighlight, AsyncStorage } from "react-native";
 import SignatureCapture from "react-native-signature-capture";
+
 import Icon from "react-native-vector-icons/Ionicons";
 import { Actions, ActionConst } from "react-native-router-flux";
 import DropdownAlert from 'react-native-dropdownalert';
@@ -18,18 +14,18 @@ let address;
 export default class SignaturePage extends Component {
   constructor(props) {
     super(props);
-
+    
     this.state = {
-      authId: "",
+      authId: '',
       isChef: false
-    };
+    }
   }
-
+  
   componentWillMount() {
     let userId;
     async function grabAuthId() {
       try {
-        const profile = await AsyncStorage.getItem("profile");
+        const profile = await AsyncStorage.getItem('profile');
         if (profile !== null && profile !== undefined) {
           userId = JSON.parse(profile).userId;
         }
@@ -37,21 +33,17 @@ export default class SignaturePage extends Component {
         console.log("Error getting profile: ", err);
       }
     }
-    grabAuthId().then(() => {
-      this.setState(
-        {
+    grabAuthId()
+      .then(() => {
+        this.setState({
           authId: userId
-        },
-        () => console.log("authId after setState: ", this.state.authId)
-      );
-    });
+        }, () => console.log('authId after setState: ', this.state.authId))
+      });
   }
 
   saveSign() {
     this.refs["sign"].saveImage();
     authId = this.state.authId;
-
-    this.showAlert();
   }
 
   resetSign() {
@@ -65,12 +57,16 @@ export default class SignaturePage extends Component {
 
     console.log(address);
     console.log(authId);
-    axios.put(`http://homemadeapp.org:3000/sig/${authId}`, { isChef: true, pathname: result.pathName, address: address })
+    axios.put(`http://localhost:3000/sig/${authId}`, { isChef: true, pathname: result.pathName, address: address })
       .then((res) => console.log("SIGNATURE SAVED", res.data))
       .catch((err) => console.log('Error updating user to chef status: ', err));
+
+    Actions.homepage({ type: ActionConst.RESET });
+    setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
 
   _onDragEvent() {
+    // This callback will be called when the user enters signature
     console.log("dragged");
   }
 
@@ -194,7 +190,7 @@ export default class SignaturePage extends Component {
           closeInterval={7000}
         />
       </View>
-    );
+    )
   }
 }
 
