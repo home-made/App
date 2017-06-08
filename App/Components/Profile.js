@@ -277,11 +277,18 @@ export default class Profile extends Component {
               </Body>
             </CardItem>
           </Card>
-          <Row style={{  alignItems: 'center', justifyContent: 'center'}}>
-            <Button style={{marginRight: 10}} onPress={this.toggleMap}><Text>Chef Location</Text></Button>
-            <Button style={{marginRight: 10}} onPress={this.handleReviewsPress}><Text>Reviews</Text></Button>
-            {this.state.chef[0] ? <Button style={{marginRight: 10}} onPress={this.handleMenuPress}><Text>Menu</Text></Button>: null}
+
+          <Row style={{ marginTop: 10, flexWrap: 'wrap', alignItems: 'flex-start', justifyContent: 'center'}}>
             {this.displayCheckout()}
+          </Row>
+
+          <Row style={{ marginTop: 10, flexWrap: 'wrap', alignItems: 'flex-start', justifyContent: 'center'}}>
+            
+            <Button style={{marginRight: 10}} onPress={this.handleReviewsPress}><Text>Reviews</Text></Button>
+
+            <Button style={{marginRight: 10}} onPress={this.toggleMap}><Text>Chef Location</Text></Button>
+
+            <Button style={{marginRight: 10}} onPress={this.handleMenuPress}><Text>Menu</Text></Button>
           </Row>
 
           {this.state.reviews ? this.toggleReviews() : <Text />}
