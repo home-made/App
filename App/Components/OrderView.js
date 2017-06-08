@@ -142,6 +142,7 @@ export default class OrderView extends Component {
               : null}
             {this.props.status === 2
               ? <Button
+                  style={{ alignSelf: 'center'}}
                   onPress={() =>
                     Actions.feedback({
                       chefId: this.props.chefId,
@@ -212,7 +213,6 @@ export default class OrderView extends Component {
                       }
                       buttonColor="#02E550"
                     />
-
                   </View>
                 : null}
             </View>
