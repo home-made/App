@@ -67,24 +67,29 @@ export default class OrderPanel extends Component {
       axios
         .get("http://homemadeapp.org:3000/orders/0/" + authID)
         .then(pending => {
-          this.setState({ pendingCustomers: pending.data[1] }, () =>
-            this.setState({ pending: pending.data[0] })
-          );
+          this.setState({ pendingCustomers: pending.data[1] }, () => {
+            let pendingReverse;
+            if(pending.data[0]) { pendingReverse = pending.data[0] } 
+            this.setState({ pending: pendingReverse })
+          });
           axios
             .get("http://homemadeapp.org:3000/orders/1/" + authID)
             .then(accepted => {
-              this.setState({ acceptedCustomers: accepted.data[1] }, () =>
-                this.setState({ accepted: accepted.data[0] }, () => {})
-              );
+              this.setState({ acceptedCustomers: accepted.data[1] }, () => {
+                let acceptedReverse;
+                if(accepted.data[0]) { acceptedReverse = accepted.data[0] } 
+                this.setState({ accepted: acceptedReverse}, () => {})
+              });
               axios
                 .get("http://homemadeapp.org:3000/orders/2/" + authID)
                 .then(complete => {
-                  console.log("COMPLETE DATA IS", complete.data)
+                  let completeReverse;
+                  if(accepted.data[0]) { completeReverse = accepted.data[0] } 
                   this.setState({ completeCustomers: complete.data[1] }, () =>{
 
                   
                     // console.log(this.state.completedCustomers)
-                    this.setState({ complete: complete.data[0] }, () => {})
+                    this.setState({ complete: completeReverse }, () => {})
                   });
                 });
             });
@@ -115,7 +120,7 @@ export default class OrderPanel extends Component {
                     )
                       item.customer = this.state.pendingCustomers[customer];
                   }
-                  pendingOrders.push(this.returnRow(item));
+                  pendingOrders.unshift(this.returnRow(item));
                 })}
             <List style={{ marginTop: 10 }} dataArray={this.state.pending}>
               {pendingOrders}
@@ -133,7 +138,7 @@ export default class OrderPanel extends Component {
                     )
                       item.customer = this.state.acceptedCustomers[customer];
                   }
-                  acceptedOrders.push(this.returnRow(item));
+                  acceptedOrders.unshift(this.returnRow(item));
                 })}
             <List style={{ marginTop: 10 }} dataArray={this.state.accepted}>
               {acceptedOrders}
@@ -151,7 +156,7 @@ export default class OrderPanel extends Component {
                     )
                       item.customer = this.state.completeCustomers[customer];
                   }
-                  completeOrders.push(this.returnRow(item));
+                  completeOrders.unshift(this.returnRow(item));
                 })}
             <List style={{ marginTop: 10 }} dataArray={this.state.complete}>
               {completeOrders}
