@@ -3,6 +3,7 @@ import { StyleSheet, View, Image, ScrollView } from "react-native";
 import ActionButton from "react-native-circular-action-menu";
 import Icon from "react-native-vector-icons/Foundation";
 import Icon2 from "react-native-vector-icons/Entypo";
+import Communications from "react-native-communications";
 import {
   Button,
   Container,
@@ -187,6 +188,9 @@ export default class OrderView extends Component {
                         />
                       }
                       buttonColor="#02E550"
+                      onPress={() =>
+                        Communications.phonecall(this.props.customer.phoneNumber, true)
+                      }
                     />
 
                   </View>
@@ -202,6 +206,9 @@ export default class OrderView extends Component {
                           size={30}
                           style={{ alignItems: "center", color: "white" }}
                         />
+                        }
+                      onPress={() =>
+                        Communications.text(this.props.customer.phoneNumber)
                       }
                       buttonColor="#02E550"
                     />
