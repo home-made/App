@@ -14,9 +14,9 @@ import {
 } from "native-base";
 import { Actions, ActionConst } from "react-native-router-flux";
 import socket from '../Socket/Socket'
-
 import AnimatedLinearGradient, {presetColors} from 'react-native-animated-linear-gradient';
 // import { Switch } from "react-native-switch";
+
 import axios from "axios";
 
 export default class NavBar extends Component {
@@ -64,7 +64,9 @@ export default class NavBar extends Component {
     }
     getUserAuthId().then(() => {
       console.log(authId);
+
       axios.get(`http://homemadeapp.org:3000/user/${authId}`).then(res => {
+
         let chefRoom = 'chef'+res.data[0].authId;
         socket.on(chefRoom, splash => {
           this.addChefNotification()

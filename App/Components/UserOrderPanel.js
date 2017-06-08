@@ -38,6 +38,7 @@ export default class UserOrderPanel extends Component {
   componentWillMount() {
     console.log("IN USER ORDER PANEL WILL MOUNT");
     let authID;
+
     async function getAuthID() {
       try {
         const data = await AsyncStorage.getItem("profile");
@@ -55,12 +56,12 @@ export default class UserOrderPanel extends Component {
       .then(() => {
         console.log("AUTHID IS", authID);
         axios
-          .get("http://homemadeapp.org:3000/orders/" + authID)
+          .get("http://localhost:3000/orders/" + authID)
           .then(orders => {
             let order = orders.data[orders.data.length - 1];
             console.log("ORDER IS", order);
             axios
-              .get("http://homemadeapp.org:3000/user/" + order.chefId)
+              .get("http://localhost:3000/user/" + order.chefId)
               .then(chefDetails => {
                 console.log("CHEF DETAILS ARE", chefDetails);
                 this.setState(

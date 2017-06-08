@@ -56,7 +56,7 @@ export default class ChefForm extends Component {
     console.log('first name: ', this.state.firstName);
     console.log('last name: ', this.state.lastName);
     if (this.state.phone !== null && this.state.firstName !== null && this.state.lastName !== null) {
-      axios.put(`http://homemadeapp.org:3000/user/${this.state.authId}`, { phoneNumber: this.state.phone, firstName: this.state.firstName, lastName: this.state.lastName })
+      axios.put(`http://localhost:3000/user/${this.state.authId}`, { phoneNumber: this.state.phone, firstName: this.state.firstName, lastName: this.state.lastName })
         .then((res) => console.log(res.data))
         .catch((err) => console.log('Error updating user to chef status: ', err));
 

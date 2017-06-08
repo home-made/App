@@ -34,7 +34,7 @@ export default class ChefMap extends Component {
     }
     this.setState({region}, () => {
       axios
-      .post("http://homemadeapp.org:3000/chefTest", {
+      .post("http://localhost:3000/chefTest", {
         lat: this.state.region.latitude,
         lon: this.state.region.longitude
       })
