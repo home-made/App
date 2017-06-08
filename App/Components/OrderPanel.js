@@ -26,13 +26,15 @@ export default class OrderPanel extends Component {
   }
 
   returnRow(data) {
-    var dateAndTime = moment(data.date).format('LLLL');
+    var dateAndTime = moment(data.date).format("LLLL");
     // console.log("DATA IS", data);
     return (
       <ListItem
         onPress={() => {
           Actions.orderView(data);
-          {/*setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);*/}
+          {
+            /*setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);*/
+          }
         }}
       >
         <Text style={{ marginLeft: 10 }}>
@@ -68,28 +70,24 @@ export default class OrderPanel extends Component {
         .get("http://homemadeapp.org:3000/orders/0/" + authID)
         .then(pending => {
           this.setState({ pendingCustomers: pending.data[1] }, () => {
-            let pendingReverse;
-            if(pending.data[0]) { pendingReverse = pending.data[0] } 
-            this.setState({ pending: pendingReverse })
+        
+            this.setState({ pending: pending.data[0] });
           });
           axios
             .get("http://homemadeapp.org:3000/orders/1/" + authID)
             .then(accepted => {
               this.setState({ acceptedCustomers: accepted.data[1] }, () => {
-                let acceptedReverse;
-                if(accepted.data[0]) { acceptedReverse = accepted.data[0] } 
-                this.setState({ accepted: acceptedReverse}, () => {})
+
+
+                this.setState({ accepted: accepted.data[0] }, () => {});
               });
               axios
                 .get("http://homemadeapp.org:3000/orders/2/" + authID)
                 .then(complete => {
-                  let completeReverse;
-                  if(accepted.data[0]) { completeReverse = accepted.data[0] } 
-                  this.setState({ completeCustomers: complete.data[1] }, () =>{
 
-                  
+                  this.setState({ completeCustomers: complete.data[1] }, () => {
                     // console.log(this.state.completedCustomers)
-                    this.setState({ complete: completeReverse }, () => {})
+                    this.setState({ complete: complete.data[0] }, () => {});
                   });
                 });
             });
@@ -101,7 +99,7 @@ export default class OrderPanel extends Component {
     var pendingOrders = [];
     var acceptedOrders = [];
     var completeOrders = [];
-    console.log("STATE AND PROPS IN ORDERPANEL", this.state, this.props)
+    console.log("STATE AND PROPS IN ORDERPANEL", this.state, this.props);
     return (
       <ScrollView>
         <Header hasTabs />
