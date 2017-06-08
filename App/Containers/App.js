@@ -48,6 +48,8 @@ export default class App extends Component {
     this.setChefLocationAndPhoneNumber = this.setChefLocationAndPhoneNumber.bind(this);
     this.updateLocation = this.updateLocation.bind(this);
     this.getLatAndLon = this.getLatAndLon.bind(this);
+    this.sendOrderSocket = this.sendOrderSocket.bind(this);
+    this.updateOrderSocket = this.updateOrderSocket.bind(this);
   }
 
 
@@ -59,6 +61,10 @@ export default class App extends Component {
   sendOrderSocket(order) {
     console.log('getting to it - socket')
     socket.emit("newOrderRequest", order);
+  }
+  updateOrderSocket(order) {
+    console.log('getting to it - socket')
+    socket.emit("newOrderUpdate", order);
   }
   getLatAndLon() {
     return {lat: this.state.latitude, lon: this.state.longitude};
@@ -301,7 +307,7 @@ export default class App extends Component {
               
             />
 
-            <Scene key="orders" component={OrderPanel} />
+            <Scene key="orders" component={OrderPanel} updateOrderSocket={this.updateOrderSocket} />
             <Scene key="orderView" component={OrderView} title="Order" />
             <Scene
               key="userOrders"

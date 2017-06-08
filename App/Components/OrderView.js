@@ -104,7 +104,6 @@ export default class OrderView extends Component {
               style={{
                 justifyContent: "center",
                 alignItems: "center",
-                backgroundColor: "red"
               }}
             >
 

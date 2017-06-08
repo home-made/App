@@ -14,8 +14,7 @@ import {
 } from "native-base";
 import axios from "axios";
 import { Actions } from "react-native-router-flux";
-import SocketIO from "socket.io-client";
-var socket = new SocketIO("localhost:3000");
+import socket from '../Socket/Socket'
 import moment from "moment";
 
 export default class OrderPanel extends Component {
@@ -31,6 +30,7 @@ export default class OrderPanel extends Component {
     return (
       <ListItem
         onPress={() => {
+          this.props.updateOrderSocket(data)
           Actions.orderView(data);
           {/*setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);*/}
         }}
@@ -65,19 +65,19 @@ export default class OrderPanel extends Component {
 
     getAuthID().then(() => {
       axios
-        .get("http://homemadeapp.org:3000/orders/0/" + authID)
+        .get("http://localhost:3000/orders/0/" + authID)
         .then(pending => {
           this.setState({ pendingCustomers: pending.data[1] }, () =>
             this.setState({ pending: pending.data[0] })
           );
           axios
-            .get("http://homemadeapp.org:3000/orders/1/" + authID)
+            .get("http://localhost:3000/orders/1/" + authID)
             .then(accepted => {
               this.setState({ acceptedCustomers: accepted.data[1] }, () =>
                 this.setState({ accepted: accepted.data[0] }, () => {})
               );
               axios
-                .get("http://homemadeapp.org:3000/orders/2/" + authID)
+                .get("http://localhost:3000/orders/2/" + authID)
                 .then(complete => {
                   console.log("COMPLETE DATA IS", complete.data)
                   this.setState({ completeCustomers: complete.data[1] }, () =>{
@@ -105,7 +105,7 @@ export default class OrderPanel extends Component {
           <Tab onPress={this.render} heading={<TabHeading><Text>Pending</Text></TabHeading>}>
             {!this.state.pending
               ? <Text />
-              : this.state.pending.forEach(item, idx => {
+              : this.state.pending.forEach(item => {
                   for (var customer in this.state.pendingCustomers) {
                     if (
                       this.state.pendingCustomers[customer].authId ===

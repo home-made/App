@@ -10,7 +10,8 @@ import {
   StyleSheet,
   ScrollView,
   AsyncStorage,
-  RefreshControl
+  RefreshControl,
+  Image
 } from "react-native";
 import {
   Button,
@@ -19,9 +20,9 @@ import {
   Content,
   Header,
   Left,
-  Image
+  Right
 } from "native-base";
-
+import Communications from "react-native-communications";
 import { Actions } from "react-native-router-flux";
 import axios from "axios";
 var socket;
@@ -48,7 +49,7 @@ export default class UserOrderPanel extends Component {
       console.log("new", splash);
     });
     socket.on("message", res => {
-      console.log('messenger',res);
+      console.log(res);
     });
     async function getAuthID() {
       try {
@@ -70,7 +71,7 @@ export default class UserOrderPanel extends Component {
           .get("http://localhost:3000/orders/" + authID)
           .then(orders => {
             let order = orders.data[orders.data.length - 1];
-            console.log("ORDER IS", order)
+            console.log("ORDER IS", order);
             axios
               .get("http://localhost:3000/user/" + order.chefId)
               .then(chefDetails => {
@@ -84,6 +85,7 @@ export default class UserOrderPanel extends Component {
                   },
                   () => {
                     console.log(this.state.order);
+                    this.sendOrderSocket(this.state.order);
                   }
                 );
               });
@@ -96,9 +98,18 @@ export default class UserOrderPanel extends Component {
   _onRefresh = () => {
     this.componentWillMount();
   };
- 
+  sendOrderSocket(order) {
+    console.log(socket.id);
+    // var orders = setInterval(() =>{
+    //   getChefOrder = (tweet) =>{
+    //     socket.volatile.emit('chef',this.state.order)
+    //   }
+    // },100)
+    // let orders = this.state.order
+    socket.emit("neworder", order.chefId);
+  }
   render() {
-    console.log(this.state.order);
+    console.log(this.state, this.props);
     if (!this.state.order) return <ScrollView />;
     else {
       console.log("THERE IS AN ORDER");
@@ -145,7 +156,7 @@ export default class UserOrderPanel extends Component {
               : null}
 
             {this.state.order.status === 1
-              ? <Text>Order Status: Accepted</Text>
+              ? <View><Text>Order Status: Accepted</Text></View>
               : null}
             {this.state.order.status === 2
               ? <Text>Order Status: Complete</Text>
