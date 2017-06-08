@@ -130,18 +130,7 @@ export default class Checkout extends Component {
       orderInstructions: this.state.orderInstructions
     };
     console.log("NEW ORDER IS", newOrder)
-    socket = new SocketIO('http://homemadeapp.org:3000');
-    socket.connect();
-    socket.on("connect", () => {
-      socket.emit('user',newOrder);
-      socket.on("fresh", message => {
-        console.log(message);
-        console.log('send heem')
-      });
-      socket.on('disconnect', ()=>{
-        console.log('user disconnected')
-      })
-    });
+    this.props.sendOrderSocket(newOrder)
     this.sendNotification();
     let context = this;
     axios

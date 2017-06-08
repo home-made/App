@@ -22,7 +22,7 @@ import DishConfirm from "../Components/DishConfirm";
 import Feedback from "../Components/Feedback";
 import SignaturePage from "../Components/SignaturePage";
 import ChefForm from "./ChefForm";
-
+import socket from '../Socket/Socket'
 import GeoPoint from "geopoint";
 import axios from "axios";
 
@@ -44,11 +44,11 @@ export default class App extends Component {
     this.getCuisineStyles = this.getCuisineStyles.bind(this);
     this.fetchUploadStatus = this.fetchUploadStatus.bind(this);
     this.setUploadStatus = this.setUploadStatus.bind(this);
-    this.setChefLocationAndPhoneNumber = this.setChefLocationAndPhoneNumber.bind(
-      this
-    );
+    this.setChefLocationAndPhoneNumber = this.setChefLocationAndPhoneNumber.bind(this);
     this.updateLocation = this.updateLocation.bind(this);
     this.getLatAndLon = this.getLatAndLon.bind(this);
+    this.sendOrderSocket = this.sendOrderSocket.bind(this);
+    this.updateOrderSocket = this.updateOrderSocket.bind(this);
   }
 
   componentWillMount() {
@@ -57,6 +57,14 @@ export default class App extends Component {
   }
   getLatAndLon() {
     return { lat: this.state.latitude, lon: this.state.longitude };
+  }
+  sendOrderSocket(order) {
+    console.log('getting to it - socket')
+    socket.emit("newOrderRequest", order);
+  }
+  updateOrderSocket(order) {
+    console.log('getting to it - socket')
+    socket.emit("newOrderUpdate", order);
   }
   setLocation() {
     navigator.geolocation.getCurrentPosition(
@@ -287,6 +295,7 @@ export default class App extends Component {
               key="checkout"
               component={Checkout}
               fetchCart={this.fetchCart}
+              sendOrderSocket={this.sendOrderSocket}
             />
             <Scene
               navigationBarStyle={styles.navbar}
@@ -332,6 +341,7 @@ export default class App extends Component {
               title="Orders"
               key="orders"
               component={OrderPanel}
+              updateOrderSocket={this.updateOrderSocket}
             />
             <Scene
               navigationBarStyle={styles.navbar}

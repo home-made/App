@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import SocketIO from "socket.io-client";
 import { Image, View, StyleSheet, AsyncStorage, Switch } from "react-native";
 import {
   Container,
@@ -14,6 +13,8 @@ import {
   Icon
 } from "native-base";
 import { Actions, ActionConst } from "react-native-router-flux";
+import socket from '../Socket/Socket'
+
 import AnimatedLinearGradient, {presetColors} from 'react-native-animated-linear-gradient';
 // import { Switch } from "react-native-switch";
 import axios from "axios";
@@ -24,26 +25,31 @@ export default class NavBar extends Component {
 
     this.state = {
       chefStatus: null,
-      chefView: false,
-      orderNotification: 0
+      chefView: false
     };
     this.orders = this.orders.bind(this);
   }
-
+  addChefNotification(){
+    let counter = this.state.chefNotification
+    counter++
+    console.log(counter)
+    this.setState({chefNotification: counter},()=> console.log('new chef order notification', this.state.chefNotification))
+  }
+  addCustomerNotification(){
+    let counter = this.state.customerNotification
+    counter++
+    console.log(counter)
+    this.setState({customerNotification: counter},()=> console.log('new customer order notification', this.state.customerNotification))
+  }
+  clearCustomerNotification(){
+    this.setState({customerNotification:0})
+  }
+  clearChefNotification(){
+    this.setState({chefNotification:0})
+  }
   componentWillMount() {
-    socket = new SocketIO("http://homemadeapp.org:3000");
-    socket.connect();
-    socket.on("init", splash => {
-      console.log(splash);
-    });
-    socket.on("message", message => {
-      let counter = this.state.orderNotification;
-      counter++;
-      console.log(counter);
-      this.setState({ orderNotification: counter }, () =>
-        console.log("new order", this.state.orderNotification)
-      );
-    });
+    this.clearChefNotification();
+    this.clearCustomerNotification();
     let authId;
     async function getUserAuthId() {
       try {
@@ -59,6 +65,14 @@ export default class NavBar extends Component {
     getUserAuthId().then(() => {
       console.log(authId);
       axios.get(`http://homemadeapp.org:3000/user/${authId}`).then(res => {
+        let chefRoom = 'chef'+res.data[0].authId;
+        socket.on(chefRoom, splash => {
+          this.addChefNotification()
+        });
+        let customerRoom = 'customer'+res.data[0].authId;
+        socket.on(customerRoom, splash => {
+          this.addCustomerNotification()
+        });
         console.log(res.data);
         this.setState(
           {
@@ -283,7 +297,10 @@ export default class NavBar extends Component {
             icon
             onPress={() => {
               this.orders();
-              this.setState({ orderNotification: 0 });
+              if(this.state.chefView)
+                this.setState({ chefNotification: 0 });
+              else
+                this.setState({ customerNotification: 0 });
             }}
             style={styles.content}
           >
@@ -294,9 +311,8 @@ export default class NavBar extends Component {
               <Text style={styles.entries}>Orders</Text>
             </Body>
             <Right>
-              {this.state.orderNotification > 0
-                ? <Text note> {this.state.orderNotification}</Text>
-                : null}
+              {this.state.chefView? <Text note> {this.state.chefNotification>0? this.state.chefNotification: ''}</Text>
+                : <Text note> {this.state.customerNotification>0 ? this.state.customerNotification: '' }</Text>}
             </Right>
           </ListItem>
           {!this.state.chefStatus

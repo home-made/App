@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import SocketIO from "socket.io-client";
 import ActionButton from "react-native-circular-action-menu";
 import Icon from 'react-native-vector-icons/Foundation';
 import Icon2 from 'react-native-vector-icons/Entypo';
@@ -25,7 +24,6 @@ import {
 import Communications from "react-native-communications";
 import { Actions } from "react-native-router-flux";
 import axios from "axios";
-var socket;
 
 export default class UserOrderPanel extends Component {
   constructor() {
@@ -40,17 +38,6 @@ export default class UserOrderPanel extends Component {
   componentWillMount() {
     console.log("IN USER ORDER PANEL WILL MOUNT");
     let authID;
-    socket = new SocketIO("http://homemadeapp.org:3000");
-    socket.connect();
-    socket.on("init", splash => {
-      console.log(splash);
-    });
-    socket.on("chef", splash => {
-      console.log("new", splash);
-    });
-    socket.on("message", res => {
-      console.log(res);
-    });
     async function getAuthID() {
       try {
         const data = await AsyncStorage.getItem("profile");
@@ -85,7 +72,6 @@ export default class UserOrderPanel extends Component {
                   },
                   () => {
                     console.log(this.state.order);
-                    this.sendOrderSocket(this.state.order);
                   }
                 );
               });
@@ -98,16 +84,7 @@ export default class UserOrderPanel extends Component {
   _onRefresh = () => {
     this.componentWillMount();
   };
-  sendOrderSocket(order) {
-    console.log(socket.id);
-    // var orders = setInterval(() =>{
-    //   getChefOrder = (tweet) =>{
-    //     socket.volatile.emit('chef',this.state.order)
-    //   }
-    // },100)
-    // let orders = this.state.order
-    socket.emit("neworder", order.chefId);
-  }
+
   render() {
     const styles = {
       container: {
