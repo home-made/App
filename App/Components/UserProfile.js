@@ -182,7 +182,7 @@ export default class Profile extends Component {
       <Container>
         <Container style={styles.container}>
           <Content>
-            <Card style={{ flex: 0.3, marginTop: -150, justifyContent: "center" }}>
+            <Card style={{ flex: 0.3, marginTop: -60,marginBottom: 20, justifyContent: "center" }}>
               <CardItem>
                 <Body style={{ justifyContent: "center", alignItems: "center" }}>
                   <Text style={styles.cardName}>
@@ -199,8 +199,7 @@ export default class Profile extends Component {
                     </Text>
                   : <Text note>No Reviews Available</Text>}
                 </Body>
-              </CardItem>
-              <CardItem>
+
                 <Body>
                   <Row style={{ justifyContent: "center", alignSelf: "center" }}>
                     <Image
