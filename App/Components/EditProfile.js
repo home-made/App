@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { StyleSheet, AsyncStorage, Image, Container } from "react-native";
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import {
+  KeyboardAwareScrollView
+} from "react-native-keyboard-aware-scroll-view";
 import { View, Input, Item, Button, Text, Toast, Content } from "native-base";
 import { Actions, ActionConst } from "react-native-router-flux";
 import axios from "axios";
@@ -19,12 +21,14 @@ export default class EditProfile extends Component {
 
   componentWillMount() {
     let userId, userName, userPic;
+    let newUrl = this.props.newUrl;
+    async function getProfile(url) {
 
-    async function getProfile() {
       try {
         const data = await AsyncStorage.getItem("profile");
         if (data !== null && data !== undefined) {
           data = JSON.parse(data);
+
           console.log("async data: ", data);
           if (data.identityId) {
             userId = data.identityId;
@@ -37,13 +41,27 @@ export default class EditProfile extends Component {
           } else {
             data.picture;
           }
+
+          if (url) {
+            data.extraInfo.picture_large = url;
+            data.picture_large = url;
+            data.picture = url;
+            async function setProfile() {
+              try {
+                await AsyncStorage.setItem("profile", JSON.stringify(data));
+              } catch (error) {
+                console.log(error);
+              }
+            }
+            setProfile().then(() => console.log("UPDATED"));
+          }
         }
       } catch (err) {
         console.log("Error getting data: ", err);
       }
     }
 
-    getProfile().then(() => {
+    getProfile(newUrl).then(() => {
       this.setState(
         { userId: userId, userName: userName, userPic: userPic },
         () => {
@@ -60,6 +78,7 @@ export default class EditProfile extends Component {
     });
   }
   componentWillReceiveProps() {
+    console.log("IN RECEIVE PROPS", this.props);
     this.componentWillMount();
   }
   handleSubmit() {
@@ -97,74 +116,74 @@ export default class EditProfile extends Component {
             marginTop: 50
           }}
         >
-        
-        <Text>
-          {this.state.userName}
-        </Text>
 
-        <Image
-          style={{
-            borderRadius: 75,
-            height: 150,
-            width: 150,
-            marginTop: 70
-          }}
-          source={{
-            uri: this.state.userPic
-          }}
-        />
-        <Item>
-          <Button
-            style={{ margin: 10 }}
-            onPress={() => {
-              this.props.setCameraMode("profile");
-              Actions.uploadimage();
+          <Text>
+            {this.state.userName}
+          </Text>
+
+          <Image
+            style={{
+              borderRadius: 75,
+              height: 150,
+              width: 150,
+              marginTop: 70
             }}
-          >
-            <Text>Update Profile Picture</Text>
-          </Button>
-        </Item>
-
-        <Item>
-          <Input
-            placeholder="Address"
-            keyboardType={"ascii-capable"}
-            onChangeText={address =>
-              this.setState({ address }, () => console.log(address))}
-          />
-        </Item>
-
-        <Item>
-          <Input
-            placeholder="Phone Number"
-            onChangeText={phone => this.setState({ phone })}
-          />
-        </Item>
-
-        <Item>
-          <Input
-            placeholder="Status"
-            onChangeText={status => this.setState({ status })}
-          />
-        </Item>
-        <Item>
-          <Button
-            style={{ marginTop: 10 }}
-            onPress={() => {
-              this.handleSubmit();
-              Toast.show({
-                supportedOrientations: ["portrait", "landscape"],
-                text: "Profile Updated",
-                position: "bottom",
-                buttonText: "Okay",
-                duration: 1000
-              });
+            source={{
+              uri: this.state.userPic
             }}
-          >
-            <Text>Submit</Text>
-          </Button>
-        </Item>
-        </View>       
+          />
+          <Item>
+            <Button
+              style={{ margin: 10 }}
+              onPress={() => {
+                this.props.setCameraMode("profile");
+                Actions.uploadimage();
+              }}
+            >
+              <Text>Update Profile Picture</Text>
+            </Button>
+          </Item>
+
+          <Item>
+            <Input
+              placeholder="Address"
+              keyboardType={"ascii-capable"}
+              onChangeText={address =>
+                this.setState({ address }, () => console.log(address))}
+            />
+          </Item>
+
+          <Item>
+            <Input
+              placeholder="Phone Number"
+              onChangeText={phone => this.setState({ phone })}
+            />
+          </Item>
+
+          <Item>
+            <Input
+              placeholder="Status"
+              onChangeText={status => this.setState({ status })}
+            />
+          </Item>
+          <Item>
+            <Button
+              style={{ marginTop: 10 }}
+              onPress={() => {
+                this.handleSubmit();
+                Toast.show({
+                  supportedOrientations: ["portrait", "landscape"],
+                  text: "Profile Updated",
+                  position: "bottom",
+                  buttonText: "Okay",
+                  duration: 1000
+                });
+              }}
+            >
+              <Text>Submit</Text>
+            </Button>
+          </Item>
+        </View>
       </KeyboardAwareScrollView>
     );
   }
@@ -177,7 +196,6 @@ const styles = StyleSheet.create({
     alignItems: "center"
   }
 });
-
 
 /*
 
