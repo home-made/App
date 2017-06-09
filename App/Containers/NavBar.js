@@ -134,11 +134,14 @@ export default class NavBar extends Component {
   orders() {
     console.log("clicked");
     console.log("CHEFVIEW IS", this.state.chefView);
-    if (this.state.chefView) {
-      Actions.orders({ type: ActionConst.RESET });
-    } else {
-      Actions.userOrders({ type: ActionConst.RESET });
-    }
+
+      Actions.orders({ chefView: this.state.chefView, type: ActionConst.RESET });
+
+    setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
+  }
+
+  currentOrder() {
+    Actions.userOrders({ type: ActionConst.RESET });
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
 
@@ -295,7 +298,28 @@ export default class NavBar extends Component {
               <Text style={styles.entries}>Edit Profile</Text>
             </Body>
           </ListItem>
-
+          {!this.state.chefView ? <ListItem
+            icon
+            onPress={() => {
+              this.currentOrder();
+              if(this.state.chefView)
+                this.setState({ chefNotification: 0 });
+              else
+                this.setState({ customerNotification: 0 });
+            }}
+            style={styles.content}
+          >
+            <Left>
+              <Icon style={styles.icons} name="ios-filing" />
+            </Left>
+            <Body>
+             <Text style={styles.entries}>Current Order</Text>
+            </Body>
+            <Right>
+              {this.state.chefView && this.state.chefNotification>0 ? <Icon2 size={20} name="ios-alert-outline"/> : null}
+              {!this.state.chefView && this.state.customerNotification>0? <Icon2 size={20} name="ios-alert-outline"/>: null }
+            </Right>
+          </ListItem> : null}
           <ListItem
             icon
             onPress={() => {
@@ -311,13 +335,14 @@ export default class NavBar extends Component {
               <Icon style={styles.icons} name="ios-filing" />
             </Left>
             <Body>
-              <Text style={styles.entries}>Orders</Text>
+             <Text style={styles.entries}>Orders</Text>
             </Body>
             <Right>
               {this.state.chefView && this.state.chefNotification>0 ? <Icon2 size={20} name="ios-alert-outline"/> : null}
               {!this.state.chefView && this.state.customerNotification>0? <Icon2 size={20} name="ios-alert-outline"/>: null }
             </Right>
           </ListItem>
+
           {!this.state.chefStatus
             ? <ListItem icon onPress={this.signature} style={styles.content}>
                 <Left>

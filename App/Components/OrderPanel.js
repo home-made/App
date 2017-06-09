@@ -18,7 +18,7 @@ import {
 import axios from "axios";
 import { Actions } from "react-native-router-flux";
 import moment from "moment";
-import socket from '../Socket/Socket'
+import socket from "../Socket/Socket";
 
 export default class OrderPanel extends Component {
   constructor() {
@@ -27,14 +27,23 @@ export default class OrderPanel extends Component {
     this.returnRow = this.returnRow.bind(this);
   }
   returnRow(data) {
-    var dateAndTime = moment(data.date).format('LLL');
-    console.log("DATA IS", data);
+    var dateAndTime = moment(data.date).format("LLLL");
+    // console.log("DATA IS", data);
+
     return (
       <ListItem
         onPress={() => {
-          this.props.updateOrderSocket(data)
-          Actions.orderView(data);
-          {/*setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);*/}
+          this.props.updateOrderSocket(data);
+          console.log("CHEF VIEW ON CLICK", this.state.chefView)
+          if(this.props.chefView){
+            Actions.orderView(data);
+          } else {
+            Actions.userOrders(data);
+          }
+          
+          {
+            /*setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);*/
+          }
         }}
       >
         <Thumbnail square size={80} source={{uri: data.customer.profileUrl}} />
@@ -56,50 +65,93 @@ export default class OrderPanel extends Component {
 
   componentWillMount() {
     let authID;
+    let user;
+    var customerInit = () => {
+      axios
+          .get("http://homemadeapp.org:3000/orders/0/user/" + authID)
+          .then(pending => {
+            this.setState({ pendingCustomers: pending.data[1] }, () =>
+              this.setState({ pending: pending.data[0] })
+            );
+            axios
+              .get("http://homemadeapp.org:3000/orders/1/user/" + authID)
+              .then(accepted => {
+                this.setState({ acceptedCustomers: accepted.data[1] }, () =>
+                  this.setState({ accepted: accepted.data[0] }, () => ()=> console.log('accepted orders is', this.state.accepted))
+                );
+                axios
+                  .get("http://homemadeapp.org:3000/orders/2/user/" + authID)
+                  .then(complete => {
+                    console.log("COMPLETE DATA IS", complete.data);
+                    this.setState(
+                      { completeCustomers: complete.data[1] },
+                      () => {
+                        this.setState({ complete: complete.data[0] }, () => {});
+                      }
+                    );
+                  });
+              });
+          });
+    }
+    var chefInit = () => {
+      axios
+          .get("http://homemadeapp.org:3000/orders/0/chef/" + authID)
+          .then(pending => {
+            this.setState({ pendingCustomers: pending.data[1] }, () =>
+              this.setState({ pending: pending.data[0] })
+            );
+            axios
+              .get("http://homemadeapp.org:3000/orders/1/chef/" + authID)
+              .then(accepted => {
+                this.setState({ acceptedCustomers: accepted.data[1] }, () =>
+                  this.setState({ accepted: accepted.data[0] }, () => ()=> console.log('accepted orders is', this.state.accepted))
+                );
+                // console.log('call http://homemadeapp.org:3000/orders/2/' + authID)
+                axios
+                  .get("http://homemadeapp.org:3000/orders/2/chef/" + authID)
+                  .then(complete => {
+                    console.log("COMPLETE DATA IS", complete.data);
+                    this.setState(
+                      { completeCustomers: complete.data[1] },
+                      () => {
+                        this.setState({ complete: complete.data[0] }, () => {});
+                      }
+                    );
+                  });
+              });
+          });
+    }
     console.log("CHEF ORDER PANEL WILL MOUNT");
     async function getAuthID() {
       try {
         const data = await AsyncStorage.getItem("profile");
         if (data !== null && data !== undefined) {
           authID = JSON.parse(data).userId;
+          console.log("JSON PARSE", JSON.parse(data));
+          user = JSON.parse(data);
           console.log(authID);
         }
       } catch (err) {
         console.log("Error getting data: ", err);
       }
     }
+    // console.log("USER IS", user);
+       getAuthID().then(() => {
+        if(this.props.chefView){
+         chefInit()
+        }
+        else {
+         customerInit();
+        }
+      });
 
-    getAuthID().then(() => {
-      axios
-        .get("http://homemadeapp.org:3000/orders/0/" + authID)
-        .then(pending => {
-          this.setState({ pendingCustomers: pending.data[1] }, () =>
-            this.setState({ pending: pending.data[0] })
-          );
-          axios
-            .get("http://homemadeapp.org:3000/orders/1/" + authID)
-            .then(accepted => {
-              this.setState({ acceptedCustomers: accepted.data[1] }, () =>
-                this.setState({ accepted: accepted.data[0] }, () => {})
-              );
-              axios
-                .get("http://homemadeapp.org:3000/orders/2/" + authID)
-                .then(complete => {
-                  console.log("COMPLETE DATA IS", complete.data)
-                  this.setState({ completeCustomers: complete.data[1] }, () =>{
-                    this.setState({ complete: complete.data[0] }, () => {console.log('people',this.state)})
-                  });
-                });
-            });
-        });
-    });
   }
 
   render() {
     var pendingOrders = [];
     var acceptedOrders = [];
     var completeOrders = [];
-    console.log("STATE AND PROPS IN ORDERPANEL", this.state, this.props)
+    console.log("STATE AND PROPS IN ORDERPANEL", this.state, this.props);
     return (
       <Container>
         <Header hasTabs />
