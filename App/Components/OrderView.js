@@ -78,7 +78,23 @@ export default class OrderView extends Component {
       status: 2
     };
     axios.put("http://homemadeapp.org:3000/orders", request).then(res => {
-      Actions.orders({ res, chefView: true, type: ActionConst.RESET });
+      Alert.alert(
+        "Thank You!",
+        `Please Tell Us About Your Experience With ${this.props.customer.firstName}!`,
+        [
+          {
+            text: "OK",
+            onPress: () =>
+              Actions.feedback({
+                chefView: this.props.chefView,
+                chefId: this.props.chefId,
+                customerId: this.props.customerId,
+                date: this.props.date,
+                _id: this.props._id
+              })
+          }
+        ]
+      );
     });
   }
 
@@ -235,8 +251,7 @@ export default class OrderView extends Component {
           </Text>
         </View>
 
-        {this.props.status !== 2
-          ? this.state.dishes.map(dish => {
+        {this.state.dishes.map(dish => {
               return (
                 <Card
                   style={{ marginTop: 20, marginLeft: 10, marginRight: 10 }}
@@ -263,7 +278,7 @@ export default class OrderView extends Component {
                 </Card>
               );
             })
-          : null}
+          }
 
       </ScrollView>
     );

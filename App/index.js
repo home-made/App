@@ -4,6 +4,7 @@ import App from './Containers/App';
 import createStore from './Redux/Reducers';
 
 const store = createStore();
+console.disableYellowBox = true;
 
 export default class Main extends Component {
   render() {
