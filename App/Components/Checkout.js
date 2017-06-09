@@ -233,6 +233,7 @@ export default class Checkout extends Component {
                 width: 340,
                 borderRadius: 30
               }}
+              autoCorrect={false}
               returnKeyType="done"
               placeholder="Special Requests?"
               onChangeText={orderInstructions =>

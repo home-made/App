@@ -19,7 +19,11 @@ import {
   Content,
   Header,
   Left,
-  Right
+  Right,
+  Card,
+  CardItem,
+  Body,
+  Thumbnail
 } from "native-base";
 import Communications from "react-native-communications";
 import { Actions } from "react-native-router-flux";
@@ -55,7 +59,9 @@ export default class UserOrderPanel extends Component {
         axios
           .get("http://homemadeapp.org:3000/orders/" + authID)
           .then(orders => {
-            let order = orders.data[orders.data.length - 1];
+            console.log('orders are',orders)
+            let order = orders.data[0];
+            
             axios
               .get("http://homemadeapp.org:3000/user/" + order.chefId)
               .then(chefDetails => {
@@ -74,7 +80,41 @@ export default class UserOrderPanel extends Component {
 
   _onRefresh = () => {
     this.componentWillMount();
-  };
+  }
+
+  returnCart () {
+    console.log(this.state.order.cart)
+    let order;
+    let dish = []
+    for (var key in this.state.order.cart) {
+     dish.push(this.state.order.cart[key]);
+    }
+    console.log(dish)
+    return dish.map(order=>{
+      return (
+        <Card style={{ marginTop: 20, marginLeft: 10, marginRight: 10 }}>
+          <CardItem>
+            <Thumbnail
+              square
+              large
+              source={{ uri: order.dish.dishImages[0] }}
+            />
+            <Body>
+              <Text>
+                {order.dish.name}
+              </Text>
+              <Text note>
+                Quantity: {order.amount}
+              </Text>
+            </Body>
+          </CardItem>
+        </Card>
+    )
+    })
+    
+    //  console.log(dish)
+
+  }
 
   render() {
     const styles = {
@@ -160,6 +200,7 @@ export default class UserOrderPanel extends Component {
             />
           }
         >
+        
           <Text style={styles.refreshText}>
             <Icon name="arrow-down" style={styles.refreshText} />
             {" "}
@@ -264,6 +305,7 @@ export default class UserOrderPanel extends Component {
                   </Button>
                 </View>
               : <Text />}
+              {/*{this.returnCart()}*/}
           </View>
 
         </ScrollView>

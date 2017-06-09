@@ -67,7 +67,17 @@ export default class OrderView extends Component {
     };
     axios
       .put("http://homemadeapp.org:3000/orders", request)
-      .then(() => Actions.orders({ chefView: true, type: ActionConst.RESET }));
+      .then(() => Alert.alert(
+        "The order has been declined!",
+        `${this.props.customer.firstName} will be notified of the new order status.`,
+        [
+          {
+            text: "OK",
+            onPress: () =>
+              Actions.orders({ chefView: true, type: ActionConst.RESET })
+          }
+        ]
+      ))
   }
 
   handleComplete() {
@@ -78,7 +88,23 @@ export default class OrderView extends Component {
       status: 2
     };
     axios.put("http://homemadeapp.org:3000/orders", request).then(res => {
-      Actions.orders({ res, chefView: true, type: ActionConst.RESET });
+      Alert.alert(
+        "Thank You!",
+        `Please Tell Us About Your Experience With ${this.props.customer.firstName}!`,
+        [
+          {
+            text: "OK",
+            onPress: () =>
+              Actions.feedback({
+                chefView: this.props.chefView,
+                chefId: this.props.chefId,
+                customerId: this.props.customerId,
+                date: this.props.date,
+                _id: this.props._id
+              })
+          }
+        ]
+      );
     });
   }
 
@@ -144,21 +170,6 @@ export default class OrderView extends Component {
             </Button>
           : null}
 
-        {this.props.status === 2
-          ? <Button
-              style={{ alignSelf: "center" }}
-              onPress={() =>
-                Actions.feedback({
-                  chefView: this.props.chefView,
-                  chefId: this.props.chefId,
-                  customerId: this.props.customerId,
-                  date: this.props.date,
-                  _id: this.props._id
-                })}
-            >
-              <Text>Leave Feedback</Text>
-            </Button>
-          : null}
         <Button
           style={{ marginVertical: 10, alignSelf: "center" }}
           onPress={() => {
@@ -235,8 +246,7 @@ export default class OrderView extends Component {
           </Text>
         </View>
 
-        {this.props.status !== 2
-          ? this.state.dishes.map(dish => {
+        {this.state.dishes.map(dish => {
               return (
                 <Card
                   style={{ marginTop: 20, marginLeft: 10, marginRight: 10 }}
@@ -263,7 +273,7 @@ export default class OrderView extends Component {
                 </Card>
               );
             })
-          : null}
+          }
 
       </ScrollView>
     );

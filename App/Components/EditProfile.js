@@ -171,7 +171,7 @@ export default class EditProfile extends Component {
             <Kaede
               autoCorrect={false}
               style={styles.kaede}
-              label={"Write a Status"}
+              label={"Update Your Status"}
               placeholder="Status"
               labelStyle={styles.label}
               inputStyle={styles.input}

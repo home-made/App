@@ -90,7 +90,7 @@ export default class ChefList extends Component {
                   />
                   <Body>
                     <Text style={styles.chefText1}>
-                      {chef.firstName} {chef.lastName}
+                      {chef.firstName} {chef.lastName[0]}
                     </Text>
                     <Text style={styles.chefText2} note>
                       {chef.status || ""}
