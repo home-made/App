@@ -157,7 +157,7 @@ export default class App extends Component {
   }
   setUploadStatus(cameraMode) {
     console.log("camera mode is", cameraMode);
-    this.setState({ cameraMode: cameraMode }, () =>
+    this.setState({ cameraMode }, () =>
       console.log("app camera mode is", this.state.cameraMode)
     );
   }
@@ -333,6 +333,7 @@ export default class App extends Component {
               key="edit"
               component={EditProfile}
               setCameraMode={this.setUploadStatus}
+              
             />
 
             <Scene
