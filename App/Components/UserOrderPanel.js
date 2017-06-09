@@ -177,9 +177,31 @@ export default class UserOrderPanel extends Component {
                 : null}
             </View>
 
+              <View style={{ flex: 0.2, flexDirection: 'row', alignItems: "center", justifyContent: "center"}}>
+                {this.state.order.status === 1
+                  ? <View style={{ flex: 1 }}>
+                      <Icon name="telephone"  size={45} style={{alignSelf: "center", color: "black"}} 
+                        onPress={() =>
+                          Communications.phonecall(this.state.phone, true)
+                        }
+                      />
+                    </View>
+                : null}
+                {this.state.order.status === 1
+                  ? <View style={{ flex: 1 }}>
+                      <Icon2 name="message"  size={45} style={{alignSelf: "center", color: "black"}}
+                        onPress={() =>
+                          Communications.text(this.state.phone)
+                        }
+                      />
+                    </View>
+                : null}
+              </View>
+
               {this.state.order.status === 1
-                ? <View>
+                ? <View style={{ flex: 0.2 }}>
                     <Button
+                      rounded
                       style={{ marginTop: 10 }}
                       onPress={() => {
                         this.props.setChefLocationAndPhoneNumber(
@@ -192,35 +214,6 @@ export default class UserOrderPanel extends Component {
                     </Button>
                   </View>
                 : null}
-
-              <View style={{flexDirection: 'row', alignItems: "center", justifyContent: "center"}}>
-                {this.state.order.status === 1
-                  ? <View style={{ flex: 1, marginTop: 70, marginRight: -225}}>
-                      <ActionButton
-                        style={{}}
-                        icon={<Icon name="telephone"  size={30} style={{alignItems: "center", color: "white"}} />}
-                        buttonColor="#02E550"
-                        onPress={() =>
-                          Communications.phonecall(this.state.phone, true)
-                        }
-                      />
-                    </View>
-                : null}
-
-                {this.state.order.status === 1
-                  ? <View style={{ flex: 1, marginTop: 70}}>
-                      <ActionButton
-                        style={{}}
-                        icon={<Icon2 name="message"  size={30} style={{alignItems: "center", color: "white"}} />}
-                        buttonColor="#02E550"
-                        onPress={() =>
-                          Communications.text(this.state.phone)
-                        }
-                      />
-    
-                    </View>
-                : null}
-              </View>
 
               {this.state.order.status === 2
                 ? <View>

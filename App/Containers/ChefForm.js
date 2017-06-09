@@ -97,6 +97,12 @@ export default class ChefForm extends Component {
       kaede: {
         backgroundColor: '#f9f5ed',
         marginTop: 10
+      },
+      submitButton: {
+        fontFamily: 'MarkerFelt-Thin',
+        fontSize: 20,
+        alignSelf: 'center',
+        color: '#505050'
       }
     }
     return (
@@ -140,6 +146,7 @@ export default class ChefForm extends Component {
 
         <View style={styles.button}>
           <Button
+            dark
             large
             transparent
             bordered
@@ -147,7 +154,7 @@ export default class ChefForm extends Component {
               this.submitForm();
             }}
           >
-            <Text>Submit</Text>
+            <Text style={styles.submitButton}>Submit</Text>
           </Button>
         </View>
       </View>
