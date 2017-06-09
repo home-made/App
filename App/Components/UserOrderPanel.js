@@ -55,7 +55,8 @@ export default class UserOrderPanel extends Component {
         axios
           .get("http://homemadeapp.org:3000/orders/" + authID)
           .then(orders => {
-            let order = orders.data[orders.data.length - 1];
+            let order = orders.data[0];
+            
             axios
               .get("http://homemadeapp.org:3000/user/" + order.chefId)
               .then(chefDetails => {
