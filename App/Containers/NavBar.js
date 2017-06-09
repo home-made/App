@@ -90,7 +90,6 @@ export default class NavBar extends Component {
       });
     });
   }
-
   cuisines() {
     Actions.cuisines({ type: ActionConst.RESET });
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);

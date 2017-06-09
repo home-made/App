@@ -6,6 +6,7 @@ import { Thumbnail, ListItem, Left, Body, Right,Text } from "native-base";
 export default class Review extends Component {
   constructor(props) {
     super();
+    console.log("PROPS IN REVIEW ", props);
   }
 
   render() {
@@ -42,7 +43,7 @@ export default class Review extends Component {
         <Body >
           <Text style={styles.cardName}>{this.props.review.user.firstName}</Text>
 
-          <Text style={styles.cardDesc} note>{this.props.review.userText}</Text>
+          <Text style={styles.cardDesc} note>{this.props.review.reviewText}</Text>
         </Body>
       </ListItem>
     );

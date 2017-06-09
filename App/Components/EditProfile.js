@@ -4,7 +4,6 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { View, Button, Text, Toast, Input } from "native-base";
 import { Actions, ActionConst } from "react-native-router-flux";
 import { Kaede } from 'react-native-textinput-effects';
-import Autocomplete from 'react-google-autocomplete';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import axios from "axios";
 
@@ -70,7 +69,7 @@ export default class EditProfile extends Component {
           axios
             .get("http://homemadeapp.org:3000/user/" + this.state.userId)
             .then(res => {
-              this.setState({ userName: res.data[0].firstName,userPic: res.data[0].profileUrl }, () =>
+              this.setState({ userName: res.data[0].firstName,userPic: res.data[0][0].profileUrl }, () =>
                 console.log('url is', res)
               );
             })
@@ -187,6 +186,7 @@ export default class EditProfile extends Component {
               style={styles.kaede}
               label={'Phone Number'}
               placeholder='Phone Number'
+              keyboardType={'numeric'}
               labelStyle={styles.label}
               inputStyle={styles.input}
               onChangeText={phone => this.setState({ phone })}

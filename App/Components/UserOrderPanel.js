@@ -127,6 +127,14 @@ export default class UserOrderPanel extends Component {
         color: '#6EE96E',
         fontFamily: 'Noteworthy-Bold',
         fontSize: 18
+      },
+      button: {
+        marginTop: 10,
+      },
+      buttonText: {
+        color: '#505050',
+        fontFamily: 'Noteworthy-Bold',
+        fontSize: 16
       }
     }
 
@@ -210,7 +218,7 @@ export default class UserOrderPanel extends Component {
                 ? <View style={{ flex: 0.2 }}>
                     <Button
                       rounded transparent bordered dark
-                      style={{ marginTop: 10 }}
+                      style={styles.buttons}
                       onPress={() => {
                         this.props.setChefLocationAndPhoneNumber(
                           this.state.chefLocation,
@@ -218,7 +226,7 @@ export default class UserOrderPanel extends Component {
                         );
                       }}
                     >
-                      <Text>Get Directions</Text>
+                      <Text style={styles.buttonText}>Get Directions</Text>
                     </Button>
                   </View>
                 : null}
@@ -227,13 +235,13 @@ export default class UserOrderPanel extends Component {
                 ? <View style={{ flex: 0.6 }}>
                     <Button
                       rounded transparent bordered dark
-                      style={{ marginTop: 10 }}
+                      style={styles.buttons}
                       onPress={() =>
                         Actions.feedback(this.state.order, {
                           leavingChefReview: true
                         })}
                     >
-                      <Text>Leave Feedback</Text>
+                      <Text style={styles.buttonText}>Leave Feedback</Text>
                     </Button>
                   </View>
                 : <Text />}
