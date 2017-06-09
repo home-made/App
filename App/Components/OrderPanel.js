@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, AsyncStorage, ScrollView } from "react-native";
+import { StyleSheet, View, AsyncStorage, ScrollView } from "react-native";
 import {
   Container,
   Header,
@@ -10,7 +10,10 @@ import {
   Tab3,
   TabHeading,
   List,
-  ListItem
+  ListItem,
+  Body,
+  Thumbnail,
+  Text
 } from "native-base";
 import axios from "axios";
 import { Actions } from "react-native-router-flux";
@@ -23,10 +26,14 @@ export default class OrderPanel extends Component {
     this.state = {};
     this.returnRow = this.returnRow.bind(this);
   }
-
   returnRow(data) {
-    var dateAndTime = moment(data.date).format('LLLL');
-    // console.log("DATA IS", data);
+    var dateAndTime = moment(data.date).format('LLL');
+    console.log("DATA IS", data);
+    var getCustomer = function (customer){
+      console.log('customer id is', customer.authId)
+      console.log('data customer is',data.customerId)
+     return data.customerId === customer.authID;
+    }
     return (
       <ListItem
         onPress={() => {
@@ -35,10 +42,14 @@ export default class OrderPanel extends Component {
           {/*setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);*/}
         }}
       >
-        <Text style={{ marginLeft: 10 }}>
-          Placed at: {dateAndTime}{"\n"}
-          Cash total: ${data.cashTotal}
-        </Text>
+        <Thumbnail square size={80} source={{uri: data.customer.profileUrl}} />
+
+        <Body>
+          <Text style={{ marginLeft: 10 }}>
+            {data.customer.firstName}{"\n"}
+            <Text note>{dateAndTime}{"\n"}Cash Donation ${data.cashTotal}</Text>
+          </Text>
+        </Body>
       </ListItem>
     );
   }
@@ -81,7 +92,7 @@ export default class OrderPanel extends Component {
                 .then(complete => {
                   console.log("COMPLETE DATA IS", complete.data)
                   this.setState({ completeCustomers: complete.data[1] }, () =>{
-                    this.setState({ complete: complete.data[0] }, () => {})
+                    this.setState({ complete: complete.data[0] }, () => {console.log('people',this.state)})
                   });
                 });
             });
