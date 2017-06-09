@@ -302,10 +302,7 @@ export default class NavBar extends Component {
             icon
             onPress={() => {
               this.currentOrder();
-              if(this.state.chefView)
-                this.setState({ chefNotification: 0 });
-              else
-                this.setState({ customerNotification: 0 });
+              this.setState({ customerNotification: 0 });
             }}
             style={styles.content}
           >
@@ -316,7 +313,6 @@ export default class NavBar extends Component {
              <Text style={styles.entries}>Current Order</Text>
             </Body>
             <Right>
-              {this.state.chefView && this.state.chefNotification>0 ? <Icon2 size={20} name="ios-alert-outline"/> : null}
               {!this.state.chefView && this.state.customerNotification>0? <Icon2 size={20} name="ios-alert-outline"/>: null }
             </Right>
           </ListItem> : null}
@@ -326,8 +322,6 @@ export default class NavBar extends Component {
               this.orders();
               if(this.state.chefView)
                 this.setState({ chefNotification: 0 });
-              else
-                this.setState({ customerNotification: 0 });
             }}
             style={styles.content}
           >
@@ -339,7 +333,6 @@ export default class NavBar extends Component {
             </Body>
             <Right>
               {this.state.chefView && this.state.chefNotification>0 ? <Icon2 size={20} name="ios-alert-outline"/> : null}
-              {!this.state.chefView && this.state.customerNotification>0? <Icon2 size={20} name="ios-alert-outline"/>: null }
             </Right>
           </ListItem>
 

@@ -149,7 +149,7 @@ export default class Checkout extends Component {
       .then(function(response) {
         console.log("New order inside Checkout.js was submitted to the database, response is: ", response);
         
-        setTimeout( ()=> { context.checkAgain.call(null, response.data.customerId) }, 10000);
+        setTimeout( ()=> { context.checkAgain.call(null, response.data.customerId) }, 120000);
         
         Actions.userOrders({ type: ActionConst.RESET });
       })
