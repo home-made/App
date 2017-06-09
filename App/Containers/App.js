@@ -162,6 +162,8 @@ export default class App extends Component {
   }
 
   render() {
+    console.disableYellowBox = true;
+
     const scenes = Actions.create(
       <Scene key="root">
         <Scene
