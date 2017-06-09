@@ -70,7 +70,7 @@ export default class EditProfile extends Component {
           axios
             .get("http://homemadeapp.org:3000/user/" + this.state.userId)
             .then(res => {
-              this.setState({ userName: res.data[0].firstName,userPic: res.data[0].profileUrl }, () =>
+              this.setState({ userName: res.data[0].firstName,userPic: res.data[0][0].profileUrl }, () =>
                 console.log('url is', res)
               );
             })

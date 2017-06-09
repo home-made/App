@@ -29,6 +29,7 @@ export default class OrderView extends Component {
   }
 
   componentWillMount() {
+    // console.log(this.props)
     let dishes = [];
 
     for (var key in this.props.cart) {
@@ -49,7 +50,7 @@ export default class OrderView extends Component {
     console.log("accept looks like", request);
     axios.put("http://homemadeapp.org:3000/orders", request).then(res => {
       console.log("RESPONSE IS", res.data);
-      Actions.orders({ type: ActionConst.RESET });
+      Actions.orders({ chefView:true,type: ActionConst.RESET });
     });
   }
 
@@ -62,7 +63,7 @@ export default class OrderView extends Component {
     };
     axios
       .put("http://homemadeapp.org:3000/orders", request)
-      .then(() => Actions.orders({ type: ActionConst.RESET }));
+      .then(() => Actions.orders({ chefView:true,type: ActionConst.RESET }));
   }
 
   handleComplete() {
@@ -75,7 +76,7 @@ export default class OrderView extends Component {
     };
     axios.put("http://homemadeapp.org:3000/orders", request).then(res => {
       console.log("COMPLETED ORDER:", res.data);
-      Actions.orders({ type: ActionConst.RESET });
+      Actions.orders({ chefView:true,type: ActionConst.RESET });
     });
   }
 
@@ -150,6 +151,7 @@ export default class OrderView extends Component {
                   style={{ alignSelf: 'center'}}
                   onPress={() =>
                     Actions.feedback({
+                      chefView: this.props.chefView,
                       chefId: this.props.chefId,
                       customerId: this.props.customerId,
                       date: this.props.date,
