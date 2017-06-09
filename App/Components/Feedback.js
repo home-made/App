@@ -110,6 +110,13 @@ export default class Feedback extends Component {
         flex: 0.8,
         justifyContent: "center",
         alignSelf: "center"
+      },
+      buttonText: {
+        fontFamily: 'MarkerFelt-Wide',
+        fontSize: 18,
+        textAlign: 'center',
+        color: '#505050'
+
       }
     };
 
@@ -149,7 +156,7 @@ export default class Feedback extends Component {
             dark
             onPress={this.submitFeedback}
           >
-            <Text>Submit Feedback</Text>
+            <Text style={styles.buttonText}>Submit Feedback</Text>
           </Button>
         </View>
 

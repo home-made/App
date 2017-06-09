@@ -138,16 +138,9 @@ export default class UserOrderPanel extends Component {
             justifyContent: "center"
           }}
         >
-          <Text>You have no current orders.</Text>
-          <View
-            style={{
-              marginTop: 60,
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center"
-            }}
-          >
-            <Button><Text>Feeling Hungry?</Text></Button>
+            <Text>You have no current orders.</Text>
+            <View style={{marginTop: 60, flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
+            <Button onPress={()=> { Actions.cuisines() }}><Text>Feeling Hungry?</Text></Button>
           </View>
         </View>
       );
