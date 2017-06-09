@@ -1,11 +1,15 @@
 import React, { Component } from "react";
 import { StyleSheet, AsyncStorage, Image, Container } from "react-native";
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import {
+  KeyboardAwareScrollView
+} from "react-native-keyboard-aware-scroll-view";
 import { View, Button, Text, Toast, Input } from "native-base";
 import { Actions, ActionConst } from "react-native-router-flux";
-import { Kaede } from 'react-native-textinput-effects';
-import Autocomplete from 'react-google-autocomplete';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { Kaede } from "react-native-textinput-effects";
+import Autocomplete from "react-google-autocomplete";
+import {
+  GooglePlacesAutocomplete
+} from "react-native-google-places-autocomplete";
 import axios from "axios";
 
 export default class EditProfile extends Component {
@@ -23,7 +27,7 @@ export default class EditProfile extends Component {
   componentWillMount() {
     let userId, userName, userPic;
     let newUrl = this.props.newUrl;
-    console.log("State IN EDIT PROFILE", this.state)
+    console.log("State IN EDIT PROFILE", this.state);
     async function getProfile(url) {
       try {
         const data = await AsyncStorage.getItem("profile");
@@ -66,12 +70,17 @@ export default class EditProfile extends Component {
       this.setState(
         { userId: userId, userName: userName, userPic: userPic },
         () => {
-          console.log('usrPic is',this.state.userPic);
+          console.log("usrPic is", this.state.userPic);
+          console.log("USER ID IN EDIT PROFILE", this.state.userId)
           axios
             .get("http://homemadeapp.org:3000/user/" + this.state.userId)
             .then(res => {
-              this.setState({ userName: res.data[0].firstName,userPic: res.data[0][0].profileUrl }, () =>
-                console.log('url is', res)
+              this.setState(
+                {
+                  userName: res.data[0].firstName,
+                  userPic: res.data[0].profileUrl
+                },
+                () => console.log("url is", res)
               );
             })
             .catch(err => console.log(err));
@@ -79,9 +88,11 @@ export default class EditProfile extends Component {
       );
     });
   }
+
   componentWillReceiveProps() {
     this.componentWillMount();
   }
+
   handleSubmit() {
     console.log("HANDLE SUBMIT CALLED");
     let send = {};
@@ -111,40 +122,40 @@ export default class EditProfile extends Component {
         marginTop: 75
       },
       name: {
-        fontFamily: 'MarkerFelt-Wide',
+        fontFamily: "MarkerFelt-Wide",
         fontSize: 50,
-        textAlign: 'center',
-        color: '#505050'
+        textAlign: "center",
+        color: "#505050"
       },
       profilePic: {
         borderRadius: 75,
         height: 150,
         width: 150,
         marginTop: 20,
-        alignSelf: 'center'
+        alignSelf: "center"
       },
       label: {
-        fontFamily: 'MarkerFelt-Thin',
-        color: '#9DDDE0'
+        fontFamily: "MarkerFelt-Thin",
+        color: "#9DDDE0"
       },
       input: {
-        fontFamily: 'MarkerFelt-Thin',
-        color: '#505050'
+        fontFamily: "MarkerFelt-Thin",
+        color: "#505050"
       },
       kaede: {
-        backgroundColor: '#f9f5ed',
+        backgroundColor: "#f9f5ed",
         marginTop: 10
       },
       buttons: {
         margin: 10,
-        alignSelf: 'center'
+        alignSelf: "center"
       },
       buttonText: {
-        fontFamily: 'MarkerFelt-Thin',
+        fontFamily: "MarkerFelt-Thin",
         fontSize: 20,
-        color: '#505050'
+        color: "#505050"
       }
-    }
+    };
 
     console.log("the state inside EditProfile.js is ", this.state);
     return (
@@ -156,11 +167,14 @@ export default class EditProfile extends Component {
 
             <Image
               style={styles.profilePic}
-              source={{uri: this.state.userPic}}
+              source={{ uri: this.state.userPic }}
             />
 
             <Button
-              rounded transparent bordered dark
+              rounded
+              transparent
+              bordered
+              dark
               style={styles.buttons}
               onPress={() => {
                 this.props.setCameraMode("profile");
@@ -175,8 +189,8 @@ export default class EditProfile extends Component {
             <Kaede
               autoCorrect={false}
               style={styles.kaede}
-              label={'Status'}
-              placeholder='Status'
+              label={"Status"}
+              placeholder="Status"
               labelStyle={styles.label}
               inputStyle={styles.input}
               onChangeText={status => this.setState({ status })}
@@ -185,45 +199,47 @@ export default class EditProfile extends Component {
             <Kaede
               autoCorrect={false}
               style={styles.kaede}
-              label={'Phone Number'}
-              placeholder='Phone Number'
+              label={"Phone Number"}
+              placeholder="Phone Number"
               labelStyle={styles.label}
               inputStyle={styles.input}
               onChangeText={phone => this.setState({ phone })}
             />
             <View style={{ marginTop: 10 }}>
               <GooglePlacesAutocomplete
-                placeholder='Address'
+                placeholder="Address"
                 minLength={2}
                 autoFocus={false}
-                listViewDisplayed='auto'
+                listViewDisplayed="auto"
                 fetchDetails={true}
-                renderDescription={(row) => row.description}
+                renderDescription={row => row.description}
                 onPress={(data, details = null) => {
                   console.log(data);
                   console.log(details);
-                  this.setState({ address: data.description }, () => console.log(data.description))
+                  this.setState({ address: data.description }, () =>
+                    console.log(data.description)
+                  );
                 }}
                 getDefaultValue={() => {
-                  return '';
+                  return "";
                 }}
                 query={{
-                  key: 'AIzaSyDySPBT6q0rzspVjjJWZDnEGCaT3CJBMKQ',
-                  language: 'en',
-                  types: 'address'
+                  key: "AIzaSyDySPBT6q0rzspVjjJWZDnEGCaT3CJBMKQ",
+                  language: "en",
+                  types: "address"
                 }}
                 styles={{
                   description: {
-                    fontWeight: 'bold'
+                    fontWeight: "bold"
                   },
                   predefinedPlacesDescription: {
-                    color: '#1faadb'
-                  },
+                    color: "#1faadb"
+                  }
                 }}
-                nearbyPlacesAPI='GooglePlacesSearch'
+                nearbyPlacesAPI="GooglePlacesSearch"
                 GooglePlacesSearchQuery={{
-                  rankby: 'distance',
-                  types: 'food',
+                  rankby: "distance",
+                  types: "food"
                 }}
                 debounce={200}
               />
@@ -231,7 +247,10 @@ export default class EditProfile extends Component {
           </View>
 
           <Button
-            rounded transparent bordered dark
+            rounded
+            transparent
+            bordered
+            dark
             style={styles.buttons}
             onPress={() => {
               this.handleSubmit();
