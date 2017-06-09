@@ -251,8 +251,7 @@ export default class OrderView extends Component {
           </Text>
         </View>
 
-        {this.props.status !== 2
-          ? this.state.dishes.map(dish => {
+        {this.state.dishes.map(dish => {
               return (
                 <Card
                   style={{ marginTop: 20, marginLeft: 10, marginRight: 10 }}
@@ -279,7 +278,7 @@ export default class OrderView extends Component {
                 </Card>
               );
             })
-          : null}
+          }
 
       </ScrollView>
     );
