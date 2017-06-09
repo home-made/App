@@ -18,10 +18,11 @@ export default class CheckOutItem extends Component {
   }
 
   handleIncrement() {
-    if(this.props.dishCounter[this.id].amount < this.props.orderItem.quantity) {
+    if (
+      this.props.dishCounter[this.id].amount < this.props.orderItem.quantity
+    ) {
       this.props.incrementDishCount(this.id);
     }
-    
   }
 
   handleDecrement() {
@@ -35,45 +36,43 @@ export default class CheckOutItem extends Component {
   render() {
     const styles = {
       item: {
-        alignSelf: 'center',
-        fontFamily: 'MarkerFelt-Thin',
+        alignSelf: "center",
+        fontFamily: "MarkerFelt-Thin",
         fontSize: 22,
-        color: '#505050'
+        color: "#505050"
       },
       aqGroup: {
         marginTop: 10,
-        flexDirection: 'row',
-        justifyContent: 'space-around'
+        flexDirection: "row",
+        justifyContent: "space-around"
       },
       amtQnty: {
-        fontFamily: 'Noteworthy-Bold',
+        fontFamily: "Noteworthy-Bold",
         fontSize: 14
       },
       quantity: {
-        fontFamily: 'Noteworthy-Bold',
+        fontFamily: "Noteworthy-Bold",
         fontSize: 14
       },
       buttons: {
         marginTop: 10,
-        justifyContent: 'space-around',
-        flexDirection: 'row',
+        justifyContent: "space-around",
+        flexDirection: "row"
       },
       buttonText: {
-        fontFamily: 'Noteworthy-Bold',
+        fontFamily: "Noteworthy-Bold",
         fontSize: 15
       }
-    }
+    };
 
     console.log("dishcounter", this.dishCounter);
-    console.log("the checkout item is ", this.props)
+    console.log("the checkout item is ", this.props);
     return (
       <ListItem>
         <Thumbnail large square source={{ uri: this.uri }} />
         <Body>
           <Text style={styles.item}>{this.itemName}</Text>
-          <Row
-            style={{ flexDirection: 'column' }}
-          >
+          <Row style={{ flexDirection: "column" }}>
 
             <View style={styles.aqGroup}>
               <Text style={styles.amtQnty}>
@@ -88,7 +87,12 @@ export default class CheckOutItem extends Component {
             </View>
 
             <View style={styles.buttons}>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between"
+                }}
+              >
                 <Button onPress={this.handleIncrement} light small>
                   <Text style={styles.buttonText}>+</Text>
                 </Button>

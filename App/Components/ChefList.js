@@ -23,21 +23,21 @@ export default class ChefList extends Component {
       },
       noChefText1: {
         fontSize: 60,
-        color: '#505050',
-        fontFamily: 'Noteworthy-Bold',
-        textAlign: 'center'
+        color: "#505050",
+        fontFamily: "Noteworthy-Bold",
+        textAlign: "center"
       },
       noChefText2: {
         marginTop: 25,
         fontSize: 20,
-        color: '#505050',
-        fontFamily: 'Noteworthy-Bold',
-        textAlign: 'center'
+        color: "#505050",
+        fontFamily: "Noteworthy-Bold",
+        textAlign: "center"
       },
       container: {
         marginTop: 60,
         justifyContent: "center",
-        flex: 1,
+        flex: 1
       },
       image: {
         borderRadius: 38,
@@ -46,13 +46,13 @@ export default class ChefList extends Component {
       },
       chefText1: {
         fontSize: 25,
-        color: '#505050',
-        fontFamily: 'Noteworthy-Bold'
+        color: "#505050",
+        fontFamily: "Noteworthy-Bold"
       },
       chefText2: {
         fontSize: 15,
-        fontFamily: 'Noteworthy-Bold'
-      },
+        fontFamily: "Noteworthy-Bold"
+      }
     };
 
     let chefs = this.state.chefs;
@@ -73,7 +73,6 @@ export default class ChefList extends Component {
       );
     } else {
       return (
-
         <Container style={styles.container}>
           {console.log("The chefs inside ChefList.js are ", chefs)}
           <Content>
@@ -93,8 +92,12 @@ export default class ChefList extends Component {
                     }}
                   />
                   <Body>
-                    <Text style={styles.chefText1}>{chef.firstName} {chef.lastName}</Text>
-                    <Text style={styles.chefText2} note>{chef.status || ""}</Text>
+                    <Text style={styles.chefText1}>
+                      {chef.firstName} {chef.lastName}
+                    </Text>
+                    <Text style={styles.chefText2} note>
+                      {chef.status || ""}
+                    </Text>
                   </Body>
                 </ListItem>
               )}

@@ -12,9 +12,9 @@ import {
   Item
 } from "native-base";
 import { Actions, ActionConst } from "react-native-router-flux";
-import MaterialsIcon from 'react-native-vector-icons/MaterialIcons';
-import { Kaede } from 'react-native-textinput-effects';
-import axios from 'axios';
+import MaterialsIcon from "react-native-vector-icons/MaterialIcons";
+import { Kaede } from "react-native-textinput-effects";
+import axios from "axios";
 
 export default class ChefForm extends Component {
   constructor(props) {
@@ -32,14 +32,19 @@ export default class ChefForm extends Component {
   }
 
   componentWillMount() {
-      this.setState({email: this.props.email, phoneNumber: this.props.phoneNumber, firstName: this.props.firstName, lastName: this.props.lastName})
+    this.setState({
+      email: this.props.email,
+      phoneNumber: this.props.phoneNumber,
+      firstName: this.props.firstName,
+      lastName: this.props.lastName
+    });
 
-        console.log("IN CHEF FORM WILL MOUNT PROPS ARE", this.props)
+    console.log("IN CHEF FORM WILL MOUNT PROPS ARE", this.props);
 
     let userId;
     async function grabAuthId() {
       try {
-        const profile = await AsyncStorage.getItem('profile');
+        const profile = await AsyncStorage.getItem("profile");
         if (profile !== null && profile !== undefined) {
           userId = JSON.parse(profile).userId;
         }
@@ -47,22 +52,30 @@ export default class ChefForm extends Component {
         console.log("Error getting profile: ", err);
       }
     }
-    grabAuthId()
-      .then(() => {
-        this.setState({
-          authId: userId
-        })
+    grabAuthId().then(() => {
+      this.setState({
+        authId: userId
       });
+    });
   }
 
   submitForm() {
-    console.log('phone number: ', this.state.phone);
-    console.log('first name: ', this.state.firstName);
-    console.log('last name: ', this.state.lastName);
-    if (this.state.phone !== null && this.state.firstName !== null && this.state.lastName !== null) {
-      axios.put(`http://homemadeapp.org:3000/user/${this.state.authId}`, { phoneNumber: this.state.phone, firstName: this.state.firstName, lastName: this.state.lastName })
-        .then((res) => console.log(res.data))
-        .catch((err) => console.log('Error updating user to chef status: ', err));
+    console.log("phone number: ", this.state.phone);
+    console.log("first name: ", this.state.firstName);
+    console.log("last name: ", this.state.lastName);
+    if (
+      this.state.phone !== null &&
+      this.state.firstName !== null &&
+      this.state.lastName !== null
+    ) {
+      axios
+        .put(`http://homemadeapp.org:3000/user/${this.state.authId}`, {
+          phoneNumber: this.state.phone,
+          firstName: this.state.firstName,
+          lastName: this.state.lastName
+        })
+        .then(res => console.log(res.data))
+        .catch(err => console.log("Error updating user to chef status: ", err));
 
       Actions.cuisines({ type: ActionConst.RESET });
     }
@@ -72,46 +85,46 @@ export default class ChefForm extends Component {
     const styles = {
       container: {
         flex: 1,
-        flexDirection: 'column',
+        flexDirection: "column",
         justifyContent: "center",
         margin: 10,
-        marginTop: 90,
+        marginTop: 90
       },
       inputContainer: {
-        flex:0.4,
-        justifyContent: 'center'
+        flex: 0.4,
+        justifyContent: "center"
       },
       title: {
-        fontFamily: 'MarkerFelt-Thin',
+        fontFamily: "MarkerFelt-Thin",
         fontSize: 50,
-        alignSelf: 'center',
-        color: '#505050'
+        alignSelf: "center",
+        color: "#505050"
       },
       button: {
-        flex: .2,
+        flex: 0.2,
         justifyContent: "center",
-        alignSelf: 'center'
+        alignSelf: "center"
       },
       label: {
-        color: '#505050'
+        color: "#505050"
       },
       input: {
-        color: '#9DDDE0'
+        color: "#9DDDE0"
       },
       kaede: {
-        backgroundColor: '#f9f5ed',
+        backgroundColor: "#f9f5ed",
         marginTop: 10
       },
       submitButton: {
-        fontFamily: 'MarkerFelt-Thin',
+        fontFamily: "MarkerFelt-Thin",
         fontSize: 20,
-        alignSelf: 'center',
-        color: '#505050'
+        alignSelf: "center",
+        color: "#505050"
       }
-    }
+    };
     return (
       <View style={styles.container}>
-        <View style={{ alignItems: 'center' }}>
+        <View style={{ alignItems: "center" }}>
           <Text style={styles.title}>Tell us about</Text>
           <Text style={styles.title}>yourself</Text>
         </View>
@@ -119,34 +132,34 @@ export default class ChefForm extends Component {
           <Content>
             <Kaede
               style={styles.kaede}
-              label={'First Name'}
+              label={"First Name"}
               labelStyle={styles.label}
               inputStyle={styles.input}
-              onChangeText={(e) => this.setState({ firstName: e })}
+              onChangeText={e => this.setState({ firstName: e })}
               defaultValue={this.state.firstName || ""}
             />
             <Kaede
               style={styles.kaede}
-              label={'Last Name'}
+              label={"Last Name"}
               labelStyle={styles.label}
               inputStyle={styles.input}
-              onChangeText={(e) => this.setState({ lastName: e })}
+              onChangeText={e => this.setState({ lastName: e })}
               defaultValue={this.state.lastName || ""}
             />
             <Kaede
               style={styles.kaede}
-              label={'Phone Number'}
+              label={"Phone Number"}
               labelStyle={styles.label}
               inputStyle={styles.input}
-              onChangeText={(e) => this.setState({ phone: e })}
+              onChangeText={e => this.setState({ phone: e })}
               defaultValue={this.state.phoneNumber || ""}
             />
             <Kaede
               style={styles.kaede}
-              label={'E-mail'}
+              label={"E-mail"}
               labelStyle={styles.label}
               inputStyle={styles.input}
-              onChangeText={(e) => this.setState({ email: e })}
+              onChangeText={e => this.setState({ email: e })}
               defaultValue={this.state.email || ""}
             />
           </Content>

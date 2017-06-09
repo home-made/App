@@ -1,6 +1,12 @@
 import React, { Component } from "react";
-import { Image, StyleSheet, TouchableHighlight, Dimensions, View } from "react-native";
-const { width, height } = Dimensions.get('window');
+import {
+  Image,
+  StyleSheet,
+  TouchableHighlight,
+  Dimensions,
+  View
+} from "react-native";
+const { width, height } = Dimensions.get("window");
 import {
   Container,
   Content,
@@ -11,14 +17,14 @@ import {
   Button,
   Left,
   Body,
-  Toast,
+  Toast
 } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
 var styles = StyleSheet.create({
   image: {
     width: width - 4,
     height: 250,
-    alignSelf: "center",
+    alignSelf: "center"
   }
 });
 
@@ -37,14 +43,13 @@ export default class DishViewCard extends Component {
                 <Text note>{this.props.dish.description}</Text>
                 <Text note>Quantity Available: {this.props.dish.quantity}</Text>
                 <Image
-                  
                   style={styles.image}
                   source={{ uri: this.props.dish.dishImages[0] }}
                 />
-                <View style={{ alignSelf: 'flex-end', flexDirection: 'row' }}>
-                  <Text style={{ alignSelf: 'center' }} note> Add to Cart</Text>
+                <View style={{ alignSelf: "flex-end", flexDirection: "row" }}>
+                  <Text style={{ alignSelf: "center" }} note> Add to Cart</Text>
                   <Icon
-                    style={{alignSelf: 'flex-end'}}
+                    style={{ alignSelf: "flex-end" }}
                     onPress={() => {
                       this.props.addToCart(this.props.dish);
                       Toast.show({
@@ -56,7 +61,7 @@ export default class DishViewCard extends Component {
                     }}
                     name="cart-plus"
                     size={30}
-                />
+                  />
                 </View>
               </Body>
             </CardItem>

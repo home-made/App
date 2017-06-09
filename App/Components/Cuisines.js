@@ -23,10 +23,10 @@ export default class Cuisines extends Component {
         marginTop: 60
       },
       text: {
-        color: '#505050',
-        fontFamily: 'Noteworthy-Bold'
+        color: "#505050",
+        fontFamily: "Noteworthy-Bold"
       }
-    }
+    };
 
     return (
       <ScrollView style={styles.scrollView}>

@@ -37,12 +37,10 @@ export default class Checkout extends Component {
     this.submitOrder = this.submitOrder.bind(this);
     this.checkAgain = this.checkAgain.bind(this);
     this.sendCancelNotification = this.sendCancelNotification.bind(this);
-    
   }
 
   componentWillMount() {
     this.calculateTotal();
-
   }
 
   incrementDishCount(key) {
@@ -82,9 +80,11 @@ export default class Checkout extends Component {
     var newDishCounter = this.state.dishCounter;
     subtract = newDishCounter[key].amount * newDishCounter[key].cashDonation;
     delete newDishCounter[key];
-    this.setState({ dishCounter: newDishCounter }, () => { if(Object.keys(this.state.dishCounter).length === 0) {
-      Actions.cuisines({ type: ActionConst.RESET });
-    }});
+    this.setState({ dishCounter: newDishCounter }, () => {
+      if (Object.keys(this.state.dishCounter).length === 0) {
+        Actions.cuisines({ type: ActionConst.RESET });
+      }
+    });
     total -= subtract;
 
     this.setState({
@@ -116,7 +116,6 @@ export default class Checkout extends Component {
       "Wait for a confirmation your order was accepted.",
       [{ text: "OK", onPress: () => console.log("OK Pressed") }]
     );
-
   }
 
   sendCancelNotification() {
@@ -125,11 +124,9 @@ export default class Checkout extends Component {
       "Please go back to the Chef's profile and submit another order.",
       [{ text: "OK", onPress: () => console.log("OK Pressed") }]
     );
-
   }
 
   submitOrder() {
-
     //where status: 0 means the order is pending approval
     var newOrder = {
       chefId: this.state.chefId,
@@ -139,7 +136,7 @@ export default class Checkout extends Component {
       cashTotal: this.state.cashTotal,
       orderInstructions: this.state.orderInstructions
     };
-    console.log("NEW ORDER IS", newOrder)
+    console.log("NEW ORDER IS", newOrder);
     this.props.sendOrderSocket(newOrder);
 
     this.sendNotification();
@@ -147,10 +144,15 @@ export default class Checkout extends Component {
     axios
       .post("http://homemadeapp.org:3000/orders", newOrder)
       .then(function(response) {
-        console.log("New order inside Checkout.js was submitted to the database, response is: ", response);
-        
-        setTimeout( ()=> { context.checkAgain.call(null, response.data.customerId) }, 120000);
-        
+        console.log(
+          "New order inside Checkout.js was submitted to the database, response is: ",
+          response
+        );
+
+        setTimeout(() => {
+          context.checkAgain.call(null, response.data.customerId);
+        }, 120000);
+
         Actions.userOrders({ type: ActionConst.RESET });
       })
       .catch(function(error) {
@@ -160,16 +162,23 @@ export default class Checkout extends Component {
   checkAgain(customer) {
     let customerId = customer;
     let context = this;
-    axios.get("http://homemadeapp.org:3000/orders/" + customerId).then((orders) => {
-      console.log("Orders inside Checkout.js checkAgain() are ", orders);
+    axios
+      .get("http://homemadeapp.org:3000/orders/" + customerId)
+      .then(orders => {
+        console.log("Orders inside Checkout.js checkAgain() are ", orders);
 
-      if(orders.data[orders.data.length - 1].status === 0){
-        axios.put("http://homemadeapp.org:3000/orders/", { _id: orders.data[orders.data.length - 1]._id, status: 3 } ).then((res) => {
-          console.log("SUCCESSFULLY CANCELED", res.data);
-          context.sendCancelNotification()
-        })
-      }
-    })
+        if (orders.data[orders.data.length - 1].status === 0) {
+          axios
+            .put("http://homemadeapp.org:3000/orders/", {
+              _id: orders.data[orders.data.length - 1]._id,
+              status: 3
+            })
+            .then(res => {
+              console.log("SUCCESSFULLY CANCELED", res.data);
+              context.sendCancelNotification();
+            });
+        }
+      });
   }
   componentDidMount() {
     console.log("compont did mont start");
@@ -198,21 +207,21 @@ export default class Checkout extends Component {
         marginTop: 64
       },
       total: {
-        fontFamily: 'Noteworthy-Bold',
+        fontFamily: "Noteworthy-Bold",
         fontSize: 20,
         marginBottom: 10
       },
       submitButton: {
-        fontFamily: 'Noteworthy-Bold',
+        fontFamily: "Noteworthy-Bold",
         fontSize: 15
       }
-    }
+    };
 
     console.log("render start");
     console.log("the state inside the checkout is ", this.state);
     if (!this.state.data) {
       return (
-        <Container style={{marginTop: 63}}>
+        <Container style={{ marginTop: 63 }}>
           <Header><Text>Checkout</Text></Header>
           <Content>
             <Text>Your shopping cart is empty!</Text>
@@ -223,27 +232,31 @@ export default class Checkout extends Component {
       return (
         <Container style={styles.container}>
           <Content>
-            <Text style={{textAlign: "center"}}>Special Requests/Notes for Chef</Text>
+            <Text style={{ textAlign: "center" }}>
+              Special Requests/Notes for Chef
+            </Text>
             <TextInput
-            style={{
-              fontSize: 18,
-              marginLeft: "auto",
-              marginRight: "auto",
-              padding: 20,
-              height: 150,
-              borderColor: "gray",
-              borderWidth: 2,
-              width: 340,
-              borderRadius: 30
-            }}
-            returnKeyType='done'
-            placeholder='Special Requests?'
-            onChangeText={orderInstructions => this.setState({ orderInstructions }, 
-            () => console.log(this.state.orderInstructions))}
-            multiline={true}
-            maxLength={300}
-          />
-            <List style={{marginTop: 40}}>
+              style={{
+                fontSize: 18,
+                marginLeft: "auto",
+                marginRight: "auto",
+                padding: 20,
+                height: 150,
+                borderColor: "gray",
+                borderWidth: 2,
+                width: 340,
+                borderRadius: 30
+              }}
+              returnKeyType="done"
+              placeholder="Special Requests?"
+              onChangeText={orderInstructions =>
+                this.setState({ orderInstructions }, () =>
+                  console.log(this.state.orderInstructions)
+                )}
+              multiline={true}
+              maxLength={300}
+            />
+            <List style={{ marginTop: 40 }}>
               {this.state.data.map(orderItem => {
                 return (
                   <CheckOutItem
@@ -264,19 +277,21 @@ export default class Checkout extends Component {
             <Container style={{ alignItems: "center" }}>
               <Content>
                 <Button
-                  style={{ marginTop: 30, marginLeft: "auto", marginRight: "auto" }}
+                  style={{
+                    marginTop: 30,
+                    marginLeft: "auto",
+                    marginRight: "auto"
+                  }}
                   onPress={this.submitOrder}
                   success
                 >
                   <Text style={styles.submitButton}>Submit Order</Text>
                 </Button>
 
-                
               </Content>
             </Container>
           </Content>
 
-       
         </Container>
       );
     }

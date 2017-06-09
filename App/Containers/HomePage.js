@@ -91,7 +91,7 @@ export default class HomePage extends Component {
           /* after we log into the app, we make a post request
              that either finds or creates a user. we find out 
              if user is a chef or not */
-          console.log("PROFILE IN HOMEPAGE", profile)
+          console.log("PROFILE IN HOMEPAGE", profile);
           axios
             .post(`http://homemadeapp.org:3000/user/${profile.userId}`, profile)
             .then(user => {
@@ -134,7 +134,7 @@ export default class HomePage extends Component {
               if (saveUser.phoneNumber) {
                 Actions.drawer();
               } else {
-                Actions.drawer({saveUser});
+                Actions.drawer({ saveUser });
               }
             } catch (err) {
               console.log(

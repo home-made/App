@@ -14,7 +14,7 @@ import {
   CheckBox,
   ListItem
 } from "native-base";
-import { Kaede } from 'react-native-textinput-effects';
+import { Kaede } from "react-native-textinput-effects";
 
 export default class DishView extends Component {
   constructor(props) {
@@ -55,7 +55,7 @@ export default class DishView extends Component {
     //   quantity: 1
     // });
 
-      this.props.setDish(this.state.dish);
+    this.props.setDish(this.state.dish);
     // this.props.setCameraMode()
     Actions.uploadimage();
   }
@@ -75,25 +75,25 @@ export default class DishView extends Component {
     const styles = {
       container: {
         flex: 1,
-        flexDirection: 'column',
+        flexDirection: "column",
         marginTop: 64
       },
       label: {
-        fontFamily: 'MarkerFelt-Thin',
-        color: '#505050'
+        fontFamily: "MarkerFelt-Thin",
+        color: "#505050"
       },
       input: {
-        fontFamily: 'MarkerFelt-Thin',
-        color: '#9DDDE0'
+        fontFamily: "MarkerFelt-Thin",
+        color: "#9DDDE0"
       },
       kaede: {
-        backgroundColor: '#f9f5ed',
+        backgroundColor: "#f9f5ed",
         marginTop: 10
       },
       picker: {
-        alignSelf: 'center',
-        borderStyle: 'solid',
-        borderColor: 'black',
+        alignSelf: "center",
+        borderStyle: "solid",
+        borderColor: "black",
         borderWidth: 2,
         borderRadius: 20,
         marginTop: 10
@@ -103,8 +103,8 @@ export default class DishView extends Component {
         alignSelf: "center"
       },
       nextButtonText: {
-        fontFamily: 'MarkerFelt-Thin',
-        fontSize: 20,
+        fontFamily: "MarkerFelt-Thin",
+        fontSize: 20
       }
     };
 
@@ -116,88 +116,93 @@ export default class DishView extends Component {
     return (
       <Container style={styles.container}>
         <Content>
-        <Kaede
-          style={styles.kaede}
-          label={'Name'}
-          placeholder={'Eg: Burger'}
-          labelStyle={styles.label}
-          inputStyle={styles.input}
-          onChangeText={name => {
-            let dish = this.state.dish;
-            dish.name = name;
-            this.setState({ dish }, () => console.log(this.state.dish));
-          }}
-          value={this.state.dish.name}
-        />
+          <Kaede
+            style={styles.kaede}
+            label={"Name"}
+            placeholder={"Eg: Burger"}
+            labelStyle={styles.label}
+            inputStyle={styles.input}
+            onChangeText={name => {
+              let dish = this.state.dish;
+              dish.name = name;
+              this.setState({ dish }, () => console.log(this.state.dish));
+            }}
+            value={this.state.dish.name}
+          />
 
-        <Kaede
-          style={styles.kaede}
-          label={'Description'}
-          placeholder={'Eg: Quarter lb, gouda cheese stuffed patty with arugula, tomatoes, etc.'}
-          labelStyle={styles.label}
-          inputStyle={styles.input}
-          onChangeText={description => {
-            let dish = this.state.dish;
-            dish.description = description;
-            this.setState({ dish }, () => console.log(this.state.dish));
-          }}
-          value={this.state.dish.description}
-        />
+          <Kaede
+            style={styles.kaede}
+            label={"Description"}
+            placeholder={
+              "Eg: Quarter lb, gouda cheese stuffed patty with arugula, tomatoes, etc."
+            }
+            labelStyle={styles.label}
+            inputStyle={styles.input}
+            onChangeText={description => {
+              let dish = this.state.dish;
+              dish.description = description;
+              this.setState({ dish }, () => console.log(this.state.dish));
+            }}
+            value={this.state.dish.description}
+          />
 
-        <Kaede
-          style={styles.kaede}
-          label={'Donation Amount'}
-          placeholder={'$'}
-          labelStyle={styles.label}
-          inputStyle={styles.input}
-          keyboardType={'number-pad'}
-          onChangeText={cashDonation => {
-            let dish = this.state.dish;
-            dish.cashDonation = cashDonation;
-            this.setState({ dish }, () => console.log(this.state.dish));
-          }}
-          value={this.state.dish.cashDonation}
-        />
+          <Kaede
+            style={styles.kaede}
+            label={"Donation Amount"}
+            placeholder={"$"}
+            labelStyle={styles.label}
+            inputStyle={styles.input}
+            keyboardType={"number-pad"}
+            onChangeText={cashDonation => {
+              let dish = this.state.dish;
+              dish.cashDonation = cashDonation;
+              this.setState({ dish }, () => console.log(this.state.dish));
+            }}
+            value={this.state.dish.cashDonation}
+          />
 
-        <Kaede
-          style={styles.kaede}
-          label={'Quantity'}
-          placeholder={"Quantity"}
-          labelStyle={styles.label}
-          inputStyle={styles.input}
-          keyboardType={'number-pad'}
-          onChangeText={quantity => {
-            let dish = this.state.dish;
-            dish.quantity = quantity;
-            this.setState({ dish }, () => console.log(this.state.dish));
-          }}
-          value={this.state.dish.quantity}
-        />
-        <View style={styles.picker}>
-          <Picker
-            supportedOrientations={["portrait", "landscape"]}
-            iosHeader="Select one"
-            mode="dropdown"
-            selectedValue={this.state.selected1}
-            onValueChange={this.onValueChange.bind(this)}
-          >
-            {/*<Item label="Select a Cuisine Style" value={0} />*/}
-            {this.state.genres
-              ? this.state.genres.map((curr, ind) => {
-                  return <Item label={curr} value={ind} />;
-                })
-              : {}}
-          </Picker>
-        </View>
+          <Kaede
+            style={styles.kaede}
+            label={"Quantity"}
+            placeholder={"Quantity"}
+            labelStyle={styles.label}
+            inputStyle={styles.input}
+            keyboardType={"number-pad"}
+            onChangeText={quantity => {
+              let dish = this.state.dish;
+              dish.quantity = quantity;
+              this.setState({ dish }, () => console.log(this.state.dish));
+            }}
+            value={this.state.dish.quantity}
+          />
+          <View style={styles.picker}>
+            <Picker
+              supportedOrientations={["portrait", "landscape"]}
+              iosHeader="Select one"
+              mode="dropdown"
+              selectedValue={this.state.selected1}
+              onValueChange={this.onValueChange.bind(this)}
+            >
+              {/*<Item label="Select a Cuisine Style" value={0} />*/}
+              {this.state.genres
+                ? this.state.genres.map((curr, ind) => {
+                    return <Item label={curr} value={ind} />;
+                  })
+                : {}}
+            </Picker>
+          </View>
 
-        <View style={styles.nextButton}>
-          <Button
-            rounded transparent bordered dark
-            onPress={() => this.handleSubmit()}
-          >
-            <Text style={styles.nextButtonText}>Next</Text>
-          </Button>
-        </View>
+          <View style={styles.nextButton}>
+            <Button
+              rounded
+              transparent
+              bordered
+              dark
+              onPress={() => this.handleSubmit()}
+            >
+              <Text style={styles.nextButtonText}>Next</Text>
+            </Button>
+          </View>
         </Content>
       </Container>
     );

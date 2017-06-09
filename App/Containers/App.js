@@ -22,7 +22,7 @@ import DishConfirm from "../Components/DishConfirm";
 import Feedback from "../Components/Feedback";
 import SignaturePage from "../Components/SignaturePage";
 import ChefForm from "./ChefForm";
-import socket from '../Socket/Socket'
+import socket from "../Socket/Socket";
 import GeoPoint from "geopoint";
 import axios from "axios";
 
@@ -44,7 +44,9 @@ export default class App extends Component {
     this.getCuisineStyles = this.getCuisineStyles.bind(this);
     this.fetchUploadStatus = this.fetchUploadStatus.bind(this);
     this.setUploadStatus = this.setUploadStatus.bind(this);
-    this.setChefLocationAndPhoneNumber = this.setChefLocationAndPhoneNumber.bind(this);
+    this.setChefLocationAndPhoneNumber = this.setChefLocationAndPhoneNumber.bind(
+      this
+    );
     this.updateLocation = this.updateLocation.bind(this);
     this.getLatAndLon = this.getLatAndLon.bind(this);
     this.sendOrderSocket = this.sendOrderSocket.bind(this);
@@ -59,11 +61,11 @@ export default class App extends Component {
     return { lat: this.state.latitude, lon: this.state.longitude };
   }
   sendOrderSocket(order) {
-    console.log('getting to it - socket')
+    console.log("getting to it - socket");
     socket.emit("newOrderRequest", order);
   }
   updateOrderSocket(order) {
-    console.log('getting to it - socket')
+    console.log("getting to it - socket");
     socket.emit("newOrderUpdate", order);
   }
   setLocation() {
@@ -210,10 +212,7 @@ export default class App extends Component {
           direction="vertical"
           initial
         />
-        <Scene
-          key="chefform"
-          component={ChefForm}
-        />
+        <Scene key="chefform" component={ChefForm} />
         <Scene
           key="drawer"
           type={ActionConst.RESET}
@@ -333,7 +332,6 @@ export default class App extends Component {
               key="edit"
               component={EditProfile}
               setCameraMode={this.setUploadStatus}
-              
             />
 
             <Scene
@@ -392,11 +390,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#2c3e50"
   },
   navbar: {
-    backgroundColor: '#9DDDE0',
+    backgroundColor: "#9DDDE0",
     opacity: 0.8
   },
   title: {
-    fontFamily: 'MarkerFelt-Thin',
+    fontFamily: "MarkerFelt-Thin",
     fontSize: 23,
     fontWeight: "bold",
     color: "#505050"

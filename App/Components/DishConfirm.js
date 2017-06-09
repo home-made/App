@@ -61,16 +61,18 @@ export default class DishConfirm extends Component {
     });
   }
   onSubmit() {
-    if(Number(this.state.dish.quantity) <= 0) {
+    if (Number(this.state.dish.quantity) <= 0) {
       let dishy = this.state.dish;
       dishy.isActive = false;
-      this.setState({dish: dishy})
+      this.setState({ dish: dishy });
     }
-    axios.post("http://homemadeapp.org:3000/dish/add", this.state.dish).then(res => {
-      console.log(res);
-      this.props.setDish(this.state.dish);
-      Actions.dishedit({ type: ActionConst.RESET });
-    });
+    axios
+      .post("http://homemadeapp.org:3000/dish/add", this.state.dish)
+      .then(res => {
+        console.log(res);
+        this.props.setDish(this.state.dish);
+        Actions.dishedit({ type: ActionConst.RESET });
+      });
   }
   render() {
     const { container } = styles;

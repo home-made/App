@@ -25,7 +25,7 @@ export default class ManageDish extends Component {
       showToast: false,
       userId: "",
       userName: "",
-      userPic: "",
+      userPic: ""
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -67,7 +67,9 @@ export default class ManageDish extends Component {
     let dish = this.state.dish;
     console.log("SEND: ", dish);
 
-    axios.put("http://homemadeapp.org:3000/dish", dish).then(Actions.chefPanel());
+    axios
+      .put("http://homemadeapp.org:3000/dish", dish)
+      .then(Actions.chefPanel());
   }
   onValueChange(value) {
     console.log(this.state.genres[value]);
@@ -126,8 +128,7 @@ export default class ManageDish extends Component {
                 this.setState({ dish }, () => console.log(this.state.dish));
               }}
               value={this.state.dish.name}
-                            style={{ marginBottom: -10 }}
-
+              style={{ marginBottom: -10 }}
             />
           </Item>
           <Item stackedLabel>
@@ -145,7 +146,7 @@ export default class ManageDish extends Component {
             />
           </Item>
           <Item>
-            <Label style={{ marginLeft: 5, marginBottom: -10  }}>$</Label>
+            <Label style={{ marginLeft: 5, marginBottom: -10 }}>$</Label>
             <Input
               placeholder="Donation Amount"
               onChangeText={cashDonation => {
@@ -154,8 +155,7 @@ export default class ManageDish extends Component {
                 this.setState({ dish }, () => console.log(this.state.dish));
               }}
               value={this.state.dish.cashDonation}
-                            style={{ marginBottom: -10 }}
-
+              style={{ marginBottom: -10 }}
             />
           </Item>
           <Item stackedLabel>
@@ -184,7 +184,6 @@ export default class ManageDish extends Component {
               mode="dropdown"
               selectedValue={this.state.selected1}
               onValueChange={this.onValueChange.bind(this)}
-              
             >
               {/*<Item label="Select a Cuisine Style" value={0} />*/}
               {this.state.genres

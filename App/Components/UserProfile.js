@@ -1,5 +1,11 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Image, AsyncStorage, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Image,
+  AsyncStorage,
+  ScrollView
+} from "react-native";
 import {
   Container,
   Text,
@@ -40,7 +46,7 @@ export default class Profile extends Component {
     } else {
       return (
         <Container style={{ marginRight: 10, marginLeft: 10, marginTop: 10 }}>
-          <H3 style={{ color: '#505050' }}>Reviews</H3>
+          <H3 style={{ color: "#505050" }}>Reviews</H3>
           {allReviews.map(review => {
             return <Review review={review} />;
           })}
@@ -73,7 +79,7 @@ export default class Profile extends Component {
                   "the user inside axiospost for UserProfile.js is ",
                   user
                 );
-                 console.log('iffy')
+                console.log("iffy");
 
                 context.setState({
                   fullName: user.data[0].firstName,
@@ -98,39 +104,43 @@ export default class Profile extends Component {
       }
       grabAuthId();
     } else {
-      console.log('profile is',this.props.profile)
+      console.log("profile is", this.props.profile);
       axios
-      .get(`http://homemadeapp.org:3000/user/${this.props.profile.authId}`)
-      .then(user => {
-        console.log(
-          "the user inside axiospost for UserProfile.js is ",
-          user
-        );
-         this.setState({
-          fullName: user.data[0].firstName,
-          authId:  user.data[0].authId,
-          userPic: user.data[0].profileUrl,
-          user: user.data[0],
-          chefReviews: user.data[0].chefReviews,
-          customerReviews: user.data[0].customerReviews,
-          status: user.data[0].status
-        }, () => console.log('STATE RIGHT AFTER SET STATE USER PROFILE',this.state));
-      })
-      .catch(error => {
-        console.log(
-          "Error inside axios get user for UserProfile.js is ",error
-        );
-      });
-     
+        .get(`http://homemadeapp.org:3000/user/${this.props.profile.authId}`)
+        .then(user => {
+          console.log("the user inside axiospost for UserProfile.js is ", user);
+          this.setState(
+            {
+              fullName: user.data[0].firstName,
+              authId: user.data[0].authId,
+              userPic: user.data[0].profileUrl,
+              user: user.data[0],
+              chefReviews: user.data[0].chefReviews,
+              customerReviews: user.data[0].customerReviews,
+              status: user.data[0].status
+            },
+            () =>
+              console.log(
+                "STATE RIGHT AFTER SET STATE USER PROFILE",
+                this.state
+              )
+          );
+        })
+        .catch(error => {
+          console.log(
+            "Error inside axios get user for UserProfile.js is ",
+            error
+          );
+        });
     }
   }
 
   render() {
     const styles = {
       text: {
-        color: '#505050'
+        color: "#505050"
       }
-    }
+    };
 
     console.log("the state inside UserProfile is ", this.state);
     console.log("prop USER PROFILE", this.props);

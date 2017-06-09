@@ -243,8 +243,8 @@ export default class Profile extends Component {
         <Content>
           <Card>
             <CardItem>
-              <Body style={{  justifyContent: "center", alignItems: "center" }} >
-                <Content >
+              <Body style={{ justifyContent: "center", alignItems: "center" }}>
+                <Content>
                   <Text style={styles.cardName}>
                     {this.state.chef[0].firstName} {this.state.chef[0].lastName}
                   </Text>

@@ -8,7 +8,7 @@ import { Actions, ActionConst } from "react-native-router-flux";
 import {
   GooglePlacesAutocomplete
 } from "react-native-google-places-autocomplete";
-import { Kaede } from 'react-native-textinput-effects';
+import { Kaede } from "react-native-textinput-effects";
 import axios from "axios";
 
 export default class EditProfile extends Component {
@@ -70,7 +70,7 @@ export default class EditProfile extends Component {
         { userId: userId, userName: userName, userPic: userPic },
         () => {
           console.log("usrPic is", this.state.userPic);
-          console.log("USER ID IN EDIT PROFILE", this.state.userId)
+          console.log("USER ID IN EDIT PROFILE", this.state.userId);
           axios
             .get("http://homemadeapp.org:3000/user/" + this.state.userId)
             .then(res => {
@@ -198,9 +198,9 @@ export default class EditProfile extends Component {
             <Kaede
               autoCorrect={false}
               style={styles.kaede}
-              label={'Phone Number'}
-              placeholder='Phone Number'
-              keyboardType={'numeric'}
+              label={"Phone Number"}
+              placeholder="Phone Number"
+              keyboardType={"numeric"}
               labelStyle={styles.label}
               inputStyle={styles.input}
               onChangeText={phone => this.setState({ phone })}

@@ -22,7 +22,7 @@ export default class DishView extends Component {
         />
         <Text> {this.props.dish.name}</Text>
         <Text> ${this.props.dish.cashDonation}</Text>
-        <Container style={{ alignContent: "center"}}>
+        <Container style={{ alignContent: "center" }}>
           <Content>
             <Button
               onPress={() => {
