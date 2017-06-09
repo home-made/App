@@ -29,7 +29,7 @@ export default class OrderPanel extends Component {
   returnRow(data) {
     var dateAndTime = moment(data.date).format("LLLL");
     console.log("DATA IS ORDER PANEL", data);
-    
+
     return (
       <ListItem
         onPress={() => {
@@ -133,6 +133,7 @@ export default class OrderPanel extends Component {
     // console.log("USER IS", user);
     getAuthID().then(() => {
       if (this.props.chefView) {
+        console.log("IN IF BLOCK ABOUT TO CHEF INIT");
         chefInit();
       } else {
         customerInit();
@@ -158,13 +159,20 @@ export default class OrderPanel extends Component {
               ? <Text />
               : this.state.pending.forEach(item => {
                   for (var customer in this.state.pendingCustomers) {
-                     if ( this.state.pendingCustomers[customer].authId === item.customerId){
+                    if (
+                      this.state.pendingCustomers[customer].authId ===
+                      item.customerId
+                    ) {
                       item.customer = this.state.pendingCustomers[customer];
                     }
-                    if ( this.state.pendingCustomers[customer].authId === item.chefId){
-
+                    if (
+                      this.state.pendingCustomers[customer].authId ===
+                      item.chefId
+                    ) {
                       item.customer = this.state.pendingCustomers[customer];
-
+                    }
+                    {
+                      /*console.log('customer',item.customer)*/
                     }
                   }
                   pendingOrders.unshift(this.returnRow(item));
@@ -181,9 +189,16 @@ export default class OrderPanel extends Component {
               ? <Text />
               : this.state.accepted.forEach(item => {
                   for (var customer in this.state.acceptedCustomers) {
-                    if (this.state.acceptedCustomers[customer].authId ===  item.customerId) {
+                    if (
+                      this.state.acceptedCustomers[customer].authId ===
+                      item.customerId
+                    ) {
                       item.customer = this.state.acceptedCustomers[customer];
-                    } if (this.state.acceptedCustomers[customer].authId ===  item.chefId) { 
+                    }
+                    if (
+                      this.state.acceptedCustomers[customer].authId ===
+                      item.chefId
+                    ) {
                       item.customer = this.state.acceptedCustomers[customer];
                     }
                   }
@@ -201,12 +216,17 @@ export default class OrderPanel extends Component {
               ? <Text />
               : this.state.complete.forEach(item => {
                   for (var customer in this.state.completeCustomers) {
-                    if ( this.state.completeCustomers[customer].authId === item.customerId){
+                    if (
+                      this.state.completeCustomers[customer].authId ===
+                      item.customerId
+                    ) {
                       item.customer = this.state.completeCustomers[customer];
                     }
-                    if ( this.state.completeCustomers[customer].authId === item.chefId){
+                    if (
+                      this.state.completeCustomers[customer].authId ===
+                      item.chefId
+                    ) {
                       item.customer = this.state.completeCustomers[customer];
-
                     }
                   }
                   completeOrders.unshift(this.returnRow(item));
