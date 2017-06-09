@@ -84,7 +84,7 @@ export default class App extends Component {
     const url = `http://maps.apple.com/?saddr=${this.state.latitude},${this.state.longitude}&daddr=${chef.geo_lat},${chef.geo_lng}&dirflg=d`;
     chefLocation = new GeoPoint(chef.geo_lat, chef.geo_lng);
     this.setState({ chefLocation, phone: phone });
-    distanceInterval = setInterval(this.updateLocation, 5000);
+    distanceInterval = setInterval(this.updateLocation, 2500);
     Linking.openURL(url);
   }
 
