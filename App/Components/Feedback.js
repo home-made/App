@@ -69,6 +69,7 @@ export default class Feedback extends Component {
   render() {
     return (
       <Container>
+        <Content>
         <TextInput
           style={{
             fontSize: 20,
@@ -83,6 +84,7 @@ export default class Feedback extends Component {
             this.setState({ text }, () => console.log(this.state.text))}
           multiline={true}
           maxLength={300}
+          keyboardType="default"
         />
         
         <View style={{flex: 1, justifyContent: 'center', marginLeft: 50, marginRight: 50}}>
@@ -104,7 +106,7 @@ export default class Feedback extends Component {
             <Text>Submit Feedback</Text>
           </Button>
         </View>
-
+        </Content>
 
       </Container>
     );

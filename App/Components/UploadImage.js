@@ -100,7 +100,6 @@ class Upload extends Component {
               if (response.status !== 201)
                 throw new Error("Failed to upload image to S3");
               console.log(response.body.postResponse.location);
-
               // console.log('http://homemadeapp.org:3000/user' + this.state.userId)
               axios
                 .put("http://homemadeapp.org:3000/user/" + this.state.userId, {

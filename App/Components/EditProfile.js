@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, AsyncStorage, Image, Container } from "react-native";
-import {
-  KeyboardAwareScrollView
-} from "react-native-keyboard-aware-scroll-view";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { View, Input, Item, Button, Text, Toast, Content } from "native-base";
 import { Actions, ActionConst } from "react-native-router-flux";
 import axios from "axios";
@@ -153,37 +151,30 @@ export default class EditProfile extends Component {
             />
           </Item>
 
-          <Item>
-            <Input
-              placeholder="Phone Number"
-              onChangeText={phone => this.setState({ phone })}
-            />
-          </Item>
-
-          <Item>
-            <Input
-              placeholder="Status"
-              onChangeText={status => this.setState({ status })}
-            />
-          </Item>
-          <Item>
-            <Button
-              style={{ marginTop: 10 }}
-              onPress={() => {
-                this.handleSubmit();
-                Toast.show({
-                  supportedOrientations: ["portrait", "landscape"],
-                  text: "Profile Updated",
-                  position: "bottom",
-                  buttonText: "Okay",
-                  duration: 1000
-                });
-              }}
-            >
-              <Text>Submit</Text>
-            </Button>
-          </Item>
-        </View>
+        <Item>
+          <Input
+            placeholder="Status"
+            onChangeText={status => this.setState({ status })}
+          />
+        </Item>
+        <Item>
+          <Button
+            style={{ marginTop: 10 }}
+            onPress={() => {
+              this.handleSubmit();
+              Toast.show({
+                supportedOrientations: ["portrait", "landscape"],
+                text: "Profile Updated",
+                position: "bottom",
+                buttonText: "Okay",
+                duration: 1000
+              });
+            }}
+          >
+            <Text>Submit</Text>
+          </Button>
+        </Item>
+        </View>       
       </KeyboardAwareScrollView>
     );
   }
