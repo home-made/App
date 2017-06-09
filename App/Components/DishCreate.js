@@ -161,7 +161,7 @@ export default class DishView extends Component {
 
         <Kaede
           style={styles.kaede}
-          label={'Donation Amount'}
+          label={'Quantity'}
           placeholder={"Quantity"}
           labelStyle={styles.label}
           inputStyle={styles.input}
