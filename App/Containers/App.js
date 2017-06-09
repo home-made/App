@@ -24,6 +24,7 @@ import SignaturePage from "../Components/SignaturePage";
 import ChefForm from "./ChefForm";
 import socket from "../Socket/Socket";
 import GeoPoint from "geopoint";
+import LoadingPage from '../Components/LoadingPage';
 import axios from "axios";
 
 // const cstore = store();
@@ -167,10 +168,14 @@ export default class App extends Component {
     const scenes = Actions.create(
       <Scene key="root">
         <Scene
+          key="loadingpage"
+          component={LoadingPage}
+          initial
+        />
+        <Scene
           key="homepage"
           component={HomePage}
           direction="vertical"
-          initial
         />
         <Scene key="chefform" component={ChefForm} />
         <Scene
