@@ -26,7 +26,7 @@ export default class OrderPanel extends Component {
 
   returnRow(data) {
     var dateAndTime = moment(data.date).format('LLLL');
-    // console.log("DATA IS", data);
+    console.log("DATA IS", data);
     return (
       <ListItem
         onPress={() => {
