@@ -43,12 +43,18 @@ export default class Profile extends Component {
       return <Text>No reviews available at this time.</Text>;
     } else {
       return (
-        <Container style={{ marginRight: 10, marginLeft: 10, marginTop: 10 }}>
+        <Content
+          contentContainerStyle={{
+            marginRight: 10,
+            marginLeft: 10,
+            marginTop: 10
+          }}
+        >
           <H3 style={{ color: "#505050" }}>Reviews</H3>
           {allReviews.map(review => {
             return <Review review={review} />;
           })}
-        </Container>
+        </Content>
       );
     }
   }
@@ -116,50 +122,49 @@ export default class Profile extends Component {
   render() {
     const styles = {
       text: {
-        color: "#505050"
+        color: "#505050",
+        alignSelf: "center"
       }
     };
 
     return (
-      <ScrollView style={{ marginTop: 60 }}>
-        <Content>
-          <Card>
-            <CardItem>
-              <Body>
-                <Text style={styles.text}>
-                  {!this.state.fullName ? "name unknown" : this.state.fullName}
-                </Text>
-                <Text style={styles.text} note>
-                  {!this.state.status
-                    ? "No status at this time."
-                    : this.state.status}
-                </Text>
-              </Body>
-            </CardItem>
-            <CardItem>
-              <Body>
-                <Row style={{ justifyContent: "center", alignItems: "center" }}>
-                  <Image
-                    style={{
-                      width: 120,
-                      height: 120,
-                      justifyContent: "center",
-                      alignItems: "center",
-                      borderRadius: 60
-                    }}
-                    source={{
-                      uri: !this.state.userPic ? "" : this.state.userPic
-                    }}
-                  />
-                </Row>
-              </Body>
-            </CardItem>
-          </Card>
+      <Content>
+        <Card style={{ flex: 0.3, marginTop: -50, justifyContent: "center" }}>
+          <CardItem>
+            <Body>
+              <Text style={styles.text}>
+                {!this.state.fullName ? "name unknown" : this.state.fullName}
+              </Text>
+              <Text style={styles.text} note>
+                {!this.state.status
+                  ? "No status at this time."
+                  : this.state.status}
+              </Text>
+            </Body>
+          </CardItem>
+          <CardItem>
+            <Body>
+              <Row style={{ justifyContent: "center", alignSelf: "center" }}>
+                <Image
+                  style={{
+                    position: "absolute",
+                    width: 120,
+                    height: 120,
+                    justifyContent: "center",
+                    borderRadius: 60
+                  }}
+                  source={{
+                    uri: !this.state.userPic ? "" : this.state.userPic
+                  }}
+                />
+              </Row>
+            </Body>
+          </CardItem>
+        </Card>
 
-          {this.handleReviews()}
+        {this.handleReviews()}
 
-        </Content>
-      </ScrollView>
+      </Content>
     );
   }
 }
