@@ -12,6 +12,7 @@ import {
   Card,
   Body,
   CardItem,
+  Thumbnail
 
 } from "native-base";
 import { Grid, Row, Col } from "react-native-easy-grid";
@@ -79,13 +80,15 @@ export default class OrderView extends Component {
   }
 
   render() {
-    console.log("STATE AND PROPS IN ORDER VIEW", this.state, this.props);
+    console.log("STATE IN ORDER VIEW", this.state);
+    console.log("PROPS IN ORDER VIEW", this.props);
     return (
       <ScrollView>
         <View
           style={{
             justifyContent: "center",
             alignItems: "center",
+            marginBottom: 20
       
           }}
         >
@@ -101,6 +104,7 @@ export default class OrderView extends Component {
               uri: this.props.customer.profileUrl
             }}
           />
+          <Text>{this.props.customer.firstName} </Text>
 
         </View>
         {this.props.status === 0
@@ -140,6 +144,7 @@ export default class OrderView extends Component {
                   <Text>Order Complete</Text>
                 </Button>
               : null}
+
             {this.props.status === 2
               ? <Button
                   style={{ alignSelf: 'center'}}
@@ -217,28 +222,28 @@ export default class OrderView extends Component {
                 : null}
             </View>
 
-          <View style={{alignItems: "center"}}>
-            <Text>Your order from: {this.props.customer.firstName} </Text>
+          <View style={{marginTop: 20, alignItems: "center"}}>
+            
             <Text>Placed at: {moment(this.props.date).format("LLLL")}</Text>
+            <Text>Special Requests: {this.props.orderInstructions ? this.props.orderInstructions : 'No special instructions.'}</Text>
           </View>
+
         {this.props.status !== 2
           ? this.state.dishes.map(dish => {
               return (
-                <Card style={{ marginTop: 40 }}>
+                <Card style={{ marginTop: 20, marginLeft: 10, marginRight: 10 }}>
                   <CardItem>
-                    <Body>
+                    
+                      <Thumbnail square large source={{ uri: dish.dish.dishImages[0] }} />
+                      <Body>      
                       <Text>
                         {dish.dish.name}
                       </Text>
-                      <Text>
-                        {dish.dish.description}
+   
+                      <Text note>
+                        Quantity: {dish.amount}
                       </Text>
-                      <Text>
-                        Amount: {dish.amount}
-                      </Text>
-                      <Text>
-                        Special Requests: {this.props.orderInstructions}
-                      </Text>
+                      
                     </Body>
                   </CardItem>
                 </Card>
