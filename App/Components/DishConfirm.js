@@ -51,7 +51,7 @@ export default class DishConfirm extends Component {
       }
       getProfile().then(res => {
         dish.chefId = res;
-        dish.isActive = true;
+        dish.isActive = false;
         dish.allergies = [];
         this.setState({ dish }, () => {
           console.log(this.state.dish);
@@ -68,7 +68,8 @@ export default class DishConfirm extends Component {
     }
     axios.post("http://homemadeapp.org:3000/dish/add", this.state.dish).then(res => {
       console.log(res);
-      Actions.chefPanel({ type: ActionConst.RESET });
+      this.props.setDish(this.state.dish);
+      Actions.dishedit({ type: ActionConst.RESET });
     });
   }
   render() {
