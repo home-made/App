@@ -68,9 +68,9 @@ export default class EditProfile extends Component {
         () => {
           console.log('usrPic is',this.state.userPic);
           axios
-            .get("http://homemadeapp.org:3000/user/" + this.state.userId)
+            .get("http://localhost:3000/user/" + this.state.userId)
             .then(res => {
-              this.setState({ userName: res.data[0].firstName,userPic: res.data[0].profileUrl }, () =>
+              this.setState({ userName: res.data[0].firstName,userPic: res.data[0][0].profileUrl }, () =>
                 console.log('url is', res)
               );
             })
@@ -97,7 +97,7 @@ export default class EditProfile extends Component {
     }
 
     axios
-      .put("http://homemadeapp.org:3000/user/" + this.state.userId, send)
+      .put("http://localhost:3000/user/" + this.state.userId, send)
       .then(res => {
         console.log(res.data);
         Actions.cuisines({ type: ActionConst.RESET });

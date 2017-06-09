@@ -93,7 +93,7 @@ export default class HomePage extends Component {
              if user is a chef or not */
           console.log("PROFILE IN HOMEPAGE", profile)
           axios
-            .post(`http://homemadeapp.org:3000/user/${profile.userId}`, profile)
+            .post(`http://localhost:3000/user/${profile.userId}`, profile)
             .then(user => {
               saveUser = user.data;
               console.log("The user data inside HomePage is ", user);

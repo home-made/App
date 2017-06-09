@@ -31,8 +31,9 @@ export default class Feedback extends Component {
         reviewerId: this.props.customerId,
         score: this.state.score
       };
+      console.log("http://localhost:3000/reviews/0/" + this.props.chefId)
       axios
-        .post("http://homemadeapp.org:3000/reviews/0/" + this.props.chefId, review)
+        .post("http://localhost:3000/reviews/0/" + this.props.chefId, review)
         .then(() =>
 
           Alert.alert("Your feedback has been submitted!", "Thank you.", [
@@ -47,13 +48,13 @@ export default class Feedback extends Component {
       };
       axios
         .post(
-          "http://homemadeapp.org:3000/reviews/1/" + this.props.customerId,
+          "http://localhost:3000/reviews/1/" + this.props.customerId,
           review
         )
         .then(res => {
           console.log(res);
           Alert.alert("Your feedback has been submitted!", "Thank you.", [
-            { text: "OK", onPress: () => Actions.orders({ type: ActionConst.RESET }) }
+            { text: "OK", onPress: () => Actions.orders({ chefView: true, type: ActionConst.RESET }) }
           ]);
         });
     }

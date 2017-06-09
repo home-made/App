@@ -145,11 +145,11 @@ export default class Checkout extends Component {
     this.sendNotification();
     let context = this;
     axios
-      .post("http://homemadeapp.org:3000/orders", newOrder)
+      .post("http://localhost:3000/orders", newOrder)
       .then(function(response) {
         console.log("New order inside Checkout.js was submitted to the database, response is: ", response);
         
-        setTimeout( ()=> { context.checkAgain.call(null, response.data.customerId) }, 10000);
+        setTimeout( ()=> { context.checkAgain.call(null, response.data.customerId) }, 120000);
         
         Actions.userOrders({ type: ActionConst.RESET });
       })
@@ -160,11 +160,11 @@ export default class Checkout extends Component {
   checkAgain(customer) {
     let customerId = customer;
     let context = this;
-    axios.get("http://homemadeapp.org:3000/orders/" + customerId).then((orders) => {
+    axios.get("http://localhost:3000/orders/" + customerId).then((orders) => {
       console.log("Orders inside Checkout.js checkAgain() are ", orders);
 
       if(orders.data[orders.data.length - 1].status === 0){
-        axios.put("http://homemadeapp.org:3000/orders/", { _id: orders.data[orders.data.length - 1]._id, status: 3 } ).then((res) => {
+        axios.put("http://localhost:3000/orders/", { _id: orders.data[orders.data.length - 1]._id, status: 3 } ).then((res) => {
           console.log("SUCCESSFULLY CANCELED", res.data);
           context.sendCancelNotification()
         })

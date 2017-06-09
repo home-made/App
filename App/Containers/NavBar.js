@@ -66,7 +66,7 @@ export default class NavBar extends Component {
     getUserAuthId().then(() => {
       console.log(authId);
 
-      axios.get(`http://homemadeapp.org:3000/user/${authId}`).then(res => {
+      axios.get(`http://localhost:3000/user/${authId}`).then(res => {
 
         let chefRoom = 'chef'+res.data[0].authId;
         socket.on(chefRoom, splash => {
@@ -90,7 +90,6 @@ export default class NavBar extends Component {
       });
     });
   }
-
   cuisines() {
     Actions.cuisines({ type: ActionConst.RESET });
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
@@ -302,10 +301,7 @@ export default class NavBar extends Component {
             icon
             onPress={() => {
               this.currentOrder();
-              if(this.state.chefView)
-                this.setState({ chefNotification: 0 });
-              else
-                this.setState({ customerNotification: 0 });
+              this.setState({ customerNotification: 0 });
             }}
             style={styles.content}
           >
@@ -316,7 +312,6 @@ export default class NavBar extends Component {
              <Text style={styles.entries}>Current Order</Text>
             </Body>
             <Right>
-              {this.state.chefView && this.state.chefNotification>0 ? <Icon2 size={20} name="ios-alert-outline"/> : null}
               {!this.state.chefView && this.state.customerNotification>0? <Icon2 size={20} name="ios-alert-outline"/>: null }
             </Right>
           </ListItem> : null}
@@ -339,7 +334,6 @@ export default class NavBar extends Component {
             </Body>
             <Right>
               {this.state.chefView && this.state.chefNotification>0 ? <Icon2 size={20} name="ios-alert-outline"/> : null}
-              {!this.state.chefView && this.state.customerNotification>0? <Icon2 size={20} name="ios-alert-outline"/>: null }
             </Right>
           </ListItem>
 

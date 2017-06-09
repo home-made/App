@@ -36,11 +36,11 @@ export default class Profile extends Component {
     console.log("allReviews", allReviews);
 
     if (allReviews.length === 0) {
-      return <Text>You have no reviews at this time.</Text>;
+      return <Text>No reviews available at this time.</Text>;
     } else {
       return (
         <Container style={{ marginRight: 10, marginLeft: 10, marginTop: 10 }}>
-          <H3 style={{ color: '#505050' }}>Your Reviews</H3>
+          <H3 style={{ color: '#505050' }}>Reviews</H3>
           {allReviews.map(review => {
             return <Review review={review} />;
           })}
@@ -67,13 +67,14 @@ export default class Profile extends Component {
             var fullName = parsedProfile.name;
 
             axios
-              .get(`http://homemadeapp.org:3000/user/${authId}`)
+              .get(`http://localhost:3000/user/${authId}`)
               .then(user => {
                 console.log(
                   "the user inside axiospost for UserProfile.js is ",
                   user
                 );
                  console.log('iffy')
+
                 context.setState({
                   fullName: user.data[0].firstName,
                   authId: authId,
@@ -97,16 +98,30 @@ export default class Profile extends Component {
       }
       grabAuthId();
     } else {
-      console.log('esly')
-      this.setState({
-        fullName: this.props.profile.firstName,
-        authId: this.props.profile.authId,
-        userPic: this.props.profile.profileUrl,
-        user: this.props.profile,
-        chefReviews: this.props.profile.chefReviews,
-        customerReviews: this.props.profile.customerReviews,
-        status: this.props.profile.status
+      console.log('profile is',this.props.profile)
+      axios
+      .get(`http://localhost:3000/user/${this.props.profile.authId}`)
+      .then(user => {
+        console.log(
+          "the user inside axiospost for UserProfile.js is ",
+          user
+        );
+         this.setState({
+          fullName: user.data[0].firstName,
+          authId:  user.data[0].authId,
+          userPic: user.data[0].profileUrl,
+          user: user.data[0],
+          chefReviews: user.data[0].chefReviews,
+          customerReviews: user.data[0].customerReviews,
+          status: user.data[0].status
+        }, () => console.log('STATE RIGHT AFTER SET STATE USER PROFILE',this.state));
+      })
+      .catch(error => {
+        console.log(
+          "Error inside axios get user for UserProfile.js is ",error
+        );
       });
+     
     }
   }
 
