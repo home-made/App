@@ -111,7 +111,7 @@ export default class Feedback extends Component {
 
     return (
       <View style={styles.container}>
-        <View style={styles.textInputView}>
+        <Content style={styles.textInputView}>
           <TextInput
             style={styles.textInput}
             placeholder='Leave a feedback!'
@@ -122,7 +122,7 @@ export default class Feedback extends Component {
             maxLength={300}
             keyboardType="default"
           />
-        </View>
+        </Content>
         
         <View style={styles.starsContainerView}>
           <StarRating
