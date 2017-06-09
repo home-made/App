@@ -3,14 +3,14 @@ import {
   View,
   StyleSheet,
   Text,
-  AsyncStorage
+  AsyncStorage,
 } from "react-native";
+import { Button } from 'native-base';
 import SignatureCapture from "react-native-signature-capture";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Actions, ActionConst } from "react-native-router-flux";
 import DropdownAlert from 'react-native-dropdownalert';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import Button from 'apsl-react-native-button'
 import axios from "axios";
 
 let authId;
@@ -91,9 +91,53 @@ export default class SignaturePage extends Component {
   }
 
   render() {
+    const styles = {
+      signature: {
+        flex: 1,
+        borderColor: "#000033",
+        borderWidth: 1
+      },
+      signatureText: {
+        fontFamily: 'MarkerFelt-Wide',
+        fontSize: 25,
+        textAlign: 'center',
+        color: '#505050'
+      },
+      actionButtonIcon: {
+        fontSize: 25,
+        height: 26,
+        color: 'white',
+      },
+      addressBar: {
+        flex: .54,
+        flexDirection: 'row',
+        marginTop: 10
+      },
+      buttonStyle1: {
+        flex: 1, justifyContent: "center", alignItems: "center", height: 50,
+        margin: 10,
+        backgroundColor: '#30C82E'
+      },
+      buttonStyle2: {
+        flex: 1, justifyContent: "center", alignItems: "center", height: 50,
+        margin: 10,
+        backgroundColor: '#CF6151'
+      },
+      buttonStyle3: {
+        flex: 1, justifyContent: "center", alignItems: "center", height: 50,
+        margin: 10,
+        backgroundColor: '#F0B073'
+      },
+      buttonText: {
+        fontFamily: 'MarkerFelt-Thin',
+        fontSize: 20,
+        color: '#505050'
+      }
+    };
+    
     return (
       <View style={{ flex: 1, flexDirection: "column", marginTop: 63 }}>
-        <Text>Sign Below</Text>
+        <Text style={styles.signatureText}>Sign Below</Text>
         <SignatureCapture
           style={ styles.signature}
           ref="sign"
@@ -105,7 +149,7 @@ export default class SignaturePage extends Component {
           viewMode={"landscape"}
         />
         
-        <View style={{flex: .6, flexDirection: 'row', marginTop: 10}}>
+        <View style={styles.addressBar}>
           <GooglePlacesAutocomplete
           placeholder='Address'
           minLength={2}
@@ -151,11 +195,21 @@ export default class SignaturePage extends Component {
         />
         </View>
         <View style={{flex: .2, flexDirection: 'row'}}>
-          <Button style={styles.buttonStyle1} textStyle={{fontSize: 18}} onPress={() => { this.saveSign()} }>
-            Save
+          <Button 
+            rounded transparent bordered dark
+            style={styles.buttonStyle1}
+            textStyle={{fontSize: 18}}
+            onPress={() => { this.saveSign()} }
+          >
+            <Text style={styles.buttonText}>Save</Text>
           </Button>
-          <Button style={styles.buttonStyle2} textStyle={{fontSize: 18}} onPress={() => { this.resetSign()} }>
-            Reset
+          <Button
+            rounded transparent bordered dark
+            style={styles.buttonStyle2}
+            textStyle={{fontSize: 18}}
+            onPress={() => { this.resetSign()} }
+          >
+            <Text style={styles.buttonText}>Reset</Text>
           </Button>
         </View>
 
@@ -165,8 +219,13 @@ export default class SignaturePage extends Component {
             flexDirection: 'row'
           }}
         >
-          <Button style={styles.buttonStyle3} textStyle={{fontSize: 18}} onPress={() => {Actions.homepage({ type: ActionConst.RESET })}}>
-            Confirm
+          <Button
+            rounded transparent bordered dark
+            style={styles.buttonStyle3}
+            textStyle={{fontSize: 18}}
+            onPress={() => {Actions.homepage({ type: ActionConst.RESET })}}
+          >
+            <Text style={styles.buttonText}>Confirm</Text>
           </Button>
           
         </View>
@@ -197,36 +256,3 @@ export default class SignaturePage extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  signature: {
-    flex: 1,
-    borderColor: "#000033",
-    borderWidth: 1
-  },
-  actionButtonIcon: {
-    fontSize: 25,
-    height: 26,
-    color: 'white',
-  },
-  buttonStyle1: {
-    flex: 1, justifyContent: "center", alignItems: "center", height: 50,
-    margin: 10,
-    backgroundColor: '#30C82E'
-  },
-  buttonStyle2: {
-    flex: 1, justifyContent: "center", alignItems: "center", height: 50,
-    margin: 10,
-    backgroundColor: '#CF6151'
-  },
-  buttonStyle3: {
-    flex: 1, justifyContent: "center", alignItems: "center", height: 50,
-    margin: 10,
-    backgroundColor: '#F0B073'
-  },
-  buttonStyle4: {
-    flex: 1, justifyContent: "center", alignItems: "center", height: 50,
-    margin: 10,
-    backgroundColor: '#F26CC6'
-  },
-  });

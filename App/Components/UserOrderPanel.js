@@ -201,7 +201,7 @@ export default class UserOrderPanel extends Component {
               {this.state.order.status === 1
                 ? <View style={{ flex: 0.2 }}>
                     <Button
-                      rounded
+                      rounded transparent bordered dark
                       style={{ marginTop: 10 }}
                       onPress={() => {
                         this.props.setChefLocationAndPhoneNumber(
@@ -216,8 +216,9 @@ export default class UserOrderPanel extends Component {
                 : null}
 
               {this.state.order.status === 2
-                ? <View>
+                ? <View style={{ flex: 0.6 }}>
                     <Button
+                      rounded transparent bordered dark
                       style={{ marginTop: 10 }}
                       onPress={() =>
                         Actions.feedback(this.state.order, {

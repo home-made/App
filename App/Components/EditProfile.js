@@ -4,8 +4,8 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { View, Button, Text, Toast, Input } from "native-base";
 import { Actions, ActionConst } from "react-native-router-flux";
 import { Kaede } from 'react-native-textinput-effects';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import Autocomplete from 'react-google-autocomplete';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import axios from "axios";
 
 export default class EditProfile extends Component {
@@ -70,7 +70,8 @@ export default class EditProfile extends Component {
           axios
             .get("http://homemadeapp.org:3000/user/" + this.state.userId)
             .then(res => {
-              this.setState({ userPic: res.data[0].profileUrl }, () =>
+              console.log('this is res.data in axios get: ', res.data[0])
+              this.setState({ userPic: res.data[0].profileUrl, user: res.data[0] }, () =>
                 console.log(this.state.user)
               );
             })
@@ -176,7 +177,7 @@ export default class EditProfile extends Component {
             <Kaede
               style={styles.kaede}
               label={'Status'}
-              placeholder={this.state.user.status ? this.state.user.status : 'Update Your Status!'}
+              placeholder='Status'
               labelStyle={styles.label}
               inputStyle={styles.input}
               onChangeText={status => this.setState({ status })}
@@ -185,21 +186,12 @@ export default class EditProfile extends Component {
             <Kaede
               style={styles.kaede}
               label={'Phone Number'}
-              placeholder={this.state.user.phoneNumber}
+              placeholder='Phone Number'
               labelStyle={styles.label}
               inputStyle={styles.input}
               onChangeText={phone => this.setState({ phone })}
             />
-
-            <Kaede
-              style={styles.kaede}
-              label={'Address'}
-              placeholder={this.state.user.address}
-              labelStyle={styles.label}
-              inputStyle={styles.input}
-              onChangeText={address =>
-                this.setState({ address }, () => console.log(address))}
-            >
+            <View style={{ marginTop: 10 }}>
               <GooglePlacesAutocomplete
                 placeholder='Address'
                 minLength={2}
@@ -210,7 +202,7 @@ export default class EditProfile extends Component {
                 onPress={(data, details = null) => {
                   console.log(data);
                   console.log(details);
-                  address = data.description;
+                  this.setState({ address: data.description }, () => console.log(data.description))
                 }}
                 getDefaultValue={() => {
                   return '';
@@ -240,8 +232,9 @@ export default class EditProfile extends Component {
                 filterReverseGeocodingByTypes={['locality', 'administrative_area_level_3']}
                 debounce={200}
               />
-            </Kaede>
+            </View>
           </View>
+
           <Button
             rounded transparent bordered dark
             style={styles.buttons}
@@ -264,16 +257,3 @@ export default class EditProfile extends Component {
     );
   }
 }
-
-/*
-
-       <Container 
-          style={{
-          flex: 1,
-          flexDirection: "column",
-          alignContent: "center",
-          alignItems: "center"
-        }}
-        >
-
-*/
