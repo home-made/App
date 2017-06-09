@@ -5,11 +5,10 @@ import {
 } from "react-native-keyboard-aware-scroll-view";
 import { View, Button, Text, Toast, Input } from "native-base";
 import { Actions, ActionConst } from "react-native-router-flux";
-import { Kaede } from "react-native-textinput-effects";
-import Autocomplete from "react-google-autocomplete";
 import {
   GooglePlacesAutocomplete
 } from "react-native-google-places-autocomplete";
+import { Kaede } from 'react-native-textinput-effects';
 import axios from "axios";
 
 export default class EditProfile extends Component {
@@ -199,8 +198,9 @@ export default class EditProfile extends Component {
             <Kaede
               autoCorrect={false}
               style={styles.kaede}
-              label={"Phone Number"}
-              placeholder="Phone Number"
+              label={'Phone Number'}
+              placeholder='Phone Number'
+              keyboardType={'numeric'}
               labelStyle={styles.label}
               inputStyle={styles.input}
               onChangeText={phone => this.setState({ phone })}

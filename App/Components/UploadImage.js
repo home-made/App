@@ -180,10 +180,10 @@ const styles = StyleSheet.create({
   },
   preview: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
-    //  height: Dimensions.get('window').height,
-    //  width: Dimensions.get('window').width
+    justifyContent: "flex-end",
+    alignItems: "center",
+    height: Dimensions.get('window').height,
+    width: Dimensions.get('window').width
   },
   capture: {
     flex: 0,
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     color: "#000",
     padding: 10,
-    margin: 145
+    margin: 10
   },
   buttonBar: {
     flexDirection: "row",
