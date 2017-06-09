@@ -25,7 +25,7 @@ export default class ManageDish extends Component {
       showToast: false,
       userId: "",
       userName: "",
-      userPic: ""
+      userPic: "",
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }

@@ -87,8 +87,9 @@ class Upload extends Component {
             });
           } else {
             console.log(res);
+            let math = Math.random()
             let options = {
-              keyPrefix: `profile${this.state.userId}`,
+              keyPrefix: `profile${math}`,
               bucket: "homemadeprofile",
               region: "us-west-1",
               accessKey: res.data.key,
@@ -106,7 +107,7 @@ class Upload extends Component {
                 })
                 .then(res => {
                   console.log(res);
-                  Actions.edit({ type: ActionConst.RESET });
+                  Actions.edit({ newUrl: response.body.postResponse.location, type: ActionConst.RESET });
                 });
               // let user = this.state.user
               // user['profileUrl']=response.body.postResponse.location;

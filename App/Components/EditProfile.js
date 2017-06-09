@@ -22,12 +22,14 @@ export default class EditProfile extends Component {
 
   componentWillMount() {
     let userId, userName, userPic;
+    let newUrl = this.props.newUrl;
+    async function getProfile(url) {
 
-    async function getProfile() {
       try {
         const data = await AsyncStorage.getItem("profile");
         if (data !== null && data !== undefined) {
           data = JSON.parse(data);
+
           console.log("async data: ", data);
           if (data.identityId) {
             userId = data.identityId;
@@ -40,13 +42,27 @@ export default class EditProfile extends Component {
           } else {
             data.picture;
           }
+
+          if (url) {
+            data.extraInfo.picture_large = url;
+            data.picture_large = url;
+            data.picture = url;
+            async function setProfile() {
+              try {
+                await AsyncStorage.setItem("profile", JSON.stringify(data));
+              } catch (error) {
+                console.log(error);
+              }
+            }
+            setProfile().then(() => console.log("UPDATED"));
+          }
         }
       } catch (err) {
         console.log("Error getting data: ", err);
       }
     }
-    console.log('hello');
-    getProfile().then(() => {
+
+    getProfile(newUrl).then(() => {
       this.setState(
         { userId: userId, userName: userName, userPic: userPic },
         () => {
@@ -54,7 +70,7 @@ export default class EditProfile extends Component {
           axios
             .get("http://homemadeapp.org:3000/user/" + this.state.userId)
             .then(res => {
-              this.setState({ user: res.data[0] }, () =>
+              this.setState({ userPic: res.data[0].profileUrl }, () =>
                 console.log(this.state.user)
               );
             })
@@ -64,6 +80,7 @@ export default class EditProfile extends Component {
     });
   }
   componentWillReceiveProps() {
+    console.log("IN RECEIVE PROPS", this.props);
     this.componentWillMount();
   }
   handleSubmit() {
@@ -225,7 +242,6 @@ export default class EditProfile extends Component {
               />
             </Kaede>
           </View>
-
           <Button
             rounded transparent bordered dark
             style={styles.buttons}
@@ -248,7 +264,6 @@ export default class EditProfile extends Component {
     );
   }
 }
-
 
 /*
 
