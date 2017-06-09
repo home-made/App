@@ -329,15 +329,6 @@ export default class NavBar extends Component {
               </ListItem>
             : null}
 
-          <ListItem icon onPress={this.chefform} style={styles.content}>
-            <Left>
-              <Icon style={styles.icons} name="ios-watch" />
-            </Left>
-            <Body>
-              <Text style={styles.entries}>Chef Form</Text>
-            </Body>
-          </ListItem>
-
           <ListItem icon onPress={this.logout} style={styles.content}>
             <Left>
               <Icon style={styles.icons} name="ios-exit" />
