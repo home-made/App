@@ -126,6 +126,7 @@ android {
 }
 
 dependencies {
+    compile project(':lottie-react-native')
     compile project(':react-native-linear-gradient')
     compile project(':react-native-mauron85-background-geolocation')
     compile project(':react-native-geocoder')
