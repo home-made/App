@@ -144,7 +144,7 @@ export default class UserOrderPanel extends Component {
         <View style={{marginTop: 100, flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
           <Text>You have no current orders.</Text>
           <View style={{marginTop: 60, flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
-          <Button><Text>Feeling Hungry?</Text></Button>
+          <Button onPress={()=> { Actions.cuisines() }}><Text>Feeling Hungry?</Text></Button>
           </View>
         </View>
       )
