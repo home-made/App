@@ -43,7 +43,7 @@ export default class Review extends Component {
         <Body >
           <Text style={styles.cardName}>{this.props.review.user.firstName}</Text>
 
-          <Text style={styles.cardDesc} note>{this.props.review.reviewText}</Text>
+          <Text style={styles.cardDesc} note>{this.props.review.userText || this.props.review.reviewText}</Text>
         </Body>
       </ListItem>
     );
