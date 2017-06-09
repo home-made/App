@@ -32,7 +32,7 @@ export default class ChefForm extends Component {
   }
 
   componentWillMount() {
-        console.log("IN CHEF FORM WILL MOUNT")
+        console.log("IN CHEF FORM WILL MOUNT PROPS ARE", this.props)
 
     let userId;
     async function grabAuthId() {
@@ -115,6 +115,7 @@ export default class ChefForm extends Component {
               labelStyle={styles.label}
               inputStyle={styles.input}
               onChangeText={(e) => this.setState({ firstName: e })}
+              defaultValue={this.props.firstName || ""}
             />
             <Kaede
               style={styles.kaede}
@@ -122,6 +123,7 @@ export default class ChefForm extends Component {
               labelStyle={styles.label}
               inputStyle={styles.input}
               onChangeText={(e) => this.setState({ lastName: e })}
+              defaultValue={this.props.lastName || ""}
             />
             <Kaede
               style={styles.kaede}
@@ -129,6 +131,7 @@ export default class ChefForm extends Component {
               labelStyle={styles.label}
               inputStyle={styles.input}
               onChangeText={(e) => this.setState({ phone: e })}
+              defaultValue={this.props.phoneNumber || ""}
             />
             <Kaede
               style={styles.kaede}
@@ -136,6 +139,7 @@ export default class ChefForm extends Component {
               labelStyle={styles.label}
               inputStyle={styles.input}
               onChangeText={(e) => this.setState({ email: e })}
+              defaultValue={this.props.email || ""}
             />
           </Content>
         </Container>
