@@ -10,7 +10,7 @@ import {
   ScrollView,
   AsyncStorage,
   RefreshControl,
-  Image
+  Image,
 } from "react-native";
 import {
   Button,
@@ -56,12 +56,12 @@ export default class UserOrderPanel extends Component {
       .then(() => {
         console.log("AUTHID IS", authID);
         axios
-          .get("http://homemadeapp.org:3000/orders/" + authID)
+          .get("http://localhost:3000/orders/" + authID)
           .then(orders => {
             let order = orders.data[orders.data.length - 1];
             console.log("ORDER IS", order);
             axios
-              .get("http://homemadeapp.org:3000/user/" + order.chefId)
+              .get("http://localhost:3000/user/" + order.chefId)
               .then(chefDetails => {
                 console.log("CHEF DETAILS ARE", chefDetails);
                 this.setState(
@@ -131,8 +131,16 @@ export default class UserOrderPanel extends Component {
     }
 
     console.log(this.state, this.props);
-    if (!this.state.order) return <ScrollView />;
-    else {
+    if (!this.state.order) {
+      return(
+        <View style={{marginTop: 100, flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
+          <Text>You have no current orders.</Text>
+          <View style={{marginTop: 60, flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
+          <Button><Text>Feeling Hungry?</Text></Button>
+          </View>
+        </View>
+      )
+    } else {
       console.log("THERE IS AN ORDER");
       return (
         <ScrollView

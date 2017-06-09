@@ -137,15 +137,18 @@ export default class Profile extends Component {
   toggleMenu(){
     console.log("Menu inside Profile.js is ", this.state.chef);
     if (this.state.menu) {   
+      // console.log('dish is ',dish)
       return this.state.chef[1].map((dish, idx) => {
-        if (idx === this.state.chef[1].length - 1) {
-          return (
-            <DishViewCard dish={dish} addToCart={this.handleAddToCart} />
-          )
-        } else {
-          return (
-            <DishViewCard dish={dish} addToCart={this.handleAddToCart} />
-          )
+        if (dish.quantity>0){
+          if (idx === this.state.chef[1].length - 1) {
+            return (
+              <DishViewCard dish={dish} addToCart={this.handleAddToCart} />
+            )
+          } else {
+            return (
+              <DishViewCard dish={dish} addToCart={this.handleAddToCart} />
+            )
+          }
         }
       }); 
     } else {

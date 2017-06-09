@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Camera from "react-native-camera";
-import { AsyncStorage } from "react-native";
+import { AsyncStorage, TouchableHighlight } from "react-native";
 import { Actions, ActionConst } from "react-native-router-flux";
 import { RNS3 } from "react-native-aws3";
 
@@ -13,13 +13,17 @@ import {
   Alert,
   Dimensions
 } from "react-native";
-import { Container, Content, List, ListItem } from "native-base";
+import { Container, Content, List, ListItem, Image } from "native-base";
 import axios from "react-native-axios";
 
 class Upload extends Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      cameraType: Camera.constants.Type.back
+    };
+    this.switchCamera = this.switchCamera.bind(this);
+
   }
   componentDidMount() {
     console.log("here");
@@ -55,7 +59,7 @@ class Upload extends Component {
     console.log("upload status is", this.state.cameraMode);
     // console.log(mode)
     axios
-      .get("http://homemadeapp.org:3000/api/")
+      .get("http://localhost:3000/api/")
       .then(res => {
         this.camera.capture(opt).then(data => {
           console.log(data);
@@ -100,9 +104,9 @@ class Upload extends Component {
               if (response.status !== 201)
                 throw new Error("Failed to upload image to S3");
               console.log(response.body.postResponse.location);
-              // console.log('http://homemadeapp.org:3000/user' + this.state.userId)
+              // console.log('http://localhost:3000/user' + this.state.userId)
               axios
-                .put("http://homemadeapp.org:3000/user/" + this.state.userId, {
+                .put("http://localhost:3000/user/" + this.state.userId, {
                   profileUrl: response.body.postResponse.location
                 })
                 .then(res => {
@@ -122,6 +126,13 @@ class Upload extends Component {
       });
   }
 
+  switchCamera(){
+    var cameraPosition = this.state.cameraType === Camera.constants.Type.back ? Camera.constants.Type.front : Camera.constants.Type.back;
+    this.setState({
+      cameraType: cameraPosition
+    })
+  }
+
   render() {
     const { container, preview, capture } = styles;
 
@@ -131,12 +142,24 @@ class Upload extends Component {
           ref={cam => {
             this.camera = cam;
           }}
+          
+          type={this.state.cameraType}
+
           style={preview}
           aspect={Camera.constants.Aspect.fill}
         >
-          <Text style={capture} onPress={() => this.takePicture()}>
+          {/*<Text style={capture} onPress={() => this.takePicture()}>
             CAPTURE
-          </Text>
+          </Text>*/}
+
+            
+              <Text onPress={()=> this.switchCamera()} style={capture}>Flip</Text>
+
+
+                <Text onPress={() => this.takePicture()} style={capture}>Take</Text>
+
+
+
         </Camera>
       </View>
     );
@@ -169,6 +192,24 @@ const styles = StyleSheet.create({
     color: "#000",
     padding: 10,
     margin: 145
+  },
+  buttonBar: {
+    flexDirection: "row",
+    position: "absolute",
+    bottom: 25,
+    right: 0,
+    left: 0,
+    justifyContent: "center"
+  },
+  button: {
+    padding: 10,
+    color: "#FFFFFF",
+    borderWidth: 1,
+    borderColor: "#FFFFFF",
+    margin: 5
+  },
+  buttonText: {
+    color: "#FFFFFF"
   }
 });
 

@@ -36,6 +36,7 @@ export default class Checkout extends Component {
     this.calculateTotal = this.calculateTotal.bind(this);
     this.submitOrder = this.submitOrder.bind(this);
     this.checkAgain = this.checkAgain.bind(this);
+    this.sendCancelNotification = this.sendCancelNotification.bind(this);
     
   }
 
@@ -118,6 +119,15 @@ export default class Checkout extends Component {
 
   }
 
+  sendCancelNotification() {
+    return Alert.alert(
+      "Your order was not accepted by the Chef!",
+      "Please go back to the Chef's profile and submit another order.",
+      [{ text: "OK", onPress: () => console.log("OK Pressed") }]
+    );
+
+  }
+
   submitOrder() {
 
     //where status: 0 means the order is pending approval
@@ -135,7 +145,7 @@ export default class Checkout extends Component {
     this.sendNotification();
     let context = this;
     axios
-      .post("http://homemadeapp.org:3000/orders", newOrder)
+      .post("http://localhost:3000/orders", newOrder)
       .then(function(response) {
         console.log("New order inside Checkout.js was submitted to the database, response is: ", response);
         
@@ -149,12 +159,14 @@ export default class Checkout extends Component {
   }
   checkAgain(customer) {
     let customerId = customer;
+    let context = this;
     axios.get("http://homemadeapp.org:3000/orders/" + customerId).then((orders) => {
       console.log("Orders inside Checkout.js checkAgain() are ", orders);
 
       if(orders.data[orders.data.length - 1].status === 0){
-        axios.put("http://homemadeapp.org:3000/orders/", { _id: orders.data[orders.data.length - 1]._id, status: 3 } ).then((res) => {
+        axios.put("http://localhost:3000/orders/", { _id: orders.data[orders.data.length - 1]._id, status: 3 } ).then((res) => {
           console.log("SUCCESSFULLY CANCELED", res.data);
+          context.sendCancelNotification()
         })
       }
     })

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Image, StyleSheet, TouchableHighlight, Dimensions } from "react-native";
+import { Image, StyleSheet, TouchableHighlight, Dimensions, View } from "react-native";
 const { width, height } = Dimensions.get('window');
 import {
   Container,
@@ -41,20 +41,23 @@ export default class DishViewCard extends Component {
                   style={styles.image}
                   source={{ uri: this.props.dish.dishImages[0] }}
                 />
-                <Icon
-                  style={{alignSelf: 'flex-end'}}
-                  onPress={() => {
-                    this.props.addToCart(this.props.dish);
-                    Toast.show({
-                      supportedOrientations: ["portrait", "landscape"],
-                      text: "Added to Cart!",
-                      position: "center",
-                      duration: 1000
-                    });
-                  }}
-                  name="cart-plus"
-                  size={30}
+                <View style={{ alignSelf: 'flex-end', flexDirection: 'row' }}>
+                  <Text style={{ alignSelf: 'center' }} note> Add to Cart</Text>
+                  <Icon
+                    style={{alignSelf: 'flex-end'}}
+                    onPress={() => {
+                      this.props.addToCart(this.props.dish);
+                      Toast.show({
+                        supportedOrientations: ["portrait", "landscape"],
+                        text: "Added to Cart!",
+                        position: "bottom",
+                        duration: 1000
+                      });
+                    }}
+                    name="cart-plus"
+                    size={30}
                 />
+                </View>
               </Body>
             </CardItem>
           </Card>
