@@ -34,7 +34,7 @@ export default class ChefMap extends Component {
     }
     this.setState({region}, () => {
       axios
-      .post("http://homemadeapp.org:3000/chefTest", {
+      .post("http://localhost:3000/chefTest", {
         lat: this.state.region.latitude,
         lon: this.state.region.longitude
       })
@@ -99,9 +99,9 @@ export default class ChefMap extends Component {
                   <MapView.Callout
                     style={{width: 'auto'}}
                   >
-                    <View style={{flexDirection: "row", alignItems: "center" }}>
+                    <View style={{flexDirection: "row", alignItems: "center", marginBottom: 5 }}>
                       <Text style={styles.text}>{name}</Text>
-                    <Icon size={18} onPress={() => this.props.setChef(chef) } style={{marginLeft: 5, height: 18, color: '#E05050' }} name="chevron-with-circle-right" />
+                    <Icon size={20} onPress={() => this.props.setChef(chef) } style={{marginTop: 2, marginLeft: 5, height: 20, color: '#E05050' }} name="chevron-with-circle-right" />
                     </View>
                   </MapView.Callout>
                 </MapView.Marker>
@@ -127,6 +127,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#E05050',
-    fontFamily: 'Noteworthy-Bold'
+    fontFamily: 'Noteworthy-Bold', 
+    fontSize: 18
   }
 });
