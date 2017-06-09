@@ -67,7 +67,17 @@ export default class OrderView extends Component {
     };
     axios
       .put("http://homemadeapp.org:3000/orders", request)
-      .then(() => Actions.orders({ chefView: true, type: ActionConst.RESET }));
+      .then(() => Alert.alert(
+        "The order has been declined!",
+        `${this.props.customer.firstName} will be notified of the new order status.`,
+        [
+          {
+            text: "OK",
+            onPress: () =>
+              Actions.orders({ chefView: true, type: ActionConst.RESET })
+          }
+        ]
+      ))
   }
 
   handleComplete() {
@@ -160,21 +170,6 @@ export default class OrderView extends Component {
             </Button>
           : null}
 
-        {this.props.status === 2
-          ? <Button
-              style={{ alignSelf: "center" }}
-              onPress={() =>
-                Actions.feedback({
-                  chefView: this.props.chefView,
-                  chefId: this.props.chefId,
-                  customerId: this.props.customerId,
-                  date: this.props.date,
-                  _id: this.props._id
-                })}
-            >
-              <Text>Leave Feedback</Text>
-            </Button>
-          : null}
         <Button
           style={{ marginVertical: 10, alignSelf: "center" }}
           onPress={() => {
