@@ -44,13 +44,17 @@ export default class OrderView extends Component {
       status: 1
     };
     axios.put("http://homemadeapp.org:3000/orders", request).then(res => {
-      Alert.alert("The order has been Accepted!", `Your will be sent a text message when ${this.props.customer.firstName} is approaching.`, [
-            {
-              text: "OK",
-              onPress: () => Actions.orders({ res, chefView: true, type: ActionConst.RESET })
-            }
-          ]);
-      
+      Alert.alert(
+        "The order has been Accepted!",
+        `Your will be sent a text message when ${this.props.customer.firstName} is approaching.`,
+        [
+          {
+            text: "OK",
+            onPress: () =>
+              Actions.orders({ res, chefView: true, type: ActionConst.RESET })
+          }
+        ]
+      );
     });
   }
 
