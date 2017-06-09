@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, Container, View, Card } from "react-native";
+import { StyleSheet, Container, View, Card } from "react-native";
 import { Grid, Row, Col } from "react-native-easy-grid";
-import { Thumbnail, ListItem, Left, Body, Right } from "native-base";
+import { Thumbnail, ListItem, Left, Body, Right,Text } from "native-base";
 
 export default class Review extends Component {
   constructor(props) {
@@ -21,15 +21,28 @@ export default class Review extends Component {
         fontFamily: 'Noteworthy-Bold',
         fontSize: 15,
         marginBottom: 15,
+      },
+       cardName: {
+        fontSize: 18,
+        color: '#E05050',
+        fontFamily: 'Noteworthy-Bold'
+      },
+      cardDesc: {
+
+        fontSize: 17,
+        fontFamily: 'Noteworthy-light'
       }
     }
 
     console.log("props inside Review.js are ", this.props)
     return (
-      <ListItem avatar>
-        <Body style={{alignContent: "center", alignItems: "center", justifyContent: "center"}}>
-          <Text style={styles.reviewScore}>Review Score: {this.props.review.score}/5</Text>
-          <Text style={styles.review} note>{this.props.review.reviewText}</Text>
+      <ListItem>
+
+          <Thumbnail square source={{uri: this.props.review.user.profileUrl}}/>
+        <Body >
+          <Text style={styles.cardName}>{this.props.review.user.firstName}</Text>
+
+          <Text style={styles.cardDesc} note>{this.props.review.userText}</Text>
         </Body>
       </ListItem>
     );
