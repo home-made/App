@@ -5,7 +5,11 @@ import { Actions, DefaultRenderer } from "react-native-router-flux";
 import Icon from 'react-native-vector-icons/Ionicons';
 
 export default class NavigationDrawer extends Component {
-  
+  constructor(props) {
+    super(props);
+    if (props.saveUser) { Actions.chefform(props.saveUser)}
+  }
+
   render() {
     const state = this.props.navigationState;
     const children = state.children;
