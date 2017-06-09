@@ -75,6 +75,24 @@ export default class Profile extends Component {
             axios
               .get(`http://homemadeapp.org:3000/user/${authId}`)
               .then(user => {
+                let scoresArray = [];
+                let numOfReviews = user.data[0].chefReviews.length;
+
+                let reviews = user.data[0].chefReviews.map(curr => {
+                  scoresArray.push(curr.score);
+                  
+                });
+                console.log('score is',scoresArray)
+
+                let avgScore = 0;
+                if (scoresArray.length > 0) {
+                  avgScore = scoresArray.reduce((a, b) => a + b);
+                  avgScore = (avgScore / numOfReviews).toPrecision(2);
+              }
+              console.log(avgScore)
+           
+              context.setState({ avgScore });
+          // });
                 context.setState({
                   fullName: user.data[0].firstName,
                   authId: authId,
@@ -177,7 +195,7 @@ export default class Profile extends Component {
         borderRadius: 60
       }
     };
-
+    
     return (
       <Container>
         <Container style={styles.container}>
