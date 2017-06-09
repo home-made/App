@@ -127,6 +127,7 @@ export default class ChefForm extends Component {
             <Kaede
               style={styles.kaede}
               label={"First Name"}
+              autoCorrect={false}
               labelStyle={styles.label}
               inputStyle={styles.input}
               onChangeText={e => this.setState({ firstName: e })}
@@ -135,6 +136,7 @@ export default class ChefForm extends Component {
             <Kaede
               style={styles.kaede}
               label={"Last Name"}
+              autoCorrect={false}
               labelStyle={styles.label}
               inputStyle={styles.input}
               onChangeText={e => this.setState({ lastName: e })}
@@ -152,6 +154,7 @@ export default class ChefForm extends Component {
               style={styles.kaede}
               label={"E-mail"}
               labelStyle={styles.label}
+              autoCorrect={false}
               inputStyle={styles.input}
               onChangeText={e => this.setState({ email: e })}
               defaultValue={this.state.email || ""}

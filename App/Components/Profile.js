@@ -195,6 +195,9 @@ export default class Profile extends Component {
     const styles = {
       container: {
         marginTop: 60
+      },text: {
+        color: "#505050",
+        alignSelf: "center"
       },
       cardName: {
         alignSelf: "center",
@@ -231,11 +234,9 @@ export default class Profile extends Component {
           <Card>
             <CardItem>
               <Body style={{ justifyContent: "center", alignItems: "center" }}>
-                <Content>
                   <Text style={styles.cardName}>
                     {this.state.chef[0].firstName} {this.state.chef[0].lastName}
                   </Text>
-                </Content>
                 <Text style={styles.cardDesc} note>
                   {this.state.chef[0].status}
                 </Text>
