@@ -314,8 +314,8 @@ export default class NavBar extends Component {
               <Text style={styles.entries}>Orders</Text>
             </Body>
             <Right>
-              {this.state.chefView && this.state.chefNotification>0 ? <Icon2 size={30} name="ios-alert-outline"/> : null}
-              {!this.state.chefView && this.state.customerNotification>0? <Icon2 name="ios-alert-outline"/>: null }
+              {this.state.chefView && this.state.chefNotification>0 ? <Icon2 size={20} name="ios-alert-outline"/> : null}
+              {!this.state.chefView && this.state.customerNotification>0? <Icon2 size={20} name="ios-alert-outline"/>: null }
             </Right>
           </ListItem>
           {!this.state.chefStatus
