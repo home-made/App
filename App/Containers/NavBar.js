@@ -321,8 +321,6 @@ export default class NavBar extends Component {
               this.orders();
               if(this.state.chefView)
                 this.setState({ chefNotification: 0 });
-              else
-                this.setState({ customerNotification: 0 });
             }}
             style={styles.content}
           >
