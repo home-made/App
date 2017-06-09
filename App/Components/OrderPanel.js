@@ -28,13 +28,10 @@ export default class OrderPanel extends Component {
   }
   returnRow(data) {
     var dateAndTime = moment(data.date).format("LLLL");
-    console.log("DATA IS ORDER PANEL", data);
-
     return (
       <ListItem
         onPress={() => {
           this.props.updateOrderSocket(data);
-          console.log("CHEF VIEW ON CLICK", this.props.chefView);
           if (this.props.chefView) {
             Actions.orderView(data);
           } else {
@@ -58,7 +55,6 @@ export default class OrderPanel extends Component {
   }
 
   componentWillReceiveProps() {
-    console.log("IN ORDER PANEL COMPONENT WILL RECEIVE PROPS");
     this.componentWillMount();
   }
 
@@ -76,13 +72,11 @@ export default class OrderPanel extends Component {
             .get("http://homemadeapp.org:3000/orders/1/user/" + authID)
             .then(accepted => {
               this.setState({ acceptedCustomers: accepted.data[1] }, () =>
-                this.setState({ accepted: accepted.data[0] }, () => () =>
-                  console.log("accepted orders is", this.state.accepted))
+                this.setState({ accepted: accepted.data[0] })
               );
               axios
                 .get("http://homemadeapp.org:3000/orders/2/user/" + authID)
                 .then(complete => {
-                  console.log("COMPLETE DATA IS", complete.data);
                   this.setState({ completeCustomers: complete.data[1] }, () => {
                     this.setState({ complete: complete.data[0] }, () => {});
                   });
@@ -101,39 +95,31 @@ export default class OrderPanel extends Component {
             .get("http://homemadeapp.org:3000/orders/1/chef/" + authID)
             .then(accepted => {
               this.setState({ acceptedCustomers: accepted.data[1] }, () =>
-                this.setState({ accepted: accepted.data[0] }, () => () =>
-                  console.log("accepted orders is", this.state.accepted))
+                this.setState({ accepted: accepted.data[0] })
               );
-              // console.log('call http://homemadeapp.org:3000/orders/2/' + authID)
               axios
                 .get("http://homemadeapp.org:3000/orders/2/chef/" + authID)
                 .then(complete => {
-                  console.log("COMPLETE DATA IS", complete.data);
                   this.setState({ completeCustomers: complete.data[1] }, () => {
-                    this.setState({ complete: complete.data[0] }, () => {});
+                    this.setState({ complete: complete.data[0] });
                   });
                 });
             });
         });
     };
-    console.log("CHEF ORDER PANEL WILL MOUNT");
     async function getAuthID() {
       try {
         const data = await AsyncStorage.getItem("profile");
         if (data !== null && data !== undefined) {
           authID = JSON.parse(data).userId;
-          console.log("JSON PARSE", JSON.parse(data));
           user = JSON.parse(data);
-          console.log(authID);
         }
       } catch (err) {
         console.log("Error getting data: ", err);
       }
     }
-    // console.log("USER IS", user);
     getAuthID().then(() => {
       if (this.props.chefView) {
-        console.log("IN IF BLOCK ABOUT TO CHEF INIT");
         chefInit();
       } else {
         customerInit();
@@ -145,7 +131,6 @@ export default class OrderPanel extends Component {
     var pendingOrders = [];
     var acceptedOrders = [];
     var completeOrders = [];
-    console.log("STATE AND PROPS IN ORDERPANEL", this.state, this.props);
     return (
       <Container>
         <Header hasTabs />
@@ -170,9 +155,6 @@ export default class OrderPanel extends Component {
                       item.chefId
                     ) {
                       item.customer = this.state.pendingCustomers[customer];
-                    }
-                    {
-                      /*console.log('customer',item.customer)*/
                     }
                   }
                   pendingOrders.unshift(this.returnRow(item));

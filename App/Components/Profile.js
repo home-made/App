@@ -41,7 +41,6 @@ export default class Profile extends Component {
   }
 
   componentWillMount() {
-    console.log("PROPS IN PROFILE", this.props);
     let chef;
     if (this.props.chef) {
       chef = [
@@ -49,13 +48,9 @@ export default class Profile extends Component {
         this.props.chef.customerReviews,
         this.props.chef.customerReviews
       ];
-      console.log("IN IF BLOCK CHEF IS,", chef);
     } else {
       chef = this.props.getChef();
-      console.log("IN ELSE BLOCK CHEF IS,", chef);
     }
-
-    console.log("the chef inside Profile.js of componentWillMount is ", chef);
 
     let chefLocation = chef[0].location;
 
@@ -65,7 +60,6 @@ export default class Profile extends Component {
 
       let reviews = this.state.chef[0].chefReviews.map(curr => {
         scoresArray.push(curr.score);
-        console.log("CURR IS", curr);
         return {
           userText: curr.reviewText,
           user: this.state.chef[2][
@@ -101,17 +95,14 @@ export default class Profile extends Component {
   }
 
   handleReviewsPress() {
-    console.log(this.state.reviewers);
-    // let
-    this.setState({ reviews: true, menu: false }, console.log(this.state));
+    this.setState({ reviews: true, menu: false });
   }
 
   handleMenuPress() {
-    this.setState({ reviews: false, menu: true }, console.log(this.state));
+    this.setState({ reviews: false, menu: true });
   }
 
   toggleReviews() {
-    console.log("Reviews inside Profile.js are ", this.state.reviewers);
     if (this.state.reviewers.length > 0) {
       return this.state.reviewers.map(review => {
         return <Review review={review} />;
@@ -122,9 +113,7 @@ export default class Profile extends Component {
   }
 
   toggleMenu() {
-    console.log("Menu inside Profile.js is ", this.state.chef);
     if (this.state.menu) {
-      // console.log('dish is ',dish)
       return this.state.chef[1].map((dish, idx) => {
         if (dish.quantity > 0) {
           if (idx === this.state.chef[1].length - 1) {
@@ -158,7 +147,7 @@ export default class Profile extends Component {
     var cart = [];
     cart = this.state.cart;
     cart.push(e);
-    this.setState({ cart: cart }, console.log("CART IS", this.state.cart));
+    this.setState({ cart: cart });
   }
 
   handleCheckout() {
@@ -167,7 +156,6 @@ export default class Profile extends Component {
       try {
         const data = await AsyncStorage.getItem("profile");
         if (data !== null && data !== undefined) {
-          console.log("async data: ", data);
           customerId = JSON.parse(data).userId;
         }
       } catch (err) {
@@ -184,7 +172,6 @@ export default class Profile extends Component {
           }
         },
         () => {
-          console.log(this.state.checkout);
           this.props.setCart(this.state.checkout);
           Actions.checkout({ type: ActionConst.RESET });
         }
@@ -201,9 +188,6 @@ export default class Profile extends Component {
   }
 
   render() {
-    {
-      console.log("the state inside Profile.js is ", this.state);
-    }
     let dishes = [];
 
     const styles = {
@@ -243,8 +227,8 @@ export default class Profile extends Component {
         <Content>
           <Card>
             <CardItem>
-              <Body style={{  justifyContent: "center", alignItems: "center" }} >
-                <Content >
+              <Body style={{ justifyContent: "center", alignItems: "center" }}>
+                <Content>
                   <Text style={styles.cardName}>
                     {this.state.chef[0].firstName} {this.state.chef[0].lastName}
                   </Text>

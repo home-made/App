@@ -8,7 +8,7 @@ import { Actions, ActionConst } from "react-native-router-flux";
 import {
   GooglePlacesAutocomplete
 } from "react-native-google-places-autocomplete";
-import { Kaede } from 'react-native-textinput-effects';
+import { Kaede } from "react-native-textinput-effects";
 import axios from "axios";
 
 export default class EditProfile extends Component {
@@ -20,31 +20,23 @@ export default class EditProfile extends Component {
       userName: "",
       userPic: ""
     };
-    // this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentWillMount() {
     let userId, userName, userPic;
     let newUrl = this.props.newUrl;
-    console.log("State IN EDIT PROFILE", this.state);
     async function getProfile(url) {
       try {
         const data = await AsyncStorage.getItem("profile");
         if (data !== null && data !== undefined) {
           data = JSON.parse(data);
 
-          console.log("async data: ", data);
           if (data.identityId) {
             userId = data.identityId;
           } else {
             userId = data.userId;
           }
           userName = data.name;
-          // if (data.extraInfo) {
-          //   userPic = data.extraInfo.picture_large;
-          // } else {
-          //   userPic = data.picture;
-          // }
 
           if (url) {
             data.extraInfo.picture_large = url;
@@ -57,7 +49,7 @@ export default class EditProfile extends Component {
                 console.log(error);
               }
             }
-            setProfile().then(() => console.log("UPDATED"));
+            setProfile();
           }
         }
       } catch (err) {
@@ -69,18 +61,13 @@ export default class EditProfile extends Component {
       this.setState(
         { userId: userId, userName: userName, userPic: userPic },
         () => {
-          console.log("usrPic is", this.state.userPic);
-          console.log("USER ID IN EDIT PROFILE", this.state.userId)
           axios
             .get("http://homemadeapp.org:3000/user/" + this.state.userId)
             .then(res => {
-              this.setState(
-                {
-                  userName: res.data[0].firstName,
-                  userPic: res.data[0].profileUrl
-                },
-                () => console.log("url is", res)
-              );
+              this.setState({
+                userName: res.data[0].firstName,
+                userPic: res.data[0].profileUrl
+              });
             })
             .catch(err => console.log(err));
         }
@@ -93,9 +80,7 @@ export default class EditProfile extends Component {
   }
 
   handleSubmit() {
-    console.log("HANDLE SUBMIT CALLED");
     let send = {};
-    console.log("SEND: ", send);
     if (this.state.address) {
       send.address = this.state.address;
     }
@@ -109,7 +94,6 @@ export default class EditProfile extends Component {
     axios
       .put("http://homemadeapp.org:3000/user/" + this.state.userId, send)
       .then(res => {
-        console.log(res.data);
         Actions.cuisines({ type: ActionConst.RESET });
       });
   }
@@ -156,7 +140,6 @@ export default class EditProfile extends Component {
       }
     };
 
-    console.log("the state inside EditProfile.js is ", this.state);
     return (
       <KeyboardAwareScrollView automaticallyAdjustContentInsets={false}>
         <View style={styles.container}>
@@ -198,9 +181,9 @@ export default class EditProfile extends Component {
             <Kaede
               autoCorrect={false}
               style={styles.kaede}
-              label={'Phone Number'}
-              placeholder='Phone Number'
-              keyboardType={'numeric'}
+              label={"Phone Number"}
+              placeholder="Phone Number"
+              keyboardType={"numeric"}
               labelStyle={styles.label}
               inputStyle={styles.input}
               onChangeText={phone => this.setState({ phone })}
@@ -214,11 +197,7 @@ export default class EditProfile extends Component {
                 fetchDetails={true}
                 renderDescription={row => row.description}
                 onPress={(data, details = null) => {
-                  console.log(data);
-                  console.log(details);
-                  this.setState({ address: data.description }, () =>
-                    console.log(data.description)
-                  );
+                  this.setState({ address: data.description });
                 }}
                 getDefaultValue={() => {
                   return "";

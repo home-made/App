@@ -23,7 +23,6 @@ export default class ChefPanel extends Component {
         const data = await AsyncStorage.getItem("profile");
         if (data !== null && data !== undefined) {
           authID = JSON.parse(data).userId;
-          console.log(authID);
         }
       } catch (err) {
         console.log("Error getting data: ", err);
@@ -31,16 +30,16 @@ export default class ChefPanel extends Component {
     }
 
     getAuthID().then(() => {
-      axios.get("http://homemadeapp.org:3000/dish/0/" + authID).then(inactive => {
-        this.setState({ inactive: inactive.data[0] }, () =>
-          console.log("INACTIVE DISHES ARE ", this.state.inactive)
-        );
-        axios.get("http://homemadeapp.org:3000/dish/1/" + authID).then(active => {
-          this.setState({ active: active.data[0] }, () =>
-            console.log("ACTIVE DISHES ARE ", this.state.active)
-          );
+      axios
+        .get("http://homemadeapp.org:3000/dish/0/" + authID)
+        .then(inactive => {
+          this.setState({ inactive: inactive.data[0] });
+          axios
+            .get("http://homemadeapp.org:3000/dish/1/" + authID)
+            .then(active => {
+              this.setState({ active: active.data[0] });
+            });
         });
-      });
     });
   }
   render() {

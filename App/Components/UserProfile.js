@@ -1,5 +1,11 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Image, AsyncStorage, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Image,
+  AsyncStorage,
+  ScrollView
+} from "react-native";
 import {
   Container,
   Text,
@@ -33,14 +39,12 @@ export default class Profile extends Component {
   handleReviews() {
     var allReviews = this.state.chefReviews.concat(this.state.customerReviews);
 
-    console.log("allReviews", allReviews);
-
     if (allReviews.length === 0) {
       return <Text>No reviews available at this time.</Text>;
     } else {
       return (
         <Container style={{ marginRight: 10, marginLeft: 10, marginTop: 10 }}>
-          <H3 style={{ color: '#505050' }}>Reviews</H3>
+          <H3 style={{ color: "#505050" }}>Reviews</H3>
           {allReviews.map(review => {
             return <Review review={review} />;
           })}
@@ -56,12 +60,7 @@ export default class Profile extends Component {
         try {
           const profile = await AsyncStorage.getItem("profile");
           if (profile !== null && profile !== undefined) {
-            console.log(
-              "profile inside UserProfile.js is ",
-              JSON.parse(profile)
-            );
             userId = JSON.parse(profile).userId;
-
             parsedProfile = JSON.parse(profile);
             var authId = parsedProfile.userId;
             var fullName = parsedProfile.name;
@@ -69,12 +68,6 @@ export default class Profile extends Component {
             axios
               .get(`http://homemadeapp.org:3000/user/${authId}`)
               .then(user => {
-                console.log(
-                  "the user inside axiospost for UserProfile.js is ",
-                  user
-                );
-                 console.log('iffy')
-
                 context.setState({
                   fullName: user.data[0].firstName,
                   authId: authId,
@@ -98,42 +91,35 @@ export default class Profile extends Component {
       }
       grabAuthId();
     } else {
-      console.log('profile is',this.props.profile)
       axios
-      .get(`http://homemadeapp.org:3000/user/${this.props.profile.authId}`)
-      .then(user => {
-        console.log(
-          "the user inside axiospost for UserProfile.js is ",
-          user
-        );
-         this.setState({
-          fullName: user.data[0].firstName,
-          authId:  user.data[0].authId,
-          userPic: user.data[0].profileUrl,
-          user: user.data[0],
-          chefReviews: user.data[0].chefReviews,
-          customerReviews: user.data[0].customerReviews,
-          status: user.data[0].status
-        }, () => console.log('STATE RIGHT AFTER SET STATE USER PROFILE',this.state));
-      })
-      .catch(error => {
-        console.log(
-          "Error inside axios get user for UserProfile.js is ",error
-        );
-      });
-     
+        .get(`http://homemadeapp.org:3000/user/${this.props.profile.authId}`)
+        .then(user => {
+          this.setState({
+            fullName: user.data[0].firstName,
+            authId: user.data[0].authId,
+            userPic: user.data[0].profileUrl,
+            user: user.data[0],
+            chefReviews: user.data[0].chefReviews,
+            customerReviews: user.data[0].customerReviews,
+            status: user.data[0].status
+          });
+        })
+        .catch(error => {
+          console.log(
+            "Error inside axios get user for UserProfile.js is ",
+            error
+          );
+        });
     }
   }
 
   render() {
     const styles = {
       text: {
-        color: '#505050'
+        color: "#505050"
       }
-    }
+    };
 
-    console.log("the state inside UserProfile is ", this.state);
-    console.log("prop USER PROFILE", this.props);
     return (
       <ScrollView style={{ marginTop: 60 }}>
         <Content>

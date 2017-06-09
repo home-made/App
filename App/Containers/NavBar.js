@@ -14,8 +14,10 @@ import {
 } from "native-base";
 import Icon2 from "react-native-vector-icons/Ionicons";
 import { Actions, ActionConst } from "react-native-router-flux";
-import socket from '../Socket/Socket'
-import AnimatedLinearGradient, {presetColors} from 'react-native-animated-linear-gradient';
+import socket from "../Socket/Socket";
+import AnimatedLinearGradient, {
+  presetColors
+} from "react-native-animated-linear-gradient";
 // import { Switch } from "react-native-switch";
 
 import axios from "axios";
@@ -25,28 +27,25 @@ export default class NavBar extends Component {
     super(props);
     this.state = {
       chefStatus: null,
-      chefView: false,
-
+      chefView: false
     };
     this.orders = this.orders.bind(this);
   }
-  addChefNotification(){
-    let counter = this.state.chefNotification
-    counter++
-    console.log(counter)
-    this.setState({chefNotification: counter},()=> console.log('new chef order notification', this.state.chefNotification))
+  addChefNotification() {
+    let counter = this.state.chefNotification;
+    counter++;
+    this.setState({ chefNotification: counter });
   }
-  addCustomerNotification(){
-    let counter = this.state.customerNotification
-    counter++
-    console.log(counter)
-    this.setState({customerNotification: counter},()=> console.log('new customer order notification', this.state.customerNotification))
+  addCustomerNotification() {
+    let counter = this.state.customerNotification;
+    counter++;
+    this.setState({ customerNotification: counter });
   }
-  clearCustomerNotification(){
-    this.setState({customerNotification:0})
+  clearCustomerNotification() {
+    this.setState({ customerNotification: 0 });
   }
-  clearChefNotification(){
-    this.setState({chefNotification:0})
+  clearChefNotification() {
+    this.setState({ chefNotification: 0 });
   }
   componentWillMount() {
     this.clearChefNotification();
@@ -56,7 +55,6 @@ export default class NavBar extends Component {
       try {
         const data = await AsyncStorage.getItem("profile");
         if (data !== null && data !== undefined) {
-          console.log("profile in componentwillmount: ", JSON.parse(data));
           authId = JSON.parse(data).userId;
         }
       } catch (err) {
@@ -64,19 +62,15 @@ export default class NavBar extends Component {
       }
     }
     getUserAuthId().then(() => {
-      console.log(authId);
-
       axios.get(`http://homemadeapp.org:3000/user/${authId}`).then(res => {
-
-        let chefRoom = 'chef'+res.data[0].authId;
+        let chefRoom = "chef" + res.data[0].authId;
         socket.on(chefRoom, splash => {
-          this.addChefNotification()
+          this.addChefNotification();
         });
-        let customerRoom = 'customer'+res.data[0].authId;
+        let customerRoom = "customer" + res.data[0].authId;
         socket.on(customerRoom, splash => {
-          this.addCustomerNotification()
+          this.addCustomerNotification();
         });
-        console.log(res.data);
         this.setState(
           {
             chefStatus: res.data[0].isChef
@@ -131,11 +125,7 @@ export default class NavBar extends Component {
   }
 
   orders() {
-    console.log("clicked");
-    console.log("CHEFVIEW IS", this.state.chefView);
-
-      Actions.orders({ chefView: this.state.chefView, type: ActionConst.RESET });
-
+    Actions.orders({ chefView: this.state.chefView, type: ActionConst.RESET });
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
 
@@ -160,18 +150,14 @@ export default class NavBar extends Component {
       try {
         await AsyncStorage.multiRemove(
           ["profile", "token", "isAuthenticated"],
-          () => {
-            console.log("Storage cleared!");
-          }
+          () => {}
         );
       } catch (err) {
         console.log("Error clearing storage: ", err);
       }
     }
     clearStorage();
-    axios
-      .get("http://stzy.auth0.com/v2/logout?federated")
-      .then(res => console.log(res));
+    axios.get("http://stzy.auth0.com/v2/logout?federated");
 
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
@@ -194,30 +180,33 @@ export default class NavBar extends Component {
       },
       entries: {
         fontSize: 18,
-        color: '#505050',
-        fontFamily: 'Noteworthy-Bold'
+        color: "#505050",
+        fontFamily: "Noteworthy-Bold"
       },
       icons: {
-        color: '#505050'
+        color: "#505050"
       }
     };
 
     const colorScheme = {
       homemade: [
-        '#9EECF0',
-        '#9EF0EA',
-        '#9EF0DA',
-        '#9EF0CE',
-        '#9EF0B6',
-        '#9EF0A0',
-        '#B2F09E',
-        '#D6F09E'
+        "#9EECF0",
+        "#9EF0EA",
+        "#9EF0DA",
+        "#9EF0CE",
+        "#9EF0B6",
+        "#9EF0A0",
+        "#B2F09E",
+        "#D6F09E"
       ]
-    }
+    };
 
     return (
       <Container>
-        <AnimatedLinearGradient customColors={colorScheme.homemade} speed={1000}/>
+        <AnimatedLinearGradient
+          customColors={colorScheme.homemade}
+          speed={1000}
+        />
 
         <View
           style={{
@@ -225,17 +214,18 @@ export default class NavBar extends Component {
             flex: 0.08,
             justifyContent: "center",
             flexDirection: "column",
-            backgroundColor: 'rgba(0,0,0,0)'
+            backgroundColor: "rgba(0,0,0,0)"
           }}
         >
           <Text
             style={{
               textAlign: "center",
-              color: '#505050',
-              fontFamily: 'MarkerFelt-Wide',
+              color: "#505050",
+              fontFamily: "MarkerFelt-Wide",
               fontSize: 40
-            }}>
-              Homemade
+            }}
+          >
+            Homemade
           </Text>
         </View>
 
@@ -297,30 +287,33 @@ export default class NavBar extends Component {
               <Text style={styles.entries}>Edit Profile</Text>
             </Body>
           </ListItem>
-          {!this.state.chefView ? <ListItem
-            icon
-            onPress={() => {
-              this.currentOrder();
-              this.setState({ customerNotification: 0 });
-            }}
-            style={styles.content}
-          >
-            <Left>
-              <Icon style={styles.icons} name="ios-filing" />
-            </Left>
-            <Body>
-             <Text style={styles.entries}>Current Order</Text>
-            </Body>
-            <Right>
-              {!this.state.chefView && this.state.customerNotification>0? <Icon2 size={20} name="ios-alert-outline"/>: null }
-            </Right>
-          </ListItem> : null}
+          {!this.state.chefView
+            ? <ListItem
+                icon
+                onPress={() => {
+                  this.currentOrder();
+                  this.setState({ customerNotification: 0 });
+                }}
+                style={styles.content}
+              >
+                <Left>
+                  <Icon style={styles.icons} name="ios-filing" />
+                </Left>
+                <Body>
+                  <Text style={styles.entries}>Current Order</Text>
+                </Body>
+                <Right>
+                  {!this.state.chefView && this.state.customerNotification > 0
+                    ? <Icon2 size={20} name="ios-alert-outline" />
+                    : null}
+                </Right>
+              </ListItem>
+            : null}
           <ListItem
             icon
             onPress={() => {
               this.orders();
-              if(this.state.chefView)
-                this.setState({ chefNotification: 0 });
+              if (this.state.chefView) this.setState({ chefNotification: 0 });
             }}
             style={styles.content}
           >
@@ -328,10 +321,12 @@ export default class NavBar extends Component {
               <Icon style={styles.icons} name="ios-filing" />
             </Left>
             <Body>
-             <Text style={styles.entries}>Orders</Text>
+              <Text style={styles.entries}>Orders</Text>
             </Body>
             <Right>
-              {this.state.chefView && this.state.chefNotification>0 ? <Icon2 size={20} name="ios-alert-outline"/> : null}
+              {this.state.chefView && this.state.chefNotification > 0
+                ? <Icon2 size={20} name="ios-alert-outline" />
+                : null}
             </Right>
           </ListItem>
 

@@ -23,18 +23,14 @@ class Upload extends Component {
       cameraType: Camera.constants.Type.back
     };
     this.switchCamera = this.switchCamera.bind(this);
-
   }
   componentDidMount() {
-    console.log("here");
     async function getProfile() {
       try {
         const data = await AsyncStorage.getItem("profile");
         if (data !== null && data !== undefined) {
-          // console.log('async data: ', data);
           data = JSON.parse(data);
           return data;
-          // userId = data.identityId, userName = data.name, userPic = data.extraInfo.picture_large;
         }
       } catch (err) {
         console.log("Error getting data: ", err);
@@ -44,12 +40,8 @@ class Upload extends Component {
     getProfile().then(data => {
       this.setState({ userId: data.userId });
     });
-    this.setState({ cameraMode: this.props.fetchCameraMode() }, () =>
-      console.log(this.state)
-    );
-    this.setState({ dish: this.props.fetchDish() }, () =>
-      console.log(this.state.dish)
-    );
+    this.setState({ cameraMode: this.props.fetchCameraMode() });
+    this.setState({ dish: this.props.fetchDish() });
   }
 
   takePicture() {
@@ -62,7 +54,6 @@ class Upload extends Component {
       .get("http://homemadeapp.org:3000/api/")
       .then(res => {
         this.camera.capture(opt).then(data => {
-          console.log(data);
           let file = {
             // `uri` can also be a file system path (i.e. file://)
             uri: data.path,
@@ -82,7 +73,6 @@ class Upload extends Component {
             RNS3.put(file, options).then(response => {
               if (response.status !== 201)
                 throw new Error("Failed to upload image to S3");
-              console.log(response.body.postResponse.location);
               let dish = this.state.dish;
               dish["dishImages"] = [response.body.postResponse.location];
               this.props.setDish(dish);
@@ -90,8 +80,7 @@ class Upload extends Component {
               Actions.dishconfirm();
             });
           } else {
-            console.log(res);
-            let math = Math.random()
+            let math = Math.random();
             let options = {
               keyPrefix: `profile${math}`,
               bucket: "homemadeprofile",
@@ -103,15 +92,15 @@ class Upload extends Component {
             RNS3.put(file, options).then(response => {
               if (response.status !== 201)
                 throw new Error("Failed to upload image to S3");
-              console.log(response.body.postResponse.location);
-              // console.log('http://homemadeapp.org:3000/user' + this.state.userId)
               axios
                 .put("http://homemadeapp.org:3000/user/" + this.state.userId, {
                   profileUrl: response.body.postResponse.location
                 })
                 .then(res => {
-                  console.log(res);
-                  Actions.edit({ newUrl: response.body.postResponse.location, type: ActionConst.RESET });
+                  Actions.edit({
+                    newUrl: response.body.postResponse.location,
+                    type: ActionConst.RESET
+                  });
                 });
               // let user = this.state.user
               // user['profileUrl']=response.body.postResponse.location;
@@ -126,11 +115,13 @@ class Upload extends Component {
       });
   }
 
-  switchCamera(){
-    var cameraPosition = this.state.cameraType === Camera.constants.Type.back ? Camera.constants.Type.front : Camera.constants.Type.back;
+  switchCamera() {
+    var cameraPosition = this.state.cameraType === Camera.constants.Type.back
+      ? Camera.constants.Type.front
+      : Camera.constants.Type.back;
     this.setState({
       cameraType: cameraPosition
-    })
+    });
   }
 
   render() {
@@ -142,9 +133,7 @@ class Upload extends Component {
           ref={cam => {
             this.camera = cam;
           }}
-          
           type={this.state.cameraType}
-
           style={preview}
           aspect={Camera.constants.Aspect.fill}
         >
@@ -152,13 +141,9 @@ class Upload extends Component {
             CAPTURE
           </Text>*/}
 
-            
-              <Text onPress={()=> this.switchCamera()} style={capture}>Flip</Text>
+          <Text onPress={() => this.switchCamera()} style={capture}>Flip</Text>
 
-
-                <Text onPress={() => this.takePicture()} style={capture}>Take</Text>
-
-
+          <Text onPress={() => this.takePicture()} style={capture}>Take</Text>
 
         </Camera>
       </View>
@@ -182,8 +167,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-end",
     alignItems: "center",
-    height: Dimensions.get('window').height,
-    width: Dimensions.get('window').width
+    height: Dimensions.get("window").height,
+    width: Dimensions.get("window").width
   },
   capture: {
     flex: 0,

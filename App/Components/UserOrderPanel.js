@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import ActionButton from "react-native-circular-action-menu";
-import Icon from 'react-native-vector-icons/Foundation';
-import Icon2 from 'react-native-vector-icons/Entypo';
+import Icon from "react-native-vector-icons/Foundation";
+import Icon2 from "react-native-vector-icons/Entypo";
 import moment from "moment";
 
 import {
@@ -10,7 +10,7 @@ import {
   ScrollView,
   AsyncStorage,
   RefreshControl,
-  Image,
+  Image
 } from "react-native";
 import {
   Button,
@@ -36,7 +36,6 @@ export default class UserOrderPanel extends Component {
   }
 
   componentWillMount() {
-    console.log("IN USER ORDER PANEL WILL MOUNT");
     let authID;
 
     async function getAuthID() {
@@ -44,7 +43,6 @@ export default class UserOrderPanel extends Component {
         const data = await AsyncStorage.getItem("profile");
         if (data !== null && data !== undefined) {
           data = JSON.parse(data);
-          console.log("DATA IS ", data);
           authID = data.userId;
         }
       } catch (err) {
@@ -54,27 +52,19 @@ export default class UserOrderPanel extends Component {
 
     getAuthID()
       .then(() => {
-        console.log("AUTHID IS", authID);
         axios
           .get("http://homemadeapp.org:3000/orders/" + authID)
           .then(orders => {
             let order = orders.data[orders.data.length - 1];
-            console.log("ORDER IS", order);
             axios
               .get("http://homemadeapp.org:3000/user/" + order.chefId)
               .then(chefDetails => {
-                console.log("CHEF DETAILS ARE", chefDetails);
-                this.setState(
-                  {
-                    order,
-                    chefLocation: chefDetails.data[0].location,
-                    phone: chefDetails.data[0].phoneNumber,
-                    chefDetails: chefDetails.data[0]
-                  },
-                  () => {
-                    console.log(this.state.order);
-                  }
-                );
+                this.setState({
+                  order,
+                  chefLocation: chefDetails.data[0].location,
+                  phone: chefDetails.data[0].phoneNumber,
+                  chefDetails: chefDetails.data[0]
+                });
               });
           })
           .catch(err => console.log(err));
@@ -102,54 +92,59 @@ export default class UserOrderPanel extends Component {
         borderRadius: 100
       },
       refreshText: {
-        color: '#505050',
-        fontFamily: 'Noteworthy-Bold',
+        color: "#505050",
+        fontFamily: "Noteworthy-Bold",
         fontSize: 17
       },
       infoText: {
-        fontFamily: 'Noteworthy-Bold',
+        fontFamily: "Noteworthy-Bold",
         fontSize: 17
       },
       date: {
-        color: '#9DDDE0',
-        fontFamily: 'MarkerFelt-Thin',
+        color: "#9DDDE0",
+        fontFamily: "MarkerFelt-Thin",
         fontSize: 24
       },
       orderStatus: {
-        flexDirection: 'row'
+        flexDirection: "row"
       },
       statusRed: {
-        color: '#E05050',
-        fontFamily: 'Noteworthy-Bold',
+        color: "#E05050",
+        fontFamily: "Noteworthy-Bold",
         fontSize: 18
       },
       statusGreen: {
-        color: '#6EE96E',
-        fontFamily: 'Noteworthy-Bold',
+        color: "#6EE96E",
+        fontFamily: "Noteworthy-Bold",
         fontSize: 18
       },
       button: {
-        marginTop: 10,
+        marginTop: 10
       },
       buttonText: {
-        color: '#505050',
-        fontFamily: 'Noteworthy-Bold',
+        color: "#505050",
+        fontFamily: "Noteworthy-Bold",
         fontSize: 16
       }
-    }
+    };
 
-    console.log(this.state, this.props);
     if (!this.state.order) {
-      return(
-        <View style={{marginTop: 100, flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
-          <Text>You have no current orders.</Text>
-          <View style={{marginTop: 60, flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
-          <Button onPress={()=> { Actions.cuisines() }}><Text>Feeling Hungry?</Text></Button>
+      return (
+        <View
+          style={{
+            marginTop: 100,
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center"
+          }}
+        >
+            <Text>You have no current orders.</Text>
+            <View style={{marginTop: 60, flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
+            <Button onPress={()=> { Actions.cuisines() }}><Text>Feeling Hungry?</Text></Button>
           </View>
         </View>
-      )
+      );
     } else {
-      console.log("THERE IS AN ORDER");
       return (
         <ScrollView
           contentContainerStyle={styles.container}
@@ -165,7 +160,11 @@ export default class UserOrderPanel extends Component {
             />
           }
         >
-          <Text style={styles.refreshText}><Icon name='arrow-down' style={styles.refreshText} />  Pull Down to Refresh</Text>
+          <Text style={styles.refreshText}>
+            <Icon name="arrow-down" style={styles.refreshText} />
+            {" "}
+            Pull Down to Refresh
+          </Text>
 
           <View style={{ alignItems: "center", marginTop: 100 }}>
             <Image
@@ -174,9 +173,13 @@ export default class UserOrderPanel extends Component {
                 uri: this.state.chefDetails.profileUrl
               }}
             />
-            <Text style={styles.infoText}>Your order with {this.state.chefDetails.firstName}</Text> 
+            <Text style={styles.infoText}>
+              Your order with {this.state.chefDetails.firstName}
+            </Text>
             <Text style={styles.infoText}>was placed on:</Text>
-            <Text style={styles.date}>{moment(this.state.order.date).format('LLLL')}</Text>
+            <Text style={styles.date}>
+              {moment(this.state.order.date).format("LLLL")}
+            </Text>
             <View style={styles.orderStatus}>
               <Text style={styles.infoText}>Order Status: </Text>
               {this.state.order.status === 0
@@ -193,58 +196,74 @@ export default class UserOrderPanel extends Component {
                 : null}
             </View>
 
-              <View style={{ flex: 0.2, flexDirection: 'row', alignItems: "center", justifyContent: "center"}}>
-                {this.state.order.status === 1
-                  ? <View style={{ flex: 1 }}>
-                      <Icon name="telephone"  size={45} style={{alignSelf: "center", color: "black"}} 
-                        onPress={() =>
-                          Communications.phonecall(this.state.phone, true)
-                        }
-                      />
-                    </View>
-                : null}
-                {this.state.order.status === 1
-                  ? <View style={{ flex: 1 }}>
-                      <Icon2 name="message"  size={45} style={{alignSelf: "center", color: "black"}}
-                        onPress={() =>
-                          Communications.text(this.state.phone)
-                        }
-                      />
-                    </View>
-                : null}
-              </View>
-
+            <View
+              style={{
+                flex: 0.2,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
               {this.state.order.status === 1
-                ? <View style={{ flex: 0.2 }}>
-                    <Button
-                      rounded transparent bordered dark
-                      style={styles.buttons}
-                      onPress={() => {
-                        this.props.setChefLocationAndPhoneNumber(
-                          this.state.chefLocation,
-                          this.state.phone
-                        );
-                      }}
-                    >
-                      <Text style={styles.buttonText}>Get Directions</Text>
-                    </Button>
+                ? <View style={{ flex: 1 }}>
+                    <Icon
+                      name="telephone"
+                      size={45}
+                      style={{ alignSelf: "center", color: "black" }}
+                      onPress={() =>
+                        Communications.phonecall(this.state.phone, true)}
+                    />
                   </View>
                 : null}
-
-              {this.state.order.status === 2
-                ? <View style={{ flex: 0.6 }}>
-                    <Button
-                      rounded transparent bordered dark
-                      style={styles.buttons}
-                      onPress={() =>
-                        Actions.feedback(this.state.order, {
-                          leavingChefReview: true
-                        })}
-                    >
-                      <Text style={styles.buttonText}>Leave Feedback</Text>
-                    </Button>
+              {this.state.order.status === 1
+                ? <View style={{ flex: 1 }}>
+                    <Icon2
+                      name="message"
+                      size={45}
+                      style={{ alignSelf: "center", color: "black" }}
+                      onPress={() => Communications.text(this.state.phone)}
+                    />
                   </View>
-                : <Text />}
+                : null}
+            </View>
+
+            {this.state.order.status === 1
+              ? <View style={{ flex: 0.2 }}>
+                  <Button
+                    rounded
+                    transparent
+                    bordered
+                    dark
+                    style={styles.buttons}
+                    onPress={() => {
+                      this.props.setChefLocationAndPhoneNumber(
+                        this.state.chefLocation,
+                        this.state.phone
+                      );
+                    }}
+                  >
+                    <Text style={styles.buttonText}>Get Directions</Text>
+                  </Button>
+                </View>
+              : null}
+
+            {this.state.order.status === 2
+              ? <View style={{ flex: 0.6 }}>
+                  <Button
+                    rounded
+                    transparent
+                    bordered
+                    dark
+                    style={styles.buttons}
+                    onPress={() =>
+                      Actions.feedback(this.state.order, {
+                        leavingChefReview: true
+                      })}
+                  >
+                    <Text style={styles.buttonText}>Leave Feedback</Text>
+                  </Button>
+                </View>
+              : <Text />}
           </View>
 
         </ScrollView>

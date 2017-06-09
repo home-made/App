@@ -9,9 +9,7 @@ export default class Cuisines extends Component {
 
   componentWillMount() {
     let genres;
-    this.setState({ genres: this.props.getStyles() }, () =>
-      console.log(this.state.genres)
-    );
+    this.setState({ genres: this.props.getStyles() });
   }
 
   render() {
@@ -23,10 +21,10 @@ export default class Cuisines extends Component {
         marginTop: 60
       },
       text: {
-        color: '#505050',
-        fontFamily: 'Noteworthy-Bold'
+        color: "#505050",
+        fontFamily: "Noteworthy-Bold"
       }
-    }
+    };
 
     return (
       <ScrollView style={styles.scrollView}>

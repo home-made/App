@@ -7,7 +7,6 @@ export default class DishView extends Component {
     super(props);
   }
   render() {
-    console.log(this.props);
     return (
       <View style={styles.container}>
 
@@ -22,7 +21,7 @@ export default class DishView extends Component {
         />
         <Text> {this.props.dish.name}</Text>
         <Text> ${this.props.dish.cashDonation}</Text>
-        <Container style={{ alignContent: "center"}}>
+        <Container style={{ alignContent: "center" }}>
           <Content>
             <Button
               onPress={() => {

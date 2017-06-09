@@ -28,7 +28,6 @@ export default class ChefPanel extends Component {
         const data = await AsyncStorage.getItem("profile");
         if (data !== null && data !== undefined) {
           authID = JSON.parse(data).userId;
-          console.log(authID);
         }
       } catch (err) {
         console.log("Error getting data: ", err);
@@ -36,20 +35,19 @@ export default class ChefPanel extends Component {
     }
 
     getAuthID().then(() => {
-      axios.get("http://homemadeapp.org:3000/dish/0/" + authID).then(inactive => {
-        this.setState({ inactive: inactive.data }, () =>
-          console.log("INACTIVE DISHES ARE ", this.state.inactive)
-        );
-        axios.get("http://homemadeapp.org:3000/dish/1/" + authID).then(active => {
-          this.setState({ active: active.data }, () =>
-            console.log("ACTIVE DISHES ARE ", this.state.active)
-          );
+      axios
+        .get("http://homemadeapp.org:3000/dish/0/" + authID)
+        .then(inactive => {
+          this.setState({ inactive: inactive.data });
+          axios
+            .get("http://homemadeapp.org:3000/dish/1/" + authID)
+            .then(active => {
+              this.setState({ active: active.data });
+            });
         });
-      });
     });
   }
   returnRow(data) {
-    console.log("DATA IS", data)
     return (
       <ListItem
         onPress={() => {
@@ -63,7 +61,7 @@ export default class ChefPanel extends Component {
             {data.name}
           </Text>
           <Text note>
-            Donation: ${data.cashDonation} {'\n'}Quantity: {data.quantity}
+            Donation: ${data.cashDonation} {"\n"}Quantity: {data.quantity}
           </Text>
         </Body>
       </ListItem>
@@ -75,34 +73,34 @@ export default class ChefPanel extends Component {
     var activeDishes = [];
     return (
       <Container>
-          <Header hasTabs />
-          <Tabs >
-            <Tab heading={<TabHeading><Text>Inactive</Text></TabHeading>}>
-              {!this.state.inactive
-                ? <Text note> {"\n"}  No Dishes Available</Text>
-                : this.state.inactive.forEach(item =>
-                    inactiveDishes.push(this.returnRow(item))
-                  )}
-              <ScrollView>
-                <List style={{ marginTop: 10 }} dataArray={this.state.inactive}>
-                  {inactiveDishes}
-                </List>
-              </ScrollView>
-            </Tab>
+        <Header hasTabs />
+        <Tabs>
+          <Tab heading={<TabHeading><Text>Inactive</Text></TabHeading>}>
+            {!this.state.inactive
+              ? <Text note> {"\n"} No Dishes Available</Text>
+              : this.state.inactive.forEach(item =>
+                  inactiveDishes.push(this.returnRow(item))
+                )}
+            <ScrollView>
+              <List style={{ marginTop: 10 }} dataArray={this.state.inactive}>
+                {inactiveDishes}
+              </List>
+            </ScrollView>
+          </Tab>
 
-            <Tab heading={<TabHeading><Text>Active</Text></TabHeading>}>
-              {!this.state.active
-                ? <Text note> {"\n"}  No Dishes Available</Text>
-                : this.state.active.forEach(item =>
-                    activeDishes.push(this.returnRow(item))
-                  )}
-              <ScrollView>
-                <List style={{ marginTop: 10 }} dataArray={this.state.active}>
-                  {activeDishes}
-                </List>
-              </ScrollView>
-            </Tab>
-          </Tabs>
+          <Tab heading={<TabHeading><Text>Active</Text></TabHeading>}>
+            {!this.state.active
+              ? <Text note> {"\n"} No Dishes Available</Text>
+              : this.state.active.forEach(item =>
+                  activeDishes.push(this.returnRow(item))
+                )}
+            <ScrollView>
+              <List style={{ marginTop: 10 }} dataArray={this.state.active}>
+                {activeDishes}
+              </List>
+            </ScrollView>
+          </Tab>
+        </Tabs>
       </Container>
     );
   }

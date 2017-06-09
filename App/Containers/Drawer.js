@@ -2,15 +2,17 @@ import React, { Component } from "react";
 import Drawer from "react-native-drawer";
 import NavBar from "./NavBar";
 import { Actions, DefaultRenderer } from "react-native-router-flux";
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from "react-native-vector-icons/Ionicons";
 
 export default class NavigationDrawer extends Component {
   constructor(props) {
     super(props);
-    if (props.saveUser) { Actions.chefform(props.saveUser)}
+    if (props.saveUser) {
+      Actions.chefform(props.saveUser);
+    }
     this.state = {
       user: props.saveUser
-    }
+    };
   }
 
   render() {
@@ -26,7 +28,7 @@ export default class NavigationDrawer extends Component {
         content={<NavBar />}
         tapToClose={true}
         openDrawerOffset={0.25}
-        panCloseMask={.3}
+        panCloseMask={0.3}
         negotiatePan={true}
         styles={drawerStyles}
         tweenHandler={ratio => {

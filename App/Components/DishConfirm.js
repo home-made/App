@@ -31,7 +31,6 @@ export default class DishConfirm extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
   componentWillMount() {
-    console.log("mounted big fella confirm big fella");
     this.setState({ dish: this.props.fetchDish() }, () => {
       let userId, userName, userPic;
       let dish = this.state.dish;
@@ -40,8 +39,6 @@ export default class DishConfirm extends Component {
           const data = await AsyncStorage.getItem("profile");
           if (data !== null && data !== undefined) {
             data = JSON.parse(data);
-            console.log(data.userId);
-            console.log("dish", dish);
             userId = data.userId;
             return userId;
           }
@@ -54,30 +51,26 @@ export default class DishConfirm extends Component {
         dish.isActive = false;
         dish.allergies = [];
         this.setState({ dish }, () => {
-          console.log(this.state.dish);
           this.props.setDish(dish);
         });
       });
     });
   }
   onSubmit() {
-    if(Number(this.state.dish.quantity) <= 0) {
-      let dishy = this.state.dish;
-      dishy.isActive = false;
-      this.setState({dish: dishy})
+    if (Number(this.state.dish.quantity) <= 0) {
+      let dish = this.state.dish;
+      dish.isActive = false;
+      this.setState({ dish });
     }
-    axios.post("http://homemadeapp.org:3000/dish/add", this.state.dish).then(res => {
-      console.log(res);
-      this.props.setDish(this.state.dish);
-      Actions.dishedit({ type: ActionConst.RESET });
-    });
+    axios
+      .post("http://homemadeapp.org:3000/dish/add", this.state.dish)
+      .then(res => {
+        this.props.setDish(this.state.dish);
+        Actions.dishedit({ type: ActionConst.RESET });
+      });
   }
   render() {
     const { container } = styles;
-    const onButtonPress = () => {
-      this.setState({ dishText: "freshly" });
-    };
-    console.log("dish state is ", this.state);
     return (
       <Container style={{ marginTop: 80, alignItems: "center" }}>
         <Image

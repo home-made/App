@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { Container, Content, Button, Text } from "native-base";
 import { Actions, ActionConst } from "react-native-router-flux";
-import StarRating from 'react-native-star-rating';
+import StarRating from "react-native-star-rating";
 import axios from "axios";
 
 export default class Feedback extends Component {
@@ -23,21 +23,23 @@ export default class Feedback extends Component {
   }
 
   submitFeedback() {
-    console.log("PROPS ARE:", this.props);
-
     if (this.props.leavingChefReview) {
       let review = {
         reviewText: this.state.text,
         reviewerId: this.props.customerId,
         score: this.state.score
       };
-      console.log("http://homemadeapp.org:3000/reviews/0/" + this.props.chefId)
       axios
-        .post("http://homemadeapp.org:3000/reviews/0/" + this.props.chefId, review)
+        .post(
+          "http://homemadeapp.org:3000/reviews/0/" + this.props.chefId,
+          review
+        )
         .then(() =>
-
           Alert.alert("Your feedback has been submitted!", "Thank you.", [
-            { text: "OK", onPress: () => Actions.cuisines({ type: ActionConst.RESET }) }
+            {
+              text: "OK",
+              onPress: () => Actions.cuisines({ type: ActionConst.RESET })
+            }
           ])
         );
     } else {
@@ -52,16 +54,18 @@ export default class Feedback extends Component {
           review
         )
         .then(res => {
-          console.log(res);
           Alert.alert("Your feedback has been submitted!", "Thank you.", [
-            { text: "OK", onPress: () => Actions.orders({ chefView: true, type: ActionConst.RESET }) }
+            {
+              text: "OK",
+              onPress: () =>
+                Actions.orders({ chefView: true, type: ActionConst.RESET })
+            }
           ]);
         });
     }
   }
 
   onStarRatingPress(rating) {
-    console.log(rating);
     this.setState({
       score: rating
     });
@@ -89,7 +93,7 @@ export default class Feedback extends Component {
       },
       starsContainerView: {
         flex: 0.2,
-        justifyContent: 'center',
+        justifyContent: "center",
         marginLeft: 50,
         marginRight: 50
       },
@@ -97,14 +101,14 @@ export default class Feedback extends Component {
         alignItems: "center"
       },
       starsCountText: {
-        fontFamily: 'MarkerFelt-Wide',
+        fontFamily: "MarkerFelt-Wide",
         fontSize: 35,
-        textAlign: 'center',
-        color: '#505050'
+        textAlign: "center",
+        color: "#505050"
       },
       buttonView: {
         flex: 0.8,
-        justifyContent: 'center',
+        justifyContent: "center",
         alignSelf: "center"
       },
       buttonText: {
@@ -114,41 +118,42 @@ export default class Feedback extends Component {
         color: '#505050'
 
       }
-    }
+    };
 
     return (
       <View style={styles.container}>
         <Content style={styles.textInputView}>
           <TextInput
             style={styles.textInput}
-            placeholder='Leave a feedback!'
-            onChangeText={text =>
-              this.setState({ text }, () => console.log(this.state.text))}
+            placeholder="Leave a feedback!"
+            onChangeText={text => this.setState({ text })}
             multiline={true}
-            returnKeyType='done'
+            returnKeyType="done"
             maxLength={300}
             keyboardType="default"
           />
         </Content>
-        
+
         <View style={styles.starsContainerView}>
           <StarRating
             disabled={false}
             maxStars={5}
             rating={this.state.score}
-            selectedStar={(rating) => this.onStarRatingPress(rating)}
-            starColor='#F5F548'
-            emptyStarColor='#ECECEC'
+            selectedStar={rating => this.onStarRatingPress(rating)}
+            starColor="#F5F548"
+            emptyStarColor="#ECECEC"
           />
           <View style={styles.starsCountView}>
             <Text style={styles.starsCountText}>{this.state.score}/5</Text>
           </View>
         </View>
 
-        <View
-          style={styles.buttonView}>
+        <View style={styles.buttonView}>
           <Button
-            rounded transparent bordered dark
+            rounded
+            transparent
+            bordered
+            dark
             onPress={this.submitFeedback}
           >
             <Text style={styles.buttonText}>Submit Feedback</Text>

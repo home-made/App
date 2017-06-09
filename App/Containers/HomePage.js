@@ -42,7 +42,6 @@ export default class HomePage extends Component {
   }
 
   componentDidMount() {
-    console.log("HOME PAGE MOUNTED");
     this.checkStorage();
   }
 
@@ -56,16 +55,9 @@ export default class HomePage extends Component {
         "isAuthenticated"
       ]);
       if (data !== null && data !== undefined) {
-        console.log(
-          "Check storage function on Homepage.js, async data: ",
-          data
-        );
         if (data[2][1] === "true") {
-          console.log("last stepppppppp");
           Actions.drawer();
         }
-      } else {
-        console.log("WHAT IS ", data);
       }
     } catch (err) {
       console.log(
@@ -86,17 +78,14 @@ export default class HomePage extends Component {
         if (err) {
           console.log(err);
         } else {
-          console.log(token);
           token = JSON.stringify(token);
           /* after we log into the app, we make a post request
              that either finds or creates a user. we find out 
              if user is a chef or not */
-          console.log("PROFILE IN HOMEPAGE", profile)
           axios
             .post(`http://homemadeapp.org:3000/user/${profile.userId}`, profile)
             .then(user => {
               saveUser = user.data;
-              console.log("The user data inside HomePage is ", user);
               if (user.data.profileUrl) {
                 profile.extraInfo.picture_large = user.data.profileUrl;
                 profile.picture = user.data.profileUrl;
@@ -129,12 +118,10 @@ export default class HomePage extends Component {
               );
 
               profile = JSON.parse(profile);
-              console.log("RIGHT BEFORE ACTIONS PROFILE IS", profile);
-              console.log("RIGHT BEFORE IF STATEMENT", saveUser);
               if (saveUser.phoneNumber) {
                 Actions.drawer();
               } else {
-                Actions.drawer({saveUser});
+                Actions.drawer({ saveUser });
               }
             } catch (err) {
               console.log(
@@ -149,7 +136,6 @@ export default class HomePage extends Component {
   }
 
   showDrawer() {
-    console.log("OPEN");
     Actions.refresh({ key: "drawerChildrenWrapper", open: value => !value });
   }
 
