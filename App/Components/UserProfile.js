@@ -67,7 +67,7 @@ export default class Profile extends Component {
             var fullName = parsedProfile.name;
 
             axios
-              .get(`http://localhost:3000/user/${authId}`)
+              .get(`http://homemadeapp.org:3000/user/${authId}`)
               .then(user => {
                 console.log(
                   "the user inside axiospost for UserProfile.js is ",
@@ -100,7 +100,7 @@ export default class Profile extends Component {
     } else {
       console.log('profile is',this.props.profile)
       axios
-      .get(`http://localhost:3000/user/${this.props.profile.authId}`)
+      .get(`http://homemadeapp.org:3000/user/${this.props.profile.authId}`)
       .then(user => {
         console.log(
           "the user inside axiospost for UserProfile.js is ",
