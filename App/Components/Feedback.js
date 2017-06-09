@@ -128,7 +128,6 @@ export default class Feedback extends Component {
             placeholder="Leave a feedback!"
             onChangeText={text => this.setState({ text })}
             multiline={true}
-            returnKeyType="done"
             maxLength={300}
             keyboardType="default"
           />

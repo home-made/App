@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Image, ScrollView } from "react-native";
+import { StyleSheet, View, Image, ScrollView, Alert } from "react-native";
 import ActionButton from "react-native-circular-action-menu";
 import Icon from "react-native-vector-icons/Foundation";
 import Icon2 from "react-native-vector-icons/Entypo";
@@ -44,7 +44,13 @@ export default class OrderView extends Component {
       status: 1
     };
     axios.put("http://homemadeapp.org:3000/orders", request).then(res => {
-      Actions.orders({ chefView: true, type: ActionConst.RESET });
+      Alert.alert("The order has been Accepted!", `Your will be sent a text message when ${this.props.customer.firstName} is approaching.`, [
+            {
+              text: "OK",
+              onPress: () => Actions.orders({ res, chefView: true, type: ActionConst.RESET })
+            }
+          ]);
+      
     });
   }
 
@@ -68,7 +74,7 @@ export default class OrderView extends Component {
       status: 2
     };
     axios.put("http://homemadeapp.org:3000/orders", request).then(res => {
-      Actions.orders({ chefView: true, type: ActionConst.RESET });
+      Actions.orders({ res, chefView: true, type: ActionConst.RESET });
     });
   }
 
