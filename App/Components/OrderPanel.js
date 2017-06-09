@@ -34,7 +34,13 @@ export default class OrderPanel extends Component {
       <ListItem
         onPress={() => {
           this.props.updateOrderSocket(data);
-          Actions.orderView(data);
+          console.log("CHEF VIEW ON CLICK", this.state.chefView)
+          if(this.props.chefView){
+            Actions.orderView(data);
+          } else {
+            Actions.userOrders(data);
+          }
+          
           {
             /*setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);*/
           }
@@ -131,7 +137,7 @@ export default class OrderPanel extends Component {
     }
     // console.log("USER IS", user);
        getAuthID().then(() => {
-        if(user.chefView){
+        if(this.props.chefView){
          chefInit()
         }
         else {

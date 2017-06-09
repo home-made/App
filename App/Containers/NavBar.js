@@ -135,13 +135,14 @@ export default class NavBar extends Component {
     console.log("clicked");
     console.log("CHEFVIEW IS", this.state.chefView);
 
-      Actions.orders({ type: ActionConst.RESET });
+      Actions.orders({ chefView: this.state.chefView, type: ActionConst.RESET });
 
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
 
   currentOrder() {
     Actions.userOrders({ type: ActionConst.RESET });
+    setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
 
   signature() {
@@ -300,7 +301,7 @@ export default class NavBar extends Component {
           {!this.state.chefView ? <ListItem
             icon
             onPress={() => {
-              this.userOrders();
+              this.currentOrder();
               if(this.state.chefView)
                 this.setState({ chefNotification: 0 });
               else
