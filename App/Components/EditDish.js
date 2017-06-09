@@ -31,28 +31,10 @@ export default class ManageDish extends Component {
   }
 
   componentWillMount() {
-    // let userId, userName, userPic;
-    // async function getProfile() {
-    //   try {
-    //     const data = await AsyncStorage.getItem('profile');
-    //     if (data !== null && data !== undefined) {
-    //       // console.log('async data: ', data);
-    //       data = JSON.parse(data);
-    //       userId = data.identityId, userName = data.name, userPic = data.extraInfo.picture_large;
-    //     }
-    //   } catch (err) {
-    //     console.log('Error getting data: ', err);
-    //   }
-    // }
-
-    // getProfile()
-    //   .then(() => {
-    //     this.setState({ userId: userId, userName: userName, userPic: userPic })
-    //   })
     let dish = this.props.fetchDish();
     dish.cashDonation += "";
     dish.quantity += "";
-    this.setState({ dish }, () => console.log(this.state.dish));
+    this.setState({ dish });
     this.setState(
       { genres: ["Select a Cuisine Style"].concat(this.props.getStyles()) },
       () => {
@@ -65,23 +47,18 @@ export default class ManageDish extends Component {
 
   handleSubmit() {
     let dish = this.state.dish;
-    console.log("SEND: ", dish);
 
     axios
       .put("http://homemadeapp.org:3000/dish", dish)
       .then(Actions.chefPanel());
   }
   onValueChange(value) {
-    console.log(this.state.genres[value]);
     let dish = this.state.dish;
     dish["cuisineType"] = this.state.genres[value];
-    this.setState(
-      {
-        selected1: value,
-        dish
-      },
-      () => console.log(this.state.dish)
-    );
+    this.setState({
+      selected1: value,
+      dish
+    });
   }
   render() {
     return (
@@ -109,9 +86,7 @@ export default class ManageDish extends Component {
               onValueChange={value => {
                 let dish = this.state.dish;
                 dish.isActive = value;
-                this.setState({ dish }, () =>
-                  console.log(this.state.dish.isActive)
-                );
+                this.setState({ dish });
               }}
               style={{ alignItems: "center", justifyContent: "center" }}
               value={this.state.dish.isActive}
@@ -125,7 +100,7 @@ export default class ManageDish extends Component {
               onChangeText={name => {
                 let dish = this.state.dish;
                 dish.name = name;
-                this.setState({ dish }, () => console.log(this.state.dish));
+                this.setState({ dish });
               }}
               value={this.state.dish.name}
               style={{ marginBottom: -10 }}
@@ -139,7 +114,7 @@ export default class ManageDish extends Component {
               onChangeText={description => {
                 let dish = this.state.dish;
                 dish.description = description;
-                this.setState({ dish }, () => console.log(this.state.dish));
+                this.setState({ dish });
               }}
               value={this.state.dish.description}
               style={{ marginBottom: -10 }}
@@ -152,7 +127,7 @@ export default class ManageDish extends Component {
               onChangeText={cashDonation => {
                 let dish = this.state.dish;
                 dish.cashDonation = cashDonation;
-                this.setState({ dish }, () => console.log(this.state.dish));
+                this.setState({ dish });
               }}
               value={this.state.dish.cashDonation}
               style={{ marginBottom: -10 }}
@@ -168,7 +143,7 @@ export default class ManageDish extends Component {
               onChangeText={quantity => {
                 let dish = this.state.dish;
                 dish.quantity = quantity;
-                this.setState({ dish }, () => console.log(this.state.dish));
+                this.setState({ dish });
               }}
               value={this.state.dish.quantity}
               style={{ marginBottom: -10 }}

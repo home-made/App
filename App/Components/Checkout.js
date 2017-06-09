@@ -136,7 +136,6 @@ export default class Checkout extends Component {
       cashTotal: this.state.cashTotal,
       orderInstructions: this.state.orderInstructions
     };
-    console.log("NEW ORDER IS", newOrder);
     this.props.sendOrderSocket(newOrder);
 
     this.sendNotification();
@@ -144,11 +143,6 @@ export default class Checkout extends Component {
     axios
       .post("http://homemadeapp.org:3000/orders", newOrder)
       .then(function(response) {
-        console.log(
-          "New order inside Checkout.js was submitted to the database, response is: ",
-          response
-        );
-
         setTimeout(() => {
           context.checkAgain.call(null, response.data.customerId);
         }, 120000);
@@ -165,8 +159,6 @@ export default class Checkout extends Component {
     axios
       .get("http://homemadeapp.org:3000/orders/" + customerId)
       .then(orders => {
-        console.log("Orders inside Checkout.js checkAgain() are ", orders);
-
         if (orders.data[orders.data.length - 1].status === 0) {
           axios
             .put("http://homemadeapp.org:3000/orders/", {
@@ -174,14 +166,12 @@ export default class Checkout extends Component {
               status: 3
             })
             .then(res => {
-              console.log("SUCCESSFULLY CANCELED", res.data);
               context.sendCancelNotification();
             });
         }
       });
   }
   componentDidMount() {
-    console.log("compont did mont start");
     let cart = this.props.fetchCart();
     let dishItems = {};
     let chefDishes = {};
@@ -193,8 +183,6 @@ export default class Checkout extends Component {
       };
       this.state.cashTotal += dish.cashDonation;
     });
-    console.log("CART IS", cart);
-    console.log("dishItems IS", dishItems);
     this.setState(cart);
     this.setState({
       dishCounter: dishItems
@@ -217,8 +205,6 @@ export default class Checkout extends Component {
       }
     };
 
-    console.log("render start");
-    console.log("the state inside the checkout is ", this.state);
     if (!this.state.data) {
       return (
         <Container style={{ marginTop: 63 }}>
@@ -250,9 +236,7 @@ export default class Checkout extends Component {
               returnKeyType="done"
               placeholder="Special Requests?"
               onChangeText={orderInstructions =>
-                this.setState({ orderInstructions }, () =>
-                  console.log(this.state.orderInstructions)
-                )}
+                this.setState({ orderInstructions })}
               multiline={true}
               maxLength={300}
             />

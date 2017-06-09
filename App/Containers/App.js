@@ -54,34 +54,26 @@ export default class App extends Component {
   }
 
   componentWillMount() {
-    console.log("APP MOUNTED");
     this.setLocation();
   }
   getLatAndLon() {
     return { lat: this.state.latitude, lon: this.state.longitude };
   }
   sendOrderSocket(order) {
-    console.log("getting to it - socket");
     socket.emit("newOrderRequest", order);
   }
   updateOrderSocket(order) {
-    console.log("getting to it - socket");
     socket.emit("newOrderUpdate", order);
   }
   setLocation() {
     navigator.geolocation.getCurrentPosition(
       position => {
-        console.log(position);
         geo = new GeoPoint(position.coords.latitude, position.coords.longitude);
-        console.log(geo);
-        this.setState(
-          {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            geo
-          },
-          () => console.log("IN SET LOCATION", this.state.geo)
-        );
+        this.setState({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          geo
+        });
       },
       error => alert(JSON.stringify(error)),
       { enableHighAccuracy: true }
@@ -89,10 +81,8 @@ export default class App extends Component {
   }
 
   setChefLocationAndPhoneNumber(chef, phone) {
-    console.log("CHEF IS", chef);
     const url = `http://maps.apple.com/?saddr=${this.state.latitude},${this.state.longitude}&daddr=${chef.geo_lat},${chef.geo_lng}&dirflg=d`;
     chefLocation = new GeoPoint(chef.geo_lat, chef.geo_lng);
-    console.log("CHEF LOCATION IS", chefLocation);
     this.setState({ chefLocation, phone: phone });
     distanceInterval = setInterval(this.updateLocation, 5000);
     Linking.openURL(url);
@@ -100,10 +90,8 @@ export default class App extends Component {
 
   updateLocation() {
     if (this.state.chefLocation.distanceTo(this.state.geo) > 2.5) {
-      console.log("ABOUT TO RESET LOCATION");
       this.setLocation();
     } else {
-      console.log("ABOUT TO CLEAR INTERVAL", this.state.phone);
       axios.post("http://homemadeapp.org:3000/text/", {
         phone: this.state.phone
       });
@@ -118,13 +106,10 @@ export default class App extends Component {
   }
 
   setChef(chef) {
-    console.log("INSIDE SET CHEF", chef);
     axios
       .get(`http://homemadeapp.org:3000/chef/${chef.authId}`)
       .then(res => {
-        console.log(res);
         this.setState({ user: res.data }, () => {
-          console.log("IN SET CHEF STATE", this.state);
           Actions.profile();
         });
       })
@@ -136,9 +121,7 @@ export default class App extends Component {
   }
 
   setCuisineType(genre) {
-    console.log("IN SET CUISINE TYPE", this.state.geo);
     this.setState({ cuisineType: genre }, () => {
-      console.log("CUISINETYPE: ", this.state.cuisineType);
       let url = `http://homemadeapp.org:3000/chef/style/${this.state.cuisineType}`;
 
       let config = {
@@ -147,7 +130,6 @@ export default class App extends Component {
       axios
         .get(url, config)
         .then(res => {
-          console.log("res.data inside App.js for setCuisine is ", res.data);
           this.setState({ chefs: res.data }, () => {
             Actions.chefList();
           });
@@ -158,24 +140,18 @@ export default class App extends Component {
     });
   }
   setUploadStatus(cameraMode) {
-    console.log("camera mode is", cameraMode);
-    this.setState({ cameraMode }, () =>
-      console.log("app camera mode is", this.state.cameraMode)
-    );
+    this.setState({ cameraMode });
   }
   fetchUploadStatus() {
-    console.log("status fetched", this.state.cameraMode);
     return this.state.cameraMode;
   }
   fetchDishDetails() {
-    console.log("dish set", this.state.dish);
     return this.state.dish;
   }
   setDishDetails(dish) {
-    this.setState({ dish }, () => console.log("dish set", this.state.dish));
+    this.setState({ dish });
   }
   fetchChefs() {
-    console.log("the chefs inside fetchchefs are ", this.state.chefs);
     return this.state.chefs;
   }
   setCart(cart) {
@@ -185,25 +161,7 @@ export default class App extends Component {
     return this.state.checkout;
   }
 
-  componentDidMount() {
-    console.log("APP MOUNTED");
-
-    /*
-    AsyncStorage.getItem('profile').then(profile => {
-      var userId = JSON.parse(profile).userId;
-      var context = this;
-      
-      SetProfile(context, userId);
-    }).catch(error => {
-      console.log("Error inside AsyncStorage for Profile.js is ", error);
-    });
-*/
-  }
-
   render() {
-    {
-      console.log("the state inside App.js is ", this.state);
-    }
     const scenes = Actions.create(
       <Scene key="root">
         <Scene

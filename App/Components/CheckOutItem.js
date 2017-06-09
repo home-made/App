@@ -65,8 +65,6 @@ export default class CheckOutItem extends Component {
       }
     };
 
-    console.log("dishcounter", this.dishCounter);
-    console.log("the checkout item is ", this.props);
     return (
       <ListItem>
         <Thumbnail large square source={{ uri: this.uri }} />

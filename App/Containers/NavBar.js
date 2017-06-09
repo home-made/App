@@ -34,21 +34,12 @@ export default class NavBar extends Component {
   addChefNotification() {
     let counter = this.state.chefNotification;
     counter++;
-    console.log(counter);
-    this.setState({ chefNotification: counter }, () =>
-      console.log("new chef order notification", this.state.chefNotification)
-    );
+    this.setState({ chefNotification: counter });
   }
   addCustomerNotification() {
     let counter = this.state.customerNotification;
     counter++;
-    console.log(counter);
-    this.setState({ customerNotification: counter }, () =>
-      console.log(
-        "new customer order notification",
-        this.state.customerNotification
-      )
-    );
+    this.setState({ customerNotification: counter });
   }
   clearCustomerNotification() {
     this.setState({ customerNotification: 0 });
@@ -64,7 +55,6 @@ export default class NavBar extends Component {
       try {
         const data = await AsyncStorage.getItem("profile");
         if (data !== null && data !== undefined) {
-          console.log("profile in componentwillmount: ", JSON.parse(data));
           authId = JSON.parse(data).userId;
         }
       } catch (err) {
@@ -72,8 +62,6 @@ export default class NavBar extends Component {
       }
     }
     getUserAuthId().then(() => {
-      console.log(authId);
-
       axios.get(`http://homemadeapp.org:3000/user/${authId}`).then(res => {
         let chefRoom = "chef" + res.data[0].authId;
         socket.on(chefRoom, splash => {
@@ -83,7 +71,6 @@ export default class NavBar extends Component {
         socket.on(customerRoom, splash => {
           this.addCustomerNotification();
         });
-        console.log(res.data);
         this.setState(
           {
             chefStatus: res.data[0].isChef
@@ -138,11 +125,7 @@ export default class NavBar extends Component {
   }
 
   orders() {
-    console.log("clicked");
-    console.log("CHEFVIEW IS", this.state.chefView);
-
     Actions.orders({ chefView: this.state.chefView, type: ActionConst.RESET });
-
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }
 
@@ -167,18 +150,14 @@ export default class NavBar extends Component {
       try {
         await AsyncStorage.multiRemove(
           ["profile", "token", "isAuthenticated"],
-          () => {
-            console.log("Storage cleared!");
-          }
+          () => {}
         );
       } catch (err) {
         console.log("Error clearing storage: ", err);
       }
     }
     clearStorage();
-    axios
-      .get("http://stzy.auth0.com/v2/logout?federated")
-      .then(res => console.log(res));
+    axios.get("http://stzy.auth0.com/v2/logout?federated");
 
     setTimeout(() => Actions.refresh({ key: "drawer", open: false }), 0);
   }

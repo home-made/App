@@ -40,36 +40,17 @@ export default class DishView extends Component {
     this.props.setCameraMode("dish");
   }
   handleSubmit() {
-    console.log("QUANTITY IS", Number(this.state.dish.quantity));
-    // axios.post("http://ec2-52-91-163-176.compute-1.amazonaws.com:3000/dish/add", {
-    //   cuisineType: "Chinese",
-    //   name: this.state.name,
-    //   description: this.state.dishDescriptionText,
-    //   dishImages: [
-    //     "http://media-cdn.tripadvisor.com/media/photo-s/02/39/2d/21/chinese-dumplings-with.jpg"
-    //   ],
-    //   chefId: "7564fjasdif",
-    //   allergies: ["none"],
-    //   cashDonation: 8,
-    //   isActive: true,
-    //   quantity: 1
-    // });
-
     this.props.setDish(this.state.dish);
     // this.props.setCameraMode()
     Actions.uploadimage();
   }
   onValueChange(value) {
-    console.log(this.state.genres[value]);
     let dish = this.state.dish;
     dish["cuisineType"] = this.state.genres[value];
-    this.setState(
-      {
-        selected1: value,
-        dish
-      },
-      () => console.log(this.state.dish)
-    );
+    this.setState({
+      selected1: value,
+      dish
+    });
   }
   render() {
     const styles = {
@@ -125,7 +106,7 @@ export default class DishView extends Component {
             onChangeText={name => {
               let dish = this.state.dish;
               dish.name = name;
-              this.setState({ dish }, () => console.log(this.state.dish));
+              this.setState({ dish });
             }}
             value={this.state.dish.name}
           />
@@ -141,7 +122,7 @@ export default class DishView extends Component {
             onChangeText={description => {
               let dish = this.state.dish;
               dish.description = description;
-              this.setState({ dish }, () => console.log(this.state.dish));
+              this.setState({ dish });
             }}
             value={this.state.dish.description}
           />
@@ -156,7 +137,7 @@ export default class DishView extends Component {
             onChangeText={cashDonation => {
               let dish = this.state.dish;
               dish.cashDonation = cashDonation;
-              this.setState({ dish }, () => console.log(this.state.dish));
+              this.setState({ dish });
             }}
             value={this.state.dish.cashDonation}
           />
@@ -171,7 +152,7 @@ export default class DishView extends Component {
             onChangeText={quantity => {
               let dish = this.state.dish;
               dish.quantity = quantity;
-              this.setState({ dish }, () => console.log(this.state.dish));
+              this.setState({ dish });
             }}
             value={this.state.dish.quantity}
           />

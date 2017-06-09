@@ -30,9 +30,6 @@ var styles = StyleSheet.create({
 
 export default class DishViewCard extends Component {
   render() {
-    {
-      console.log("the props inside DishViewCard are ", this.props);
-    }
     return (
       <Container style={{ marginBottom: -290 }}>
         <Content>

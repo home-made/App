@@ -36,7 +36,6 @@ export default class UserOrderPanel extends Component {
   }
 
   componentWillMount() {
-    console.log("IN USER ORDER PANEL WILL MOUNT");
     let authID;
 
     async function getAuthID() {
@@ -44,7 +43,6 @@ export default class UserOrderPanel extends Component {
         const data = await AsyncStorage.getItem("profile");
         if (data !== null && data !== undefined) {
           data = JSON.parse(data);
-          console.log("DATA IS ", data);
           authID = data.userId;
         }
       } catch (err) {
@@ -54,27 +52,19 @@ export default class UserOrderPanel extends Component {
 
     getAuthID()
       .then(() => {
-        console.log("AUTHID IS", authID);
         axios
           .get("http://homemadeapp.org:3000/orders/" + authID)
           .then(orders => {
             let order = orders.data[orders.data.length - 1];
-            console.log("ORDER IS", order);
             axios
               .get("http://homemadeapp.org:3000/user/" + order.chefId)
               .then(chefDetails => {
-                console.log("CHEF DETAILS ARE", chefDetails);
-                this.setState(
-                  {
-                    order,
-                    chefLocation: chefDetails.data[0].location,
-                    phone: chefDetails.data[0].phoneNumber,
-                    chefDetails: chefDetails.data[0]
-                  },
-                  () => {
-                    console.log(this.state.order);
-                  }
-                );
+                this.setState({
+                  order,
+                  chefLocation: chefDetails.data[0].location,
+                  phone: chefDetails.data[0].phoneNumber,
+                  chefDetails: chefDetails.data[0]
+                });
               });
           })
           .catch(err => console.log(err));
@@ -138,7 +128,6 @@ export default class UserOrderPanel extends Component {
       }
     };
 
-    console.log(this.state, this.props);
     if (!this.state.order) {
       return (
         <View
@@ -163,7 +152,6 @@ export default class UserOrderPanel extends Component {
         </View>
       );
     } else {
-      console.log("THERE IS AN ORDER");
       return (
         <ScrollView
           contentContainerStyle={styles.container}

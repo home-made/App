@@ -25,15 +25,12 @@ class Upload extends Component {
     this.switchCamera = this.switchCamera.bind(this);
   }
   componentDidMount() {
-    console.log("here");
     async function getProfile() {
       try {
         const data = await AsyncStorage.getItem("profile");
         if (data !== null && data !== undefined) {
-          // console.log('async data: ', data);
           data = JSON.parse(data);
           return data;
-          // userId = data.identityId, userName = data.name, userPic = data.extraInfo.picture_large;
         }
       } catch (err) {
         console.log("Error getting data: ", err);
@@ -43,12 +40,8 @@ class Upload extends Component {
     getProfile().then(data => {
       this.setState({ userId: data.userId });
     });
-    this.setState({ cameraMode: this.props.fetchCameraMode() }, () =>
-      console.log(this.state)
-    );
-    this.setState({ dish: this.props.fetchDish() }, () =>
-      console.log(this.state.dish)
-    );
+    this.setState({ cameraMode: this.props.fetchCameraMode() });
+    this.setState({ dish: this.props.fetchDish() });
   }
 
   takePicture() {
@@ -61,7 +54,6 @@ class Upload extends Component {
       .get("http://homemadeapp.org:3000/api/")
       .then(res => {
         this.camera.capture(opt).then(data => {
-          console.log(data);
           let file = {
             // `uri` can also be a file system path (i.e. file://)
             uri: data.path,
@@ -81,7 +73,6 @@ class Upload extends Component {
             RNS3.put(file, options).then(response => {
               if (response.status !== 201)
                 throw new Error("Failed to upload image to S3");
-              console.log(response.body.postResponse.location);
               let dish = this.state.dish;
               dish["dishImages"] = [response.body.postResponse.location];
               this.props.setDish(dish);
@@ -89,7 +80,6 @@ class Upload extends Component {
               Actions.dishconfirm();
             });
           } else {
-            console.log(res);
             let math = Math.random();
             let options = {
               keyPrefix: `profile${math}`,
@@ -102,14 +92,11 @@ class Upload extends Component {
             RNS3.put(file, options).then(response => {
               if (response.status !== 201)
                 throw new Error("Failed to upload image to S3");
-              console.log(response.body.postResponse.location);
-              // console.log('http://homemadeapp.org:3000/user' + this.state.userId)
               axios
                 .put("http://homemadeapp.org:3000/user/" + this.state.userId, {
                   profileUrl: response.body.postResponse.location
                 })
                 .then(res => {
-                  console.log(res);
                   Actions.edit({
                     newUrl: response.body.postResponse.location,
                     type: ActionConst.RESET

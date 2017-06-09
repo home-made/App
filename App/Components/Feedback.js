@@ -23,15 +23,12 @@ export default class Feedback extends Component {
   }
 
   submitFeedback() {
-    console.log("PROPS ARE:", this.props);
-
     if (this.props.leavingChefReview) {
       let review = {
         reviewText: this.state.text,
         reviewerId: this.props.customerId,
         score: this.state.score
       };
-      console.log("http://homemadeapp.org:3000/reviews/0/" + this.props.chefId);
       axios
         .post(
           "http://homemadeapp.org:3000/reviews/0/" + this.props.chefId,
@@ -57,7 +54,6 @@ export default class Feedback extends Component {
           review
         )
         .then(res => {
-          console.log(res);
           Alert.alert("Your feedback has been submitted!", "Thank you.", [
             {
               text: "OK",
@@ -70,7 +66,6 @@ export default class Feedback extends Component {
   }
 
   onStarRatingPress(rating) {
-    console.log(rating);
     this.setState({
       score: rating
     });
@@ -124,8 +119,7 @@ export default class Feedback extends Component {
           <TextInput
             style={styles.textInput}
             placeholder="Leave a feedback!"
-            onChangeText={text =>
-              this.setState({ text }, () => console.log(this.state.text))}
+            onChangeText={text => this.setState({ text })}
             multiline={true}
             returnKeyType="done"
             maxLength={300}

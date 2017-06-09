@@ -39,8 +39,6 @@ export default class ChefForm extends Component {
       lastName: this.props.lastName
     });
 
-    console.log("IN CHEF FORM WILL MOUNT PROPS ARE", this.props);
-
     let userId;
     async function grabAuthId() {
       try {
@@ -60,9 +58,6 @@ export default class ChefForm extends Component {
   }
 
   submitForm() {
-    console.log("phone number: ", this.state.phone);
-    console.log("first name: ", this.state.firstName);
-    console.log("last name: ", this.state.lastName);
     if (
       this.state.phone !== null &&
       this.state.firstName !== null &&
@@ -74,7 +69,6 @@ export default class ChefForm extends Component {
           firstName: this.state.firstName,
           lastName: this.state.lastName
         })
-        .then(res => console.log(res.data))
         .catch(err => console.log("Error updating user to chef status: ", err));
 
       Actions.cuisines({ type: ActionConst.RESET });

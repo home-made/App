@@ -9,9 +9,7 @@ export default class Cuisines extends Component {
 
   componentWillMount() {
     let genres;
-    this.setState({ genres: this.props.getStyles() }, () =>
-      console.log(this.state.genres)
-    );
+    this.setState({ genres: this.props.getStyles() });
   }
 
   render() {

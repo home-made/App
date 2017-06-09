@@ -58,7 +58,6 @@ export default class ChefList extends Component {
     let chefs = this.state.chefs;
 
     if (chefs.length === 0) {
-      console.log("inside the if block for ChefList and chefs is ", chefs);
       return (
         <Container style={styles.noChefContainer}>
           <Content>
@@ -74,14 +73,12 @@ export default class ChefList extends Component {
     } else {
       return (
         <Container style={styles.container}>
-          {console.log("The chefs inside ChefList.js are ", chefs)}
           <Content>
             <List
               dataArray={chefs}
               renderRow={chef => (
                 <ListItem
                   onPress={() => {
-                    console.log("CHEF IS", chef);
                     this.props.setChef(chef);
                   }}
                 >

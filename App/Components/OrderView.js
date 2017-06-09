@@ -28,15 +28,12 @@ export default class OrderView extends Component {
   }
 
   componentWillMount() {
-    // console.log(this.props)
     let dishes = [];
 
     for (var key in this.props.cart) {
       dishes.push(this.props.cart[key]);
     }
-    this.setState({ dishes }, () =>
-      console.log("STATE.DISHES", this.state.dishes)
-    );
+    this.setState({ dishes });
   }
 
   handleAccept() {
@@ -46,9 +43,7 @@ export default class OrderView extends Component {
       _id: this.props._id,
       status: 1
     };
-    console.log("accept looks like", request);
     axios.put("http://homemadeapp.org:3000/orders", request).then(res => {
-      console.log("RESPONSE IS", res.data);
       Actions.orders({ chefView: true, type: ActionConst.RESET });
     });
   }
@@ -66,7 +61,6 @@ export default class OrderView extends Component {
   }
 
   handleComplete() {
-    console.log("INSIDE HANDLE COMPLETE");
     let request = {
       chefId: this.props.chefId,
       date: this.props.date,
@@ -74,14 +68,11 @@ export default class OrderView extends Component {
       status: 2
     };
     axios.put("http://homemadeapp.org:3000/orders", request).then(res => {
-      console.log("COMPLETED ORDER:", res.data);
       Actions.orders({ chefView: true, type: ActionConst.RESET });
     });
   }
 
   render() {
-    console.log("STATE IN ORDER VIEW", this.state);
-    console.log("PROPS IN ORDER VIEW", this.props);
     return (
       <ScrollView>
         <View

@@ -25,7 +25,6 @@ export default class ChefMap extends Component {
 
   componentWillMount() {
     let location = this.props.getLocation();
-    console.log("LOCATION IN WILL MOUNT");
     region = {
       latitude: location.lat,
       longitude: location.lon,
@@ -39,7 +38,6 @@ export default class ChefMap extends Component {
           lon: this.state.region.longitude
         })
         .then(chefsInRange => {
-          console.log(chefsInRange);
           this.setState({ data: chefsInRange.data });
         })
         .catch(err => console.log(err));

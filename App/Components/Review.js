@@ -6,7 +6,6 @@ import { Thumbnail, ListItem, Left, Body, Right, Text } from "native-base";
 export default class Review extends Component {
   constructor(props) {
     super();
-    console.log("PROPS IN REVIEW ", props);
   }
 
   render() {
@@ -34,7 +33,6 @@ export default class Review extends Component {
       }
     };
 
-    console.log("props inside Review.js are ", this.props);
     return (
       <ListItem>
 
