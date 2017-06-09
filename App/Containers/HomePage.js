@@ -10,6 +10,7 @@ import {
   ActivityIndicator
 } from "react-native";
 import { Actions, ActionConst } from "react-native-router-flux";
+import AnimatedLinearGradient from "react-native-animated-linear-gradient";
 
 import Promise from "bluebird";
 import Auth0Lock from "react-native-lock";
@@ -140,32 +141,34 @@ export default class HomePage extends Component {
   }
 
   render() {
+    const colorScheme = {
+      homemade: [
+        "#9EECF0",
+        "#9EF0EA",
+        "#9EF0DA",
+        "#9EF0CE",
+        "#9EF0B6",
+        "#9EF0A0",
+        "#B2F09E",
+        "#D6F09E"
+      ]
+    };
+
     return (
       <View style={styles.container}>
-        <Image
-          source={require("./img/turquoise-top-gradient-background.jpg")}
-          style={styles.backgroundImage}
+        <AnimatedLinearGradient
+          customColors={colorScheme.homemade}
+          speed={1000}
         />
-        {/*<ActivityIndicator
-          size='large'
-          color='#0000ff'
-          animating='true'
-        />*/}
-        <TouchableHighlight onPress={this.onLogin}>
-          <Text style={styles.welcome}>
-            Log In
+          <Text style={styles.welcome} onPress={this.onLogin}>
+            Login
           </Text>
-        </TouchableHighlight>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  backgroundImage: {
-    position: "absolute",
-    resizeMode: "cover"
-  },
   container: {
     flex: 1,
     justifyContent: "center",
@@ -173,9 +176,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#cccccc"
   },
   welcome: {
-    fontSize: 20,
-    textAlign: "center",
+    backgroundColor: 'transparent',
+    fontSize: 50,
+    fontFamily: "Noteworthy-Bold",
     margin: 10,
-    color: "#ffffff"
+    color: "#505050"
   }
 });

@@ -15,9 +15,7 @@ import {
 import Icon2 from "react-native-vector-icons/Ionicons";
 import { Actions, ActionConst } from "react-native-router-flux";
 import socket from "../Socket/Socket";
-import AnimatedLinearGradient, {
-  presetColors
-} from "react-native-animated-linear-gradient";
+import AnimatedLinearGradient from "react-native-animated-linear-gradient";
 // import { Switch } from "react-native-switch";
 
 import axios from "axios";
