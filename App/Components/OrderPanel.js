@@ -29,11 +29,6 @@ export default class OrderPanel extends Component {
   returnRow(data) {
     var dateAndTime = moment(data.date).format('LLL');
     console.log("DATA IS", data);
-    var getCustomer = function (customer){
-      console.log('customer id is', customer.authId)
-      console.log('data customer is',data.customerId)
-     return data.customerId === customer.authID;
-    }
     return (
       <ListItem
         onPress={() => {
