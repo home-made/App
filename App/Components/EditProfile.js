@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import { StyleSheet, AsyncStorage, Image, Container } from "react-native";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { View, Input, Item, Button, Text, Toast, Content } from "native-base";
+import { View, Button, Text, Toast, Input } from "native-base";
 import { Actions, ActionConst } from "react-native-router-flux";
+import { Kaede } from 'react-native-textinput-effects';
+import Autocomplete from 'react-google-autocomplete';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import axios from "axios";
 
 export default class EditProfile extends Component {
@@ -70,7 +73,8 @@ export default class EditProfile extends Component {
               this.setState({ userName: res.data[0].firstName,userPic: res.data[0].profileUrl }, () =>
                 console.log('url is', res)
               );
-            });
+            })
+            .catch(err => console.log(err));
         }
       );
     });
@@ -101,64 +105,134 @@ export default class EditProfile extends Component {
   }
 
   render() {
+    const styles = {
+      container: {
+        flex: 1,
+        marginTop: 75
+      },
+      name: {
+        fontFamily: 'MarkerFelt-Wide',
+        fontSize: 50,
+        textAlign: 'center',
+        color: '#505050'
+      },
+      profilePic: {
+        borderRadius: 75,
+        height: 150,
+        width: 150,
+        marginTop: 20,
+        alignSelf: 'center'
+      },
+      label: {
+        fontFamily: 'MarkerFelt-Thin',
+        color: '#9DDDE0'
+      },
+      input: {
+        fontFamily: 'MarkerFelt-Thin',
+        color: '#505050'
+      },
+      kaede: {
+        backgroundColor: '#f9f5ed',
+        marginTop: 10
+      },
+      buttons: {
+        margin: 10,
+        alignSelf: 'center'
+      },
+      buttonText: {
+        fontFamily: 'MarkerFelt-Thin',
+        fontSize: 20,
+        color: '#505050'
+      }
+    }
+
     console.log("the state inside EditProfile.js is ", this.state);
     return (
-      <KeyboardAwareScrollView>
-        <View
-          style={{
-            flex: 1,
-            flexDirection: "column",
-            alignContent: "center",
-            alignItems: "center",
-            marginTop: 50
-          }}
-        >
+      <KeyboardAwareScrollView automaticallyAdjustContentInsets={false}>
+        <View style={styles.container}>
 
-          <Text>
-            {this.state.userName}
-          </Text>
+          <View>
+            <Text style={styles.name}>{this.state.userName}</Text>
 
-          <Image
-            style={{
-              borderRadius: 75,
-              height: 150,
-              width: 150,
-              marginTop: 70
-            }}
-            source={{
-              uri: this.state.userPic
-            }}
-          />
-          <Item>
+            <Image
+              style={styles.profilePic}
+              source={{uri: this.state.userPic}}
+            />
+
             <Button
-              style={{ margin: 10 }}
+              rounded transparent bordered dark
+              style={styles.buttons}
               onPress={() => {
                 this.props.setCameraMode("profile");
                 Actions.uploadimage();
               }}
             >
-              <Text>Update Profile Picture</Text>
+              <Text style={styles.buttonText}>Update Profile Picture</Text>
             </Button>
-          </Item>
+          </View>
 
-          <Item>
-            <Input
-              placeholder="Address"
-              keyboardType={"ascii-capable"}
-              onChangeText={address =>
-                this.setState({ address }, () => console.log(address))}
+          <View>
+            <Kaede
+              autoCorrect={false}
+              style={styles.kaede}
+              label={'Status'}
+              placeholder='Status'
+              labelStyle={styles.label}
+              inputStyle={styles.input}
+              onChangeText={status => this.setState({ status })}
             />
-          </Item>
 
-        <Item>
-          <Input
-            placeholder="Status"
-            onChangeText={status => this.setState({ status })}
-          />
-        </Item>
-        <Item>
+            <Kaede
+              autoCorrect={false}
+              style={styles.kaede}
+              label={'Phone Number'}
+              placeholder='Phone Number'
+              labelStyle={styles.label}
+              inputStyle={styles.input}
+              onChangeText={phone => this.setState({ phone })}
+            />
+            <View style={{ marginTop: 10 }}>
+              <GooglePlacesAutocomplete
+                placeholder='Address'
+                minLength={2}
+                autoFocus={false}
+                listViewDisplayed='auto'
+                fetchDetails={true}
+                renderDescription={(row) => row.description}
+                onPress={(data, details = null) => {
+                  console.log(data);
+                  console.log(details);
+                  this.setState({ address: data.description }, () => console.log(data.description))
+                }}
+                getDefaultValue={() => {
+                  return '';
+                }}
+                query={{
+                  key: 'AIzaSyDySPBT6q0rzspVjjJWZDnEGCaT3CJBMKQ',
+                  language: 'en',
+                  types: 'address'
+                }}
+                styles={{
+                  description: {
+                    fontWeight: 'bold'
+                  },
+                  predefinedPlacesDescription: {
+                    color: '#1faadb'
+                  },
+                }}
+                nearbyPlacesAPI='GooglePlacesSearch'
+                GooglePlacesSearchQuery={{
+                  rankby: 'distance',
+                  types: 'food',
+                }}
+                debounce={200}
+              />
+            </View>
+          </View>
+
           <Button
-            style={{ marginTop: 10 }}
+            rounded transparent bordered dark
+            style={styles.buttons}
             onPress={() => {
               this.handleSubmit();
               Toast.show({
@@ -170,32 +244,11 @@ export default class EditProfile extends Component {
               });
             }}
           >
-            <Text>Submit</Text>
+            <Text style={styles.buttonText}>Submit</Text>
           </Button>
-        </Item>
-        </View>       
+
+        </View>
       </KeyboardAwareScrollView>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
-  }
-});
-
-/*
-
-       <Container 
-          style={{
-          flex: 1,
-          flexDirection: "column",
-          alignContent: "center",
-          alignItems: "center"
-        }}
-        >
-
-*/

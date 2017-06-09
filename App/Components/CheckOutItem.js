@@ -38,7 +38,7 @@ export default class CheckOutItem extends Component {
         alignSelf: 'center',
         fontFamily: 'MarkerFelt-Thin',
         fontSize: 22,
-        color: '#E05050'
+        color: '#505050'
       },
       aqGroup: {
         marginTop: 10,

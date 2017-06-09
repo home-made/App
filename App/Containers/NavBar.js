@@ -195,11 +195,11 @@ export default class NavBar extends Component {
       },
       entries: {
         fontSize: 18,
-        color: '#E05050',
+        color: '#505050',
         fontFamily: 'Noteworthy-Bold'
       },
       icons: {
-        color: '#E05050'
+        color: '#505050'
       }
     };
 
@@ -232,7 +232,7 @@ export default class NavBar extends Component {
           <Text
             style={{
               textAlign: "center",
-              color: '#E05050',
+              color: '#505050',
               fontFamily: 'MarkerFelt-Wide',
               fontSize: 40
             }}>

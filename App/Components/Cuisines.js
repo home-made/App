@@ -23,7 +23,7 @@ export default class Cuisines extends Component {
         marginTop: 60
       },
       text: {
-        color: '#E05050',
+        color: '#505050',
         fontFamily: 'Noteworthy-Bold'
       }
     }

@@ -399,7 +399,7 @@ const styles = StyleSheet.create({
     fontFamily: 'MarkerFelt-Thin',
     fontSize: 23,
     fontWeight: "bold",
-    color: "#E05050"
+    color: "#505050"
   },
   welcome: {
     fontSize: 20,

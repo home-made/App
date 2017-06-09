@@ -11,7 +11,7 @@ export default class Review extends Component {
   render() {
     const styles = {
       reviewScore: {
-        color: '#E05050',
+        color: '#505050',
         fontFamily: 'Noteworthy-Bold',
         fontSize: 18,
         alignSelf: 'center',

@@ -23,14 +23,14 @@ export default class ChefList extends Component {
       },
       noChefText1: {
         fontSize: 60,
-        color: '#E05050',
+        color: '#505050',
         fontFamily: 'Noteworthy-Bold',
         textAlign: 'center'
       },
       noChefText2: {
         marginTop: 25,
         fontSize: 20,
-        color: '#E05050',
+        color: '#505050',
         fontFamily: 'Noteworthy-Bold',
         textAlign: 'center'
       },
@@ -46,7 +46,7 @@ export default class ChefList extends Component {
       },
       chefText1: {
         fontSize: 25,
-        color: '#E05050',
+        color: '#505050',
         fontFamily: 'Noteworthy-Bold'
       },
       chefText2: {

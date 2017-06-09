@@ -67,27 +67,63 @@ export default class Feedback extends Component {
   }
 
   render() {
+    const styles = {
+      container: {
+        flex: 1
+      },
+      textInputView: {
+        flex: 1,
+        margin: 13
+      },
+      textInput: {
+        fontSize: 20,
+        margin: 5,
+        marginTop: 80,
+        padding: 20,
+        paddingTop: 10,
+        height: 200,
+        borderColor: "gray",
+        borderWidth: 2,
+        borderRadius: 30
+      },
+      starsContainerView: {
+        flex: 0.2,
+        justifyContent: 'center',
+        marginLeft: 50,
+        marginRight: 50
+      },
+      starsCountView: {
+        alignItems: "center"
+      },
+      starsCountText: {
+        fontFamily: 'MarkerFelt-Wide',
+        fontSize: 35,
+        textAlign: 'center',
+        color: '#505050'
+      },
+      buttonView: {
+        flex: 0.8,
+        justifyContent: 'center',
+        alignSelf: "center"
+      }
+    }
+
     return (
-      <Container>
-        <Content>
-        <TextInput
-          style={{
-            fontSize: 20,
-            margin: 5,
-            marginTop: 80,
-            padding: 10,
-            height: 200,
-            borderColor: "gray",
-            borderWidth: 2
-          }}
-          onChangeText={text =>
-            this.setState({ text }, () => console.log(this.state.text))}
-          multiline={true}
-          maxLength={300}
-          keyboardType="default"
-        />
+      <View style={styles.container}>
+        <View style={styles.textInputView}>
+          <TextInput
+            style={styles.textInput}
+            placeholder='Leave a feedback!'
+            onChangeText={text =>
+              this.setState({ text }, () => console.log(this.state.text))}
+            multiline={true}
+            returnKeyType='done'
+            maxLength={300}
+            keyboardType="default"
+          />
+        </View>
         
-        <View style={{flex: 1, justifyContent: 'center', marginLeft: 50, marginRight: 50}}>
+        <View style={styles.starsContainerView}>
           <StarRating
             disabled={false}
             maxStars={5}
@@ -96,19 +132,22 @@ export default class Feedback extends Component {
             starColor='#F5F548'
             emptyStarColor='#ECECEC'
           />
-          <View style={{ alignItems: "center" }}>
-            <Text>{this.state.score}/5</Text>
+          <View style={styles.starsCountView}>
+            <Text style={styles.starsCountText}>{this.state.score}/5</Text>
           </View>
         </View>
 
-        <View style={{ flex: 1, justifyContent: 'center', alignSelf: "center" }}>
-          <Button success onPress={this.submitFeedback}>
+        <View
+          style={styles.buttonView}>
+          <Button
+            rounded transparent bordered dark
+            onPress={this.submitFeedback}
+          >
             <Text>Submit Feedback</Text>
           </Button>
         </View>
-        </Content>
 
-      </Container>
+      </View>
     );
   }
 }

@@ -233,8 +233,11 @@ export default class Checkout extends Component {
               height: 150,
               borderColor: "gray",
               borderWidth: 2,
-              width: 340
+              width: 340,
+              borderRadius: 30
             }}
+            returnKeyType='done'
+            placeholder='Special Requests?'
             onChangeText={orderInstructions => this.setState({ orderInstructions }, 
             () => console.log(this.state.orderInstructions))}
             multiline={true}

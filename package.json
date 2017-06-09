@@ -19,6 +19,7 @@
     "moment": "^2.18.1",
     "native-base": "^2.1.4",
     "react": "16.0.0-alpha.6",
+    "react-google-autocomplete": "^1.0.13",
     "react-moment": "^0.2.2",
     "react-native": "0.44.0",
     "react-native-action-button": "^2.6.9",

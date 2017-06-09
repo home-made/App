@@ -40,7 +40,7 @@ export default class Profile extends Component {
     } else {
       return (
         <Container style={{ marginRight: 10, marginLeft: 10, marginTop: 10 }}>
-          <H3 style={{ color: '#E05050' }}>Your Reviews</H3>
+          <H3 style={{ color: '#505050' }}>Your Reviews</H3>
           {allReviews.map(review => {
             return <Review review={review} />;
           })}
@@ -113,7 +113,7 @@ export default class Profile extends Component {
   render() {
     const styles = {
       text: {
-        color: '#E05050'
+        color: '#505050'
       }
     }
 
