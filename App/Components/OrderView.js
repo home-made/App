@@ -234,7 +234,7 @@ export default class OrderView extends Component {
                 <Card style={{ marginTop: 20, marginLeft: 10, marginRight: 10 }}>
                   <CardItem>
                     
-                      <Thumbnail square large source={{ uri: dish.dish.dishImages[0] }} />
+                      <Thumbnail square large style={{marginRight: 10}} source={{ uri: dish.dish.dishImages[0] }} />
                       <Body>      
                       <Text>
                         {dish.dish.name}
