@@ -175,6 +175,7 @@ export default class EditProfile extends Component {
 
           <View>
             <Kaede
+              autoCorrect={false}
               style={styles.kaede}
               label={'Status'}
               placeholder='Status'
@@ -184,6 +185,7 @@ export default class EditProfile extends Component {
             />
 
             <Kaede
+              autoCorrect={false}
               style={styles.kaede}
               label={'Phone Number'}
               placeholder='Phone Number'
@@ -220,16 +222,11 @@ export default class EditProfile extends Component {
                     color: '#1faadb'
                   },
                 }}
-                currentLocation={true}
-                currentLocationLabel="Current location"
                 nearbyPlacesAPI='GooglePlacesSearch'
-                GoogleReverseGeocodingQuery={{
-                }}
                 GooglePlacesSearchQuery={{
                   rankby: 'distance',
                   types: 'food',
                 }}
-                filterReverseGeocodingByTypes={['locality', 'administrative_area_level_3']}
                 debounce={200}
               />
             </View>

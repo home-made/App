@@ -14,6 +14,8 @@ import {
   CheckBox,
   ListItem
 } from "native-base";
+import { Kaede } from 'react-native-textinput-effects';
+
 export default class DishView extends Component {
   constructor(props) {
     super(props);
@@ -70,104 +72,134 @@ export default class DishView extends Component {
     );
   }
   render() {
+    const styles = {
+      container: {
+        flex: 1,
+        flexDirection: 'column',
+        marginTop: 64
+      },
+      label: {
+        fontFamily: 'MarkerFelt-Thin',
+        color: '#505050'
+      },
+      input: {
+        fontFamily: 'MarkerFelt-Thin',
+        color: '#9DDDE0'
+      },
+      kaede: {
+        backgroundColor: '#f9f5ed',
+        marginTop: 10
+      },
+      picker: {
+        alignSelf: 'center',
+        borderStyle: 'solid',
+        borderColor: 'black',
+        borderWidth: 2,
+        borderRadius: 20,
+        marginTop: 10
+      },
+      nextButton: {
+        marginTop: 70,
+        alignSelf: "center"
+      },
+      nextButtonText: {
+        fontFamily: 'MarkerFelt-Thin',
+        fontSize: 20,
+      }
+    };
+
     const price = "$" + this.state.cashDonation;
     const { container } = styles;
     const onButtonPress = () => {
       this.setState({ dishText: "freshly" });
     };
     return (
-      <Container
-        style={{
-          flex: 1,
-          flexDirection: "column"
-        }}
-      >
+      <Container style={styles.container}>
         <Content>
-          <Form style={{ marginTop: 100 }}>
-            <Item>
-              <Input
-                placeholder="Name"
-                onChangeText={name => {
-                  let dish = this.state.dish;
-                  dish.name = name;
-                  this.setState({ dish }, () => console.log(this.state.dish));
-                }}
-                value={this.state.dish.name}
-              />
-            </Item>
-            <Item>
-              <Input
-                placeholder="Description"
-                onChangeText={description => {
-                  let dish = this.state.dish;
-                  dish.description = description;
-                  this.setState({ dish }, () => console.log(this.state.dish));
-                }}
-                value={this.state.dish.description}
-              />
-            </Item>
-            <Item stackedLabel>
-              <Label>$</Label>
-              <Input
-                placeholder="Donation Amount"
-                keyboardType={"number-pad"}
-                onChangeText={cashDonation => {
-                  let dish = this.state.dish;
-                  dish.cashDonation = cashDonation;
-                  this.setState({ dish }, () => console.log(this.state.dish));
-                }}
-                value={this.state.dish.cashDonation}
-              />
-            </Item>
-            <Item>
-              <Input
-                placeholder="Quantity"
-                keyboardType={"number-pad"}
-                onChangeText={quantity => {
-                  let dish = this.state.dish;
-                  dish.quantity = quantity;
-                  this.setState({ dish }, () => console.log(this.state.dish));
-                }}
-                value={this.state.dish.quantity}
-              />
-            </Item>
-            <Picker
-              supportedOrientations={["portrait", "landscape"]}
-              iosHeader="Select one"
-              mode="dropdown"
-              selectedValue={this.state.selected1}
-              onValueChange={this.onValueChange.bind(this)}
-            >
-              {/*<Item label="Select a Cuisine Style" value={0} />*/}
-              {this.state.genres
-                ? this.state.genres.map((curr, ind) => {
-                    return <Item label={curr} value={ind} />;
-                  })
-                : {}}
-            </Picker>
-            <Button
-              style={{ marginTop: 70, alignItems: "center" }}
-              onPress={() => this.handleSubmit()}
-            >
-              <Text>Next</Text>
-            </Button>
-          </Form>
+        <Kaede
+          style={styles.kaede}
+          label={'Name'}
+          placeholder={'Eg: Burger'}
+          labelStyle={styles.label}
+          inputStyle={styles.input}
+          onChangeText={name => {
+            let dish = this.state.dish;
+            dish.name = name;
+            this.setState({ dish }, () => console.log(this.state.dish));
+          }}
+          value={this.state.dish.name}
+        />
+
+        <Kaede
+          style={styles.kaede}
+          label={'Description'}
+          placeholder={'Eg: Quarter lb, gouda cheese stuffed patty with arugula, tomatoes, etc.'}
+          labelStyle={styles.label}
+          inputStyle={styles.input}
+          onChangeText={description => {
+            let dish = this.state.dish;
+            dish.description = description;
+            this.setState({ dish }, () => console.log(this.state.dish));
+          }}
+          value={this.state.dish.description}
+        />
+
+        <Kaede
+          style={styles.kaede}
+          label={'Donation Amount'}
+          placeholder={'$'}
+          labelStyle={styles.label}
+          inputStyle={styles.input}
+          keyboardType={'number-pad'}
+          onChangeText={cashDonation => {
+            let dish = this.state.dish;
+            dish.cashDonation = cashDonation;
+            this.setState({ dish }, () => console.log(this.state.dish));
+          }}
+          value={this.state.dish.cashDonation}
+        />
+
+        <Kaede
+          style={styles.kaede}
+          label={'Donation Amount'}
+          placeholder={"Quantity"}
+          labelStyle={styles.label}
+          inputStyle={styles.input}
+          keyboardType={'number-pad'}
+          onChangeText={quantity => {
+            let dish = this.state.dish;
+            dish.quantity = quantity;
+            this.setState({ dish }, () => console.log(this.state.dish));
+          }}
+          value={this.state.dish.quantity}
+        />
+        <View style={styles.picker}>
+          <Picker
+            supportedOrientations={["portrait", "landscape"]}
+            iosHeader="Select one"
+            mode="dropdown"
+            selectedValue={this.state.selected1}
+            onValueChange={this.onValueChange.bind(this)}
+          >
+            {/*<Item label="Select a Cuisine Style" value={0} />*/}
+            {this.state.genres
+              ? this.state.genres.map((curr, ind) => {
+                  return <Item label={curr} value={ind} />;
+                })
+              : {}}
+          </Picker>
+        </View>
+
+        <View style={styles.nextButton}>
+          <Button
+            rounded transparent bordered dark
+            onPress={() => this.handleSubmit()}
+          >
+            <Text style={styles.nextButtonText}>Next</Text>
+          </Button>
+        </View>
         </Content>
       </Container>
     );
   }
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#ffffff"
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: "center",
-    margin: 10,
-    color: "#ffffff"
-  }
-});

@@ -11,10 +11,12 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { Actions, ActionConst } from "react-native-router-flux";
 import DropdownAlert from 'react-native-dropdownalert';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import axios from "axios";
 
 let authId;
-let address;
+let address = null;
+let dragged = false;
 export default class SignaturePage extends Component {
   constructor(props) {
     super(props);
@@ -48,14 +50,12 @@ export default class SignaturePage extends Component {
   }
 
   saveSign() {
-    this.refs["sign"].saveImage();
-    authId = this.state.authId;
-
     this.showAlert();
   }
 
   resetSign() {
     this.refs["sign"].resetImage();
+    dragged = false;
   }
 
   _onSaveEvent(result) {
@@ -72,14 +72,25 @@ export default class SignaturePage extends Component {
 
   _onDragEvent() {
     console.log("dragged");
+    dragged = true;
   }
 
   showAlert() {
-    this.dropdown.alertWithType(
-      "success",
-      "Signature saved successfully!",
-      `If your signature is correct, press confirm or press reset to redo!`,
-    );
+    if (address && dragged) {
+      this.dropdown.alertWithType(
+        "success",
+        "Signature and address saved successfully!",
+        'If your signature is correct, press confirm or press reset to redo!',
+      );
+      this.refs["sign"].saveImage();
+      authId = this.state.authId;
+    } else {
+      this.dropdown.alertWithType(
+        'error',
+        'Signature and address failed to save',
+        'Please make sure you sign and input your address'
+      )
+    }
   }
 
   dismissAlert = () => {
@@ -93,7 +104,7 @@ export default class SignaturePage extends Component {
   render() {
     const styles = {
       signature: {
-        flex: 1,
+        flex: 0.67,
         borderColor: "#000033",
         borderWidth: 1
       },
@@ -109,7 +120,7 @@ export default class SignaturePage extends Component {
         color: 'white',
       },
       addressBar: {
-        flex: .54,
+        flex: .62,
         flexDirection: 'row',
         marginTop: 10
       },
@@ -136,123 +147,117 @@ export default class SignaturePage extends Component {
     };
     
     return (
-      <View style={{ flex: 1, flexDirection: "column", marginTop: 63 }}>
-        <Text style={styles.signatureText}>Sign Below</Text>
-        <SignatureCapture
-          style={ styles.signature}
-          ref="sign"
-          onSaveEvent={this._onSaveEvent}
-          onDragEvent={this._onDragEvent}
-          saveImageFileInExtStorage={false}
-          showNativeButtons={false}
-          showTitleLabel={false}
-          viewMode={"landscape"}
-        />
-        
-        <View style={styles.addressBar}>
-          <GooglePlacesAutocomplete
-          placeholder='Address'
-          minLength={2}
-          autoFocus={false}
-          listViewDisplayed='auto'
-          fetchDetails={true}
-          renderDescription={(row) => row.description}
-          onPress={(data, details = null) => {
-            console.log(data);
-            console.log(details);
-            address = data.description;
-          }}
-          getDefaultValue={() => {
-            return '';
-          }}
-          query={{
-            key: 'AIzaSyDySPBT6q0rzspVjjJWZDnEGCaT3CJBMKQ',
-            language: 'en',
-            types: 'address'
-          }}
-          styles={{
-            description: {
-              fontWeight: 'bold'
-            },
-            predefinedPlacesDescription: {
-              color: '#1faadb'
-            },
-          }}
-          currentLocation={true}
-          currentLocationLabel="Current location"
-          nearbyPlacesAPI='GooglePlacesSearch'
-          GoogleReverseGeocodingQuery={{
-          }}
-          GooglePlacesSearchQuery={{
-            rankby: 'distance',
-            types: 'food',
-          }}
-  
-  
-          filterReverseGeocodingByTypes={['locality', 'administrative_area_level_3']}
-  
-          debounce={200}
-        />
-        </View>
-        <View style={{flex: .2, flexDirection: 'row'}}>
-          <Button 
-            rounded transparent bordered dark
-            style={styles.buttonStyle1}
-            textStyle={{fontSize: 18}}
-            onPress={() => { this.saveSign()} }
-          >
-            <Text style={styles.buttonText}>Save</Text>
-          </Button>
-          <Button
-            rounded transparent bordered dark
-            style={styles.buttonStyle2}
-            textStyle={{fontSize: 18}}
-            onPress={() => { this.resetSign()} }
-          >
-            <Text style={styles.buttonText}>Reset</Text>
-          </Button>
-        </View>
+        <View style={{ flex: 1, flexDirection: "column", marginTop: 63 }}>
+          <Text style={styles.signatureText}>Sign Below</Text>
+          <SignatureCapture
+            style={ styles.signature}
+            ref="sign"
+            onSaveEvent={this._onSaveEvent}
+            onDragEvent={this._onDragEvent}
+            saveImageFileInExtStorage={false}
+            showNativeButtons={false}
+            showTitleLabel={false}
+            viewMode={"landscape"}
+          />
 
-        <View
-          style={{
-            flex: .3,
-            flexDirection: 'row'
-          }}
-        >
-          <Button
-            rounded transparent bordered dark
-            style={styles.buttonStyle3}
-            textStyle={{fontSize: 18}}
-            onPress={() => {Actions.homepage({ type: ActionConst.RESET })}}
-          >
-            <Text style={styles.buttonText}>Confirm</Text>
-          </Button>
-          
-        </View>
+          <View style={styles.addressBar}>
+            <GooglePlacesAutocomplete
+              placeholder='Address'
+              minLength={2}
+              autoFocus={false}
+              listViewDisplayed='auto'
+              fetchDetails={true}
+              renderDescription={(row) => row.description}
+              onPress={(data, details = null) => {
+                console.log(data);
+                console.log(details);
+                address = data.description;
+              }}
+              getDefaultValue={() => {
+                return '';
+              }}
+              query={{
+                key: 'AIzaSyDySPBT6q0rzspVjjJWZDnEGCaT3CJBMKQ',
+                language: 'en',
+                types: 'address'
+              }}
+              styles={{
+                description: {
+                  fontWeight: 'bold'
 
-        <View style={{ alignItems: "center" }}>
-          <Text style={{ alignItems: "center", justifyContent: "center" }}>
-            By signing this form, I agree to these
-          </Text>
-          <Text
+                },
+                predefinedPlacesDescription: {
+                  color: '#1faadb'
+                },
+              }}
+              nearbyPlacesAPI='GooglePlacesSearch'
+              GooglePlacesSearchQuery={{
+                rankby: 'distance',
+                types: 'food',
+              }}
+              debounce={200}
+            />
+          </View>
+
+          <View style={{flex: .25, flexDirection: 'row'}}>
+            <Button 
+              rounded transparent bordered dark
+              style={styles.buttonStyle1}
+              textStyle={{fontSize: 18}}
+              onPress={() => { this.saveSign()} }
+            >
+              <Text style={styles.buttonText}>Save</Text>
+            </Button>
+            <Button
+              rounded transparent bordered dark
+              style={styles.buttonStyle2}
+              textStyle={{fontSize: 18}}
+              onPress={() => { this.resetSign()} }
+            >
+              <Text style={styles.buttonText}>Reset</Text>
+            </Button>
+          </View>
+
+          <View
             style={{
-              alignItems: "center",
-              justifyContent: "center",
-              color: "blue"
+              flex: .3,
+              flexDirection: 'row'
             }}
           >
-            terms and conditions
-          </Text>
+            <Button
+              rounded transparent bordered dark
+              style={styles.buttonStyle3}
+              textStyle={{fontSize: 18}}
+              onPress={() => {Actions.homepage({ type: ActionConst.RESET })}}
+            >
+              <Text style={styles.buttonText}>Confirm</Text>
+            </Button>
+            
+          </View>
+
+          <View style={{ flex: 0.2, alignItems: "center" }}>
+            <Text style={{ alignItems: "center", justifyContent: "center" }}>
+              By signing this form, I agree to these
+            </Text>
+            <Text
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                color: "blue"
+              }}
+            >
+              terms and conditions
+            </Text>
+          </View>
+          <DropdownAlert
+            ref={ref => this.dropdown = ref}
+            containerStyle={{
+              backgroundColor: "#6441A4"
+            }}
+            onClose={data => this.onClose(data)}
+            closeInterval={7000}
+          />
         </View>
-        <DropdownAlert
-          ref={ref => this.dropdown = ref}
-          containerStyle={{
-            backgroundColor: "#6441A4"
-          }}
-          onClose={data => this.onClose(data)}
-          closeInterval={7000}
-        />
-      </View>
     );
   }
 }

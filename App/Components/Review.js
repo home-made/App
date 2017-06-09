@@ -27,9 +27,9 @@ export default class Review extends Component {
     console.log("props inside Review.js are ", this.props)
     return (
       <ListItem avatar>
-        <Body>
-          <Text style={styles.reviewScore}>Review Score: {this.props.review.score}</Text>
-          <Text style={styles.review} note>{this.props.review.userText}</Text>
+        <Body style={{alignContent: "center", alignItems: "center", justifyContent: "center"}}>
+          <Text style={styles.reviewScore}>Review Score: {this.props.review.score}/5</Text>
+          <Text style={styles.review} note>{this.props.review.reviewText}</Text>
         </Body>
       </ListItem>
     );

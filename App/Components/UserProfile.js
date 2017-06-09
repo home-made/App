@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Image, AsyncStorage } from "react-native";
+import { StyleSheet, View, Image, AsyncStorage, ScrollView } from "react-native";
 import {
   Container,
   Text,
@@ -121,8 +121,9 @@ export default class Profile extends Component {
     }
 
     console.log("the state inside UserProfile is ", this.state);
+    console.log("prop USER PROFILE", this.props);
     return (
-      <Container style={{ marginTop: 60 }}>
+      <ScrollView style={{ marginTop: 60 }}>
         <Content>
           <Card>
             <CardItem>
@@ -160,7 +161,7 @@ export default class Profile extends Component {
           {this.handleReviews()}
 
         </Content>
-      </Container>
+      </ScrollView>
     );
   }
 }
