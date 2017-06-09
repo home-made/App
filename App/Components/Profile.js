@@ -9,7 +9,9 @@ import {
   Left,
   Body,
   Button,
-  ListItem
+  ListItem,
+  Footer,
+  FooterTab,
 } from "native-base";
 import { Actions, ActionConst } from "react-native-router-flux";
 import { Grid, Row, Col } from "react-native-easy-grid";
@@ -223,6 +225,7 @@ export default class Profile extends Component {
     };
 
     return (
+      <Container>
       <Container style={styles.container}>
         <Content>
           <Card>
@@ -292,12 +295,17 @@ export default class Profile extends Component {
               <Text>Menu</Text>
             </Button>
           </Row>
-
+          
+                      
           {this.state.reviews ? this.toggleReviews() : <Text />}
           {this.state.menu ? this.toggleMenu() : <Text />}
 
         </Content>
+        
       </Container>
+     
+      </Container>
+
     );
   }
 }

@@ -7,6 +7,7 @@ const store = createStore();
 
 export default class Main extends Component {
   render() {
+    console.disableYellowBox = true;
     return (
       <Provider store={store}>
         <App />
