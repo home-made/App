@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, AsyncStorage, Image, Container } from "react-native";
-import { View, Input, Item, Button, Text, Toast } from "native-base";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { View, Input, Item, Button, Text, Toast, Content } from "native-base";
 import { Actions, ActionConst } from "react-native-router-flux";
 import axios from "axios";
 
@@ -48,9 +49,9 @@ export default class EditProfile extends Component {
         () => {
           console.log(this.state.userId);
           axios
-            .get("http://localhost:3000/user/" + this.state.userId)
+            .get("http://homemadeapp.org:3000/user/" + this.state.userId)
             .then(res => {
-              this.setState({ user: res.data[0] }, () =>
+              this.setState({ userPic: res.data[0].profileUrl }, () =>
                 console.log(this.state.user)
               );
             });
@@ -76,7 +77,7 @@ export default class EditProfile extends Component {
     }
 
     axios
-      .put("http://localhost:3000/user/" + this.state.userId, send)
+      .put("http://homemadeapp.org:3000/user/" + this.state.userId, send)
       .then(res => {
         console.log(res.data);
         Actions.cuisines({ type: ActionConst.RESET });
@@ -86,14 +87,17 @@ export default class EditProfile extends Component {
   render() {
     console.log("the state inside EditProfile.js is ", this.state);
     return (
-      <View
-        style={{
-          flex: 1,
-          flexDirection: "column",
-          alignContent: "center",
-          alignItems: "center"
-        }}
-      >
+      <KeyboardAwareScrollView>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "column",
+            alignContent: "center",
+            alignItems: "center",
+            marginTop: 50
+          }}
+        >
+        
         <Text>
           {this.state.userName}
         </Text>
@@ -160,7 +164,8 @@ export default class EditProfile extends Component {
             <Text>Submit</Text>
           </Button>
         </Item>
-      </View>
+        </View>       
+      </KeyboardAwareScrollView>
     );
   }
 }
@@ -172,3 +177,17 @@ const styles = StyleSheet.create({
     alignItems: "center"
   }
 });
+
+
+/*
+
+       <Container 
+          style={{
+          flex: 1,
+          flexDirection: "column",
+          alignContent: "center",
+          alignItems: "center"
+        }}
+        >
+
+*/

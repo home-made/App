@@ -25,7 +25,7 @@ export default class ManageDish extends Component {
       showToast: false,
       userId: "",
       userName: "",
-      userPic: ""
+      userPic: "",
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -67,7 +67,7 @@ export default class ManageDish extends Component {
     let dish = this.state.dish;
     console.log("SEND: ", dish);
 
-    axios.put("http://localhost:3000/dish", dish).then(Actions.chefPanel());
+    axios.put("http://homemadeapp.org:3000/dish", dish).then(Actions.chefPanel());
   }
   onValueChange(value) {
     console.log(this.state.genres[value]);
