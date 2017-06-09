@@ -321,7 +321,7 @@ export default class App extends Component {
               titleStyle={styles.title}
               key="uploadimage"
               component={UploadImage}
-              title="Upload Dish"
+              title=""
               setDish={this.setDishDetails}
               fetchDish={this.fetchDishDetails}
               fetchCameraMode={this.fetchUploadStatus}
