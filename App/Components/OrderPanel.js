@@ -106,13 +106,14 @@ export default class OrderPanel extends Component {
     var completeOrders = [];
     console.log("STATE AND PROPS IN ORDERPANEL", this.state, this.props)
     return (
-      <ScrollView>
+      <Container>
         <Header hasTabs />
         <Tabs>
           <Tab
             onPress={this.render}
             heading={<TabHeading><Text>Pending</Text></TabHeading>}
           >
+          
             {!this.state.pending
               ? <Text />
               : this.state.pending.forEach(item => {
@@ -125,9 +126,11 @@ export default class OrderPanel extends Component {
                   }
                   pendingOrders.unshift(this.returnRow(item));
                 })}
+          <ScrollView>
             <List style={{ marginTop: 10 }} dataArray={this.state.pending}>
               {pendingOrders}
             </List>
+          </ScrollView>
           </Tab>
 
           <Tab heading={<TabHeading><Text>Confirmed</Text></TabHeading>}>
@@ -143,9 +146,11 @@ export default class OrderPanel extends Component {
                   }
                   acceptedOrders.unshift(this.returnRow(item));
                 })}
+          <ScrollView>
             <List style={{ marginTop: 10 }} dataArray={this.state.accepted}>
               {acceptedOrders}
             </List>
+          </ScrollView>
           </Tab>
 
           <Tab heading={<TabHeading><Text>Complete</Text></TabHeading>}>
@@ -161,12 +166,14 @@ export default class OrderPanel extends Component {
                   }
                   completeOrders.unshift(this.returnRow(item));
                 })}
-            <List style={{ marginTop: 10 }} dataArray={this.state.complete}>
-              {completeOrders}
-            </List>
+            <ScrollView>
+              <List style={{ marginTop: 10 }} dataArray={this.state.complete}>
+                {completeOrders}
+              </List>
+            </ScrollView>
           </Tab>
         </Tabs>
-      </ScrollView>
+      </Container>
     );
   }
 }
