@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, AsyncStorage, ScrollView } from "react-native";
+import { StyleSheet, View, AsyncStorage, ScrollView } from "react-native";
 import {
   Container,
   Header,
@@ -10,7 +10,10 @@ import {
   Tab3,
   TabHeading,
   List,
-  ListItem
+  ListItem,
+  Body,
+  Thumbnail,
+  Text
 } from "native-base";
 import axios from "axios";
 import { Actions } from "react-native-router-flux";
@@ -23,10 +26,10 @@ export default class OrderPanel extends Component {
     this.state = {};
     this.returnRow = this.returnRow.bind(this);
   }
-
   returnRow(data) {
     var dateAndTime = moment(data.date).format("LLLL");
     // console.log("DATA IS", data);
+
     return (
       <ListItem
         onPress={() => {
@@ -37,10 +40,14 @@ export default class OrderPanel extends Component {
           }
         }}
       >
-        <Text style={{ marginLeft: 10 }}>
-          Placed at: {dateAndTime}{"\n"}
-          Cash total: ${data.cashTotal}
-        </Text>
+        <Thumbnail square size={80} source={{uri: data.customer.profileUrl}} />
+
+        <Body>
+          <Text style={{ marginLeft: 10 }}>
+            {data.customer.firstName}{"\n"}
+            <Text note>{dateAndTime}{"\n"}Cash Donation ${data.cashTotal}</Text>
+          </Text>
+        </Body>
       </ListItem>
     );
   }
@@ -131,6 +138,7 @@ export default class OrderPanel extends Component {
          customerInit();
         }
       });
+
   }
 
   render() {
@@ -139,13 +147,14 @@ export default class OrderPanel extends Component {
     var completeOrders = [];
     console.log("STATE AND PROPS IN ORDERPANEL", this.state, this.props);
     return (
-      <ScrollView>
+      <Container>
         <Header hasTabs />
         <Tabs>
           <Tab
             onPress={this.render}
             heading={<TabHeading><Text>Pending</Text></TabHeading>}
           >
+          
             {!this.state.pending
               ? <Text />
               : this.state.pending.forEach(item => {
@@ -158,9 +167,11 @@ export default class OrderPanel extends Component {
                   }
                   pendingOrders.unshift(this.returnRow(item));
                 })}
+          <ScrollView>
             <List style={{ marginTop: 10 }} dataArray={this.state.pending}>
               {pendingOrders}
             </List>
+          </ScrollView>
           </Tab>
 
           <Tab heading={<TabHeading><Text>Confirmed</Text></TabHeading>}>
@@ -176,9 +187,11 @@ export default class OrderPanel extends Component {
                   }
                   acceptedOrders.unshift(this.returnRow(item));
                 })}
+          <ScrollView>
             <List style={{ marginTop: 10 }} dataArray={this.state.accepted}>
               {acceptedOrders}
             </List>
+          </ScrollView>
           </Tab>
 
           <Tab heading={<TabHeading><Text>Complete</Text></TabHeading>}>
@@ -194,12 +207,14 @@ export default class OrderPanel extends Component {
                   }
                   completeOrders.unshift(this.returnRow(item));
                 })}
-            <List style={{ marginTop: 10 }} dataArray={this.state.complete}>
-              {completeOrders}
-            </List>
+            <ScrollView>
+              <List style={{ marginTop: 10 }} dataArray={this.state.complete}>
+                {completeOrders}
+              </List>
+            </ScrollView>
           </Tab>
         </Tabs>
-      </ScrollView>
+      </Container>
     );
   }
 }
