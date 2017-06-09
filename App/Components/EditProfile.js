@@ -20,8 +20,8 @@ export default class EditProfile extends Component {
   componentWillMount() {
     let userId, userName, userPic;
     let newUrl = this.props.newUrl;
+    console.log("State IN EDIT PROFILE", this.state)
     async function getProfile(url) {
-
       try {
         const data = await AsyncStorage.getItem("profile");
         if (data !== null && data !== undefined) {
@@ -34,11 +34,11 @@ export default class EditProfile extends Component {
             userId = data.userId;
           }
           userName = data.name;
-          if (data.extraInfo) {
-            userPic = data.extraInfo.picture_large;
-          } else {
-            data.picture;
-          }
+          // if (data.extraInfo) {
+          //   userPic = data.extraInfo.picture_large;
+          // } else {
+          //   userPic = data.picture;
+          // }
 
           if (url) {
             data.extraInfo.picture_large = url;
@@ -63,12 +63,12 @@ export default class EditProfile extends Component {
       this.setState(
         { userId: userId, userName: userName, userPic: userPic },
         () => {
-          console.log(this.state.userId);
+          console.log('usrPic is',this.state.userPic);
           axios
-            .get("http://homemadeapp.org:3000/user/" + this.state.userId)
+            .get("http://localhost:3000/user/" + this.state.userId)
             .then(res => {
-              this.setState({ userPic: res.data[0].profileUrl }, () =>
-                console.log(this.state.user)
+              this.setState({ userName: res.data[0].firstName,userPic: res.data[0].profileUrl }, () =>
+                console.log('url is', res)
               );
             });
         }
@@ -76,7 +76,6 @@ export default class EditProfile extends Component {
     });
   }
   componentWillReceiveProps() {
-    console.log("IN RECEIVE PROPS", this.props);
     this.componentWillMount();
   }
   handleSubmit() {
@@ -94,7 +93,7 @@ export default class EditProfile extends Component {
     }
 
     axios
-      .put("http://homemadeapp.org:3000/user/" + this.state.userId, send)
+      .put("http://localhost:3000/user/" + this.state.userId, send)
       .then(res => {
         console.log(res.data);
         Actions.cuisines({ type: ActionConst.RESET });

@@ -32,6 +32,8 @@ export default class ChefForm extends Component {
   }
 
   componentWillMount() {
+      this.setState({email: this.props.email, phoneNumber: this.props.phoneNumber, firstName: this.props.firstName, lastName: this.props.lastName})
+
         console.log("IN CHEF FORM WILL MOUNT PROPS ARE", this.props)
 
     let userId;
@@ -58,7 +60,7 @@ export default class ChefForm extends Component {
     console.log('first name: ', this.state.firstName);
     console.log('last name: ', this.state.lastName);
     if (this.state.phone !== null && this.state.firstName !== null && this.state.lastName !== null) {
-      axios.put(`http://homemadeapp.org:3000/user/${this.state.authId}`, { phoneNumber: this.state.phone, firstName: this.state.firstName, lastName: this.state.lastName })
+      axios.put(`http://localhost:3000/user/${this.state.authId}`, { phoneNumber: this.state.phone, firstName: this.state.firstName, lastName: this.state.lastName })
         .then((res) => console.log(res.data))
         .catch((err) => console.log('Error updating user to chef status: ', err));
 
@@ -115,7 +117,7 @@ export default class ChefForm extends Component {
               labelStyle={styles.label}
               inputStyle={styles.input}
               onChangeText={(e) => this.setState({ firstName: e })}
-              defaultValue={this.props.firstName || ""}
+              defaultValue={this.state.firstName || ""}
             />
             <Kaede
               style={styles.kaede}
@@ -123,7 +125,7 @@ export default class ChefForm extends Component {
               labelStyle={styles.label}
               inputStyle={styles.input}
               onChangeText={(e) => this.setState({ lastName: e })}
-              defaultValue={this.props.lastName || ""}
+              defaultValue={this.state.lastName || ""}
             />
             <Kaede
               style={styles.kaede}
@@ -131,7 +133,7 @@ export default class ChefForm extends Component {
               labelStyle={styles.label}
               inputStyle={styles.input}
               onChangeText={(e) => this.setState({ phone: e })}
-              defaultValue={this.props.phoneNumber || ""}
+              defaultValue={this.state.phoneNumber || ""}
             />
             <Kaede
               style={styles.kaede}
@@ -139,7 +141,7 @@ export default class ChefForm extends Component {
               labelStyle={styles.label}
               inputStyle={styles.input}
               onChangeText={(e) => this.setState({ email: e })}
-              defaultValue={this.props.email || ""}
+              defaultValue={this.state.email || ""}
             />
           </Content>
         </Container>

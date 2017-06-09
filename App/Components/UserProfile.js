@@ -63,25 +63,21 @@ export default class Profile extends Component {
             userId = JSON.parse(profile).userId;
 
             parsedProfile = JSON.parse(profile);
-
-            var userPic = parsedProfile.picture_large
-              ? parsedProfile.picture_large
-              : parsedProfile.picture;
             var authId = parsedProfile.userId;
             var fullName = parsedProfile.name;
 
             axios
-              .get(`http://homemadeapp.org:3000/user/${authId}`)
+              .get(`http://localhost:3000/user/${authId}`)
               .then(user => {
                 console.log(
                   "the user inside axiospost for UserProfile.js is ",
                   user
                 );
-
+                 console.log('iffy')
                 context.setState({
-                  fullName,
+                  fullName: user.data[0].firstName,
                   authId: authId,
-                  userPic: userPic,
+                  userPic: user.data[0].profileUrl,
                   user: user.data[0],
                   chefReviews: user.data[0].chefReviews,
                   customerReviews: user.data[0].customerReviews,
@@ -101,6 +97,7 @@ export default class Profile extends Component {
       }
       grabAuthId();
     } else {
+      console.log('esly')
       this.setState({
         fullName: this.props.profile.firstName,
         authId: this.props.profile.authId,

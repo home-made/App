@@ -23,10 +23,10 @@ import axios from "axios";
 export default class NavBar extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       chefStatus: null,
-      chefView: false
+      chefView: false,
+
     };
     this.orders = this.orders.bind(this);
   }
@@ -66,7 +66,7 @@ export default class NavBar extends Component {
     getUserAuthId().then(() => {
       console.log(authId);
 
-      axios.get(`http://homemadeapp.org:3000/user/${authId}`).then(res => {
+      axios.get(`http://localhost:3000/user/${authId}`).then(res => {
 
         let chefRoom = 'chef'+res.data[0].authId;
         socket.on(chefRoom, splash => {

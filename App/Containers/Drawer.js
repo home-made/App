@@ -8,6 +8,9 @@ export default class NavigationDrawer extends Component {
   constructor(props) {
     super(props);
     if (props.saveUser) { Actions.chefform(props.saveUser)}
+    this.state = {
+      user: props.saveUser
+    }
   }
 
   render() {

@@ -5,7 +5,7 @@ module.exports = (state, userCoords) => {
   var userGP = new geoPoint(userCoords.latitude, userCoords.longitude);
 
   axios
-    .get("http://homemadeapp.org:3000/chefTest")
+    .get("http://localhost:3000/chefTest")
     .then(response => {
       console.log("got the chefs", response);
 

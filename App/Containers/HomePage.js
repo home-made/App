@@ -91,9 +91,9 @@ export default class HomePage extends Component {
           /* after we log into the app, we make a post request
              that either finds or creates a user. we find out 
              if user is a chef or not */
-
+          console.log("PROFILE IN HOMEPAGE", profile)
           axios
-            .post(`http://homemadeapp.org:3000/user/${profile.userId}`, profile)
+            .post(`http://localhost:3000/user/${profile.userId}`, profile)
             .then(user => {
               saveUser = user.data;
               console.log("The user data inside HomePage is ", user);
@@ -132,10 +132,8 @@ export default class HomePage extends Component {
               console.log("RIGHT BEFORE ACTIONS PROFILE IS", profile);
               console.log("RIGHT BEFORE IF STATEMENT", saveUser);
               if (saveUser.phoneNumber) {
-                console.log("HI")
                 Actions.drawer();
               } else {
-                console.log("INSIDE ELSE BLOCK");
                 Actions.drawer({saveUser});
               }
             } catch (err) {

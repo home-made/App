@@ -68,19 +68,19 @@ export default class OrderPanel extends Component {
     let user;
     var customerInit = () => {
       axios
-          .get("http://homemadeapp.org:3000/orders/0/user/" + authID)
+          .get("http://localhost:3000/orders/0/user/" + authID)
           .then(pending => {
             this.setState({ pendingCustomers: pending.data[1] }, () =>
               this.setState({ pending: pending.data[0] })
             );
             axios
-              .get("http://homemadeapp.org:3000/orders/1/user/" + authID)
+              .get("http://localhost:3000/orders/1/user/" + authID)
               .then(accepted => {
                 this.setState({ acceptedCustomers: accepted.data[1] }, () =>
                   this.setState({ accepted: accepted.data[0] }, () => ()=> console.log('accepted orders is', this.state.accepted))
                 );
                 axios
-                  .get("http://homemadeapp.org:3000/orders/2/user/" + authID)
+                  .get("http://localhost:3000/orders/2/user/" + authID)
                   .then(complete => {
                     console.log("COMPLETE DATA IS", complete.data);
                     this.setState(
@@ -95,20 +95,20 @@ export default class OrderPanel extends Component {
     }
     var chefInit = () => {
       axios
-          .get("http://homemadeapp.org:3000/orders/0/chef/" + authID)
+          .get("http://localhost:3000/orders/0/chef/" + authID)
           .then(pending => {
             this.setState({ pendingCustomers: pending.data[1] }, () =>
               this.setState({ pending: pending.data[0] })
             );
             axios
-              .get("http://homemadeapp.org:3000/orders/1/chef/" + authID)
+              .get("http://localhost:3000/orders/1/chef/" + authID)
               .then(accepted => {
                 this.setState({ acceptedCustomers: accepted.data[1] }, () =>
                   this.setState({ accepted: accepted.data[0] }, () => ()=> console.log('accepted orders is', this.state.accepted))
                 );
-                // console.log('call http://homemadeapp.org:3000/orders/2/' + authID)
+                // console.log('call http://localhost:3000/orders/2/' + authID)
                 axios
-                  .get("http://homemadeapp.org:3000/orders/2/chef/" + authID)
+                  .get("http://localhost:3000/orders/2/chef/" + authID)
                   .then(complete => {
                     console.log("COMPLETE DATA IS", complete.data);
                     this.setState(
