@@ -100,7 +100,7 @@ export default class ChefMap extends Component {
                     style={{width: 'auto'}}
                   >
                     <View style={{flexDirection: "row", alignItems: "center", marginBottom: 5 }}>
-                      <Text style={styles.text}>{name}</Text>
+                      <Text onPress={() => this.props.setChef(chef) } style={styles.text}>{name}</Text>
                     <Icon size={20} onPress={() => this.props.setChef(chef) } style={{marginTop: 2, marginLeft: 5, height: 20, color: '#505050' }} name="chevron-with-circle-right" />
                     </View>
                   </MapView.Callout>
