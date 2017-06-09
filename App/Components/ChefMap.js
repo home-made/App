@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#505050',
-    fontFamily: 'Noteworthy-Bold'
+    fontFamily: 'Noteworthy-Bold',
     fontSize: 18
   }
 });
