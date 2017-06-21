@@ -26,15 +26,20 @@ This is the part that might get complicated, bear with us.
 - Run `$ react-native run-ios` to fire up the iOS simulator. Two separate tabs will open in your Terminal. One tab displays the status of the Xcode build that creates the actual iOS application. You'll have to wait patiently while Xcode builds the app. The other tab opens the React Packager that loads the dependencies. 
 
 
--When the iOS simulator pops open, you'll get one of two red screens: 
+When the iOS simulator pops open, you'll get one of two red screens: 
 
-   - If you get a screen that reads `Connection to http://localhost:8081 debugger-proxy?role=client timeed out`, go to your internet browser, close one of the React Native Debugger windows, and click `Command + r` in the simulator to refresh the screen.  
+- If you get a screen that reads `Connection to http://localhost:8081/debugger-proxy?role=client timeed out`, go to your internet browser, close one of the React Native Debugger windows, and click `Command + r` in the simulator to refresh the screen.
 
-   - If you get a screen that reads `Cannot read property 'Aspect' of undefined`, click `Shift + Command + h` to zoom out to the iPhone Simulator Home Screen. Click on the Homemade iOS icon to reload the app. You should see spinning animation of Hommemade fire up and take you to the Login page.
+  ![Connection Time Out Error](/img/connect_red_screen_opt.jpg?raw=true "Connection Time Out Error")  
 
-   -Keep doing the above steps if you keep seeing the same red screens.
 
--Voila! You'll appear on the app Login Page.
+- If you get a screen that reads `Cannot read property 'Aspect' of undefined`, click `Shift + Command + h` to zoom out to the iPhone Simulator Home Screen. Click on the Homemade iOS icon to reload the app. You should see spinning animation of Hommemade fire up and take you to the Login page.
+
+  ![Aspect Error](/img/aspect_red_screen_opt.jpg?raw=true "Aspect Error")  
+
+- Keep doing the above steps if you keep seeing the same red screens.
+
+- Voila! You'll appear on the app Login Page.
 
 ## Current Homemade issues
 
